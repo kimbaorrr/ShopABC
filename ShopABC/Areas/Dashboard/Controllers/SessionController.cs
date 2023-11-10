@@ -1,0 +1,49 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using ShopABC.Models;
+
+namespace ShopABC.Areas.Dashboard.Controllers
+{
+    [Area("Dashboard")]
+    public class SessionController : Controller
+    {
+        // GET: Dashboard/Session
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            ISession my_sess = this.HttpContext.Session;
+            if (my_sess.GetString("tendn") == null || my_sess.GetInt32("manv") == null || my_sess.GetString("pkey") == null)
+            {
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary(new { controller = "Login", action = "Index", area = "Dashboard", date = DateTime.Today.Date.ToString("ddMMyyyy") }));
+            }
+        }
+        public void set_ThongBao(string thongbao, byte matt)
+        {
+            ViewBag.ThongBao = null; ViewBag.TrangThai = null;
+            ViewBag.ThongBao = thongbao;
+            switch (matt)
+            {
+                case 0:
+                    ViewBag.TrangThai = "success";
+                    break;
+                case 1:
+                    ViewBag.TrangThai = "warning";
+                    break;
+                case 2:
+                    ViewBag.TrangThai = "danger";
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void log_History(string message)
+        {
+            if (string.IsNullOrEmpty(get_Connection().RemoteIpAddress.ToString()))
+                ShopABC_TaiKhoan._History(get_Connection().RemoteIpAddress.ToString(), get_Session().GetInt32("manv"), message, this.HttpContext.Request.Headers["User-Agent"]);
+            else
+                ShopABC_TaiKhoan._History(get_Connection().LocalIpAddress.ToString(), get_Session().GetInt32("manv"), message, this.HttpContext.Request.Headers["User-Agent"]);
+        }
+        public ISession get_Session() => this.HttpContext.Session;
+        public ConnectionInfo get_Connection() => this.HttpContext.Connection;
+    }
+}

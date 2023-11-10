@@ -1,0 +1,107 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    Baiviet a = ViewData["ChiTiet_Blog"] as Baiviet;
+    ViewBag.Title = a.Tieude;
+    @model ShopABC_ChiTietBaiViet_BinhLuan; 
+}
+<!-- Blog Details Hero Begin -->
+<section class="blog-hero spad">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-9 text-center">
+                <div class="blog__hero__text">
+                    <h2>@a.Tieude</h2>
+                    <ul>
+                        <li>Viết bởi @ShopABC_NhanVien.get_HoTen(a.Manv)</li>
+                        <li>@a.Ngaydang.Value.ToString("dd/MMM/yyyy")</li>
+                        <li>Lượt xem @a.Luotxem</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Hero End -->
+<!-- Blog Details Section Begin -->
+<section class="blog-details spad">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-12">
+                <div class="blog__details__pic">
+                    <img src="@ShopABC_Tools.get_Images_over_CDN(a.Hinhbv, 1)" alt="">
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="blog__details__content">
+                    <div class="blog__details__share">
+                        <span>share</span>
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#" class="youtube"><i class="fa fa-youtube-play"></i></a></li>
+                            <li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="blog__details__text">
+                        @Html.Raw(a.Noidung)
+                    </div>
+                    <div class="blog__details__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="blog__details__author">
+                                    <div class="blog__details__author__pic">
+                                        <img src="/nv_zone/images/@a.ManvNavigation.Hinhnv" alt="">
+                                    </div>
+                                    <div class="blog__details__author__text">
+                                        <h5>@ShopABC_NhanVien.get_HoTen(a.Manv)</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="blog__details__tags">
+                                    <a href="#">#Thời trang</a>
+                                    <a href="#">#Xu hướng</a>
+                                    <a href="#">#@a.Ngaydang.Value.Year</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="blog__details__comment">
+                        <h4>Để lại một bình luận</h4>
+                        @using (Html.BeginForm("Xem_Blog", "Blog", FormMethod.Post, new {bid = a.Mabv}))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4">
+                                    @Html.TextBoxFor(m => m.HoTen, new {@placeholder = "Họ tên"})
+                                    @Html.ValidationMessageFor(m => m.HoTen, "", new {@class = "text-danger"})
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    @Html.TextBoxFor(m => m.Email, new {@placeholder = "Email"})
+                                    @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    @Html.TextBoxFor(m => m.SDT, new {@placeholder = "Số điện thoại"})
+                                    @Html.ValidationMessageFor(m => m.SDT, "", new {@class = "text-danger"})
+                                </div>
+                                <div class="col-lg-12 text-center">
+                                    @Html.TextAreaFor(m => m.BinhLuan, new {@placeholder = "Nội dung"})
+                                    @Html.ValidationMessageFor(m => m.BinhLuan, "", new {@class = "text-danger"})
+                                    <button type="submit" class="site-btn">Bình luận</button>
+                                </div>
+                                <input name="MaBV" type="text" value="@a.Mabv" hidden/>
+                            </div>
+                        }
+                        @if (ViewBag.PhanHoi != null)
+                        {
+                            <p class="text-danger mt-2">@ViewBag.PhanHoi</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Section End -->

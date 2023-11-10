@@ -1,0 +1,55 @@
+﻿@using ShopABC.Models
+
+@{
+    ViewBag.Title = "Quên mật khẩu";
+    Layout = "_Layout_Login";
+    @model ShopABC_QuenMatKhau
+
+}
+
+<div class="mt-4">
+    @using (Html.BeginForm("QuenMatKhau", "Login", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            @Html.LabelFor(m => m.Email)
+            @Html.TextBoxFor(m => m.Email, new { @class = "w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-900", @autofocus = ""})
+        </div>
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-sm text-red-500" })
+        <div class="mt-4">
+            @Html.LabelFor(m => m.MaXacMinh)
+            <div class="flex">
+                <button id= "GuiMa" type="button" class="inline-flex items-center text-sm text-white border rounded-md order-2 px-2 py-2 mt-2 bg-blue-800" onclick="this.innerHTML = 'Đã gửi mã'">
+                    Gửi mã
+                </button>
+            @Html.TextBoxFor(m => m.MaXacMinh, new { @class = "flex-1 w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-900 order-1" })
+            </div>
+        </div>
+        
+        @Html.ValidationMessageFor(m => m.MaXacMinh, "", new { @class = "text-sm text-red-500", @autocomplete = "off" })
+        <div class="flex items-baseline justify-between">
+            <button class="px-3 py-2 mt-4 text-white transition-colors duration-150 border border-transparent bg-blue-800 rounded-lg hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
+                type="submit">
+                Xác nhận
+            </button>
+        </div>
+    }
+</div>
+@section More_Scripts {
+    <script>
+        /*
+        $(document).ready(function () {
+            $("#GuiMa").click(function() {
+                $.ajax('/Dashboard/Login/GuiMaXacMinh',
+                {
+                    type: 'post',  // http method
+                    data: { 
+                        email: $("#Email").text() 
+                    }
+                });
+            });
+        });
+        */
+    </script>
+
+}

@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Trạng thái";
+}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>@ViewBag.Title</h3>
+                <p class="text-subtitle text-muted">Xem trạng thái hoạt động của hệ thống theo thời gian thực</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4>Chi tiết</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Máy chủ Web : <strong>Bình thường</strong></p>
+                <p class="card-text">Máy chủ FTP : <strong>Bình thường</strong></p>
+                <p class="card-text">CDN : <strong>Bảo trì</strong></p>
+            </div>
+            <div class="card-footer text-muted">
+                Cập nhật lần cuối 1 phút trước
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="card mb-3 bg-success text-white">
+                    <div class="card-header bg-success border-bottom py-3">Máy chủ web</div>
+                    <div class="card-body" style="padding-top: 18px;">
+                        <h5 class="card-title text-white">Bình thường</h5>
+                        <p class="card-text">Máy chủ web hoạt động bình thường và ổn định.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header bg-success py-3 border-bottom">Máy chủ FTP</div>
+                    <div class="card-body" style="padding-top: 18px;">
+                        <h5 class="card-title text-white">Bình thường</h5>
+                        <p class="card-text">Máy chủ FTP hoạt động bình thường và ổn định.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-header bg-danger py-3 border-bottom">CDN</div>
+                    <div class="card-body" style="padding-top: 18px;">
+                        <h5 class="card-title text-white">Bảo trì</h5>
+                        <p class="card-text">Chúng tôi đang bảo trì mạng lưới CDN. Vui lòng quay lại sau.!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

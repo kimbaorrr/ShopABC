@@ -1,0 +1,83 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>@ViewBag.Title</h3>
+                <p class="text-subtitle text-muted">Trang hiển thị danh sách sản phẩm có trên hệ thống</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Tables start -->
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                Dữ liệu sản phẩm
+            </div>
+            <div class="card-body overflow-auto">
+                <table class="table" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Mã SP</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá bán (VNĐ)</th>
+                            <th>Giảm giá (%)</th>
+                            <th>Tình trạng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Sanpham i in ShopABC_SanPham.get_SanPham())
+                        {
+                            <tr>
+                                <td>@i.Masp</td>
+                                <td>@i.Tensp</td>
+                                <td>@String.Format("{0:0,0}", i.Giaban)</td>
+                                <td>@i.Giamgia</td>
+                                <td><span class="badge bg-success">Còn hàng</span>
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("ChiTietSanPham", "SanPham", new { p = i.Tensp, spid = i.Masp, pkey = this.Context.Session.GetString("pkey") })' class="btn btn-sm btn-primary">Xem</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <!-- Basic Tables end -->
+</div>
+
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+        <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#table1").DataTable();
+                $("#table1_filter").wrap("<form>");
+                $("#table1_filter").closest("form").attr("autocomplete", "off");
+            });
+        </script>
+}
+

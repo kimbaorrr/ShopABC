@@ -1,0 +1,125 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Duyệt sản phẩm";
+}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>@ViewBag.Title</h3>
+                <p class="text-subtitle text-muted">Trang hiển thị các sản phẩm chưa được duyệt</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Tables start -->
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                Dữ liệu sản phẩm
+            </div>
+            <div class="card-body overflow-auto">
+                <table class="table" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Ngày nhập</th>
+                            <th>Người nhập</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Sanpham i in ShopABC_SanPham.get_SanPham_ChuaDuyet())
+                        {
+                            <tr>
+                                <td><a href='@Url.Action("ChiTietSanPham", "SanPham", new {p = i.Tensp, spid = i.Masp, pkey = this.Context.Session.GetString("pkey")})'>@i.Masp</a></td>
+                                <td>@i.Tensp</td>
+                                <td>@i.Ngaynhap</td>
+                                <td>@ShopABC_NhanVien.get_HoTen((int)i.Manv)</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger btn_HuyBo">Hủy bỏ</button>
+                                    <button class="btn btn-sm btn-success btn_DuyetSanPham">Duyệt</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+    <!-- Basic Tables end -->
+</div>
+
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+            function gettoken() {
+                var token = '@Html.AntiForgeryToken()';
+                token = $(token).val();
+                return token;
+            }
+            $('.btn_DuyetSanPham').click(function () {
+                $.ajax({
+                    url: "/admin/duyet-san-pham",
+                    type: "post",
+                    data: {
+                        spid: $(this).parents("tr").find("td:first a").text(),
+                        hd: "duyet",
+                        __RequestVerificationToken: gettoken()
+                    },
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            });
+            $('.btn_HuyBo').click(function () {
+                $.ajax({
+                    url: "/admin/duyet-san-pham",
+                    type: "post",
+                    data: {
+                        spid: $(this).parents("tr").find("td:first a").text(),
+                        hd: "huybo",
+                        __RequestVerificationToken: gettoken()
+                    },
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+}
+

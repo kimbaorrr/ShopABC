@@ -1,0 +1,64 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Khách hàng thân thiết";
+}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>@ViewBag.Title</h3>
+                <p class="text-subtitle text-muted">Trang hiển thị khách hàng mua hàng trên 10 lần</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <section class="section">
+        <div class="row" id="table-hover-row">
+            <div class="col-12" style="max-height: 80vh;">
+                <div class="card" style="max-height: 80vh;">
+                    <div class="card-header">
+                        <h4 class="card-title">Dữ liệu khách hàng</h4>
+                    </div>
+                    <div class="card-content overflow-auto">
+                        <!-- table hover -->
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Mã khách hàng</th>
+                                        <th>Họ tên Khách hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Số lần mua</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (Khachhang i in ShopABC_KhachHang.get_KhachHang_ThanThiet())
+                                        {
+                                            <tr>
+                                                <td>@i.Makh</td>
+                                                <td>@i.Tenkh</td>
+                                                <td>@i.Sdt</td>
+                                                <td>@ShopABC_KhachHang.get_SoLanMua(i.Makh)</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

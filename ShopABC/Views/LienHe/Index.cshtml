@@ -1,0 +1,42 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Thông tin liên hệ";
+    ThongtinCty a = ShopABC_ThongTinCty.get_ThongTin_Theo_TieuDe(ViewBag.Title);
+}
+
+@section Breadcum {
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>@ViewBag.Title</h4>
+                        <div class="breadcrumb__links">
+                            <a href='@Url.Action("Index", "Home")'>Trang chủ</a>
+                            <span>@ViewBag.Title</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+}
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-4 col-sm-6">
+                <div class="about__item">
+                    <h3>@a.Tieude</h3>
+                    <br />
+                    @Html.Raw(a.Noidung)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->

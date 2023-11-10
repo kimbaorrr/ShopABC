@@ -1,0 +1,130 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+@{
+    ViewBag.Title = "Thanh toán";
+    ShopABC_GioHang sp = ViewData["GioHangCuaToi"] as ShopABC_GioHang;
+    @model ShopABC_ThanhToan
+}
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Giỏ hàng</h4>
+                    <div class="breadcrumb__links">
+                        <a href='@Url.Action("Index", "Home")'>Trang chủ</a>
+                        <a href='@Url.Action("Index", "GioHang")'>Giỏ hàng</a>
+                        <span>@ViewBag.Title</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            @using (Html.BeginForm("ThanhToan", "GioHang", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="coupon__code">
+                            <span class="icon_tag_alt"></span> Có mã khuyến mãi? <a href='@Url.Action("Index", "GioHang")'>
+                                Nhấp vào đây
+                            </a> để nhập mã của bạn
+                        </h6>
+                        <h6 class="checkout__title">Thông tin giao hàng</h6>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    @Html.LabelFor(m => m.HoDem)<span class="text-danger"> *</span>
+                                    @Html.TextBoxFor(m => m.HoDem, new {@autofocus = "" })
+                                    @Html.ValidationMessageFor(m => m.HoDem, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    @Html.LabelFor(m => m.TenKH)<span class="text-danger"> *</span>
+                                    @Html.TextBoxFor(m => m.TenKH)
+                                    @Html.ValidationMessageFor(m => m.TenKH, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            @Html.LabelFor(m => m.DiaChi)<span class="text-danger"> *</span>
+                            @Html.TextBoxFor(m => m.DiaChi)
+                            @Html.ValidationMessageFor(m => m.DiaChi, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    @Html.LabelFor(m => m.SDT)<span class="text-danger"> *</span>
+                                    @Html.TextBoxFor(m => m.SDT)
+                                    @Html.ValidationMessageFor(m => m.SDT, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    @Html.LabelFor(m => m.Email)<span class="text-danger"> *</span>
+                                    @Html.TextBoxFor(m => m.Email)
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            @Html.LabelFor(m => m.GhiChu)
+                            @Html.TextBoxFor(m => m.GhiChu)
+                            @Html.ValidationMessageFor(m => m.GhiChu, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            <h4 class="order__title">Đơn hàng của bạn</h4>
+                            <div class="checkout__order__products">Sản phẩm <span>Thành tiền</span></div>
+                            <ul class="checkout__total__products">
+                                @{
+                                    byte count = 1;
+                                    foreach (Chitietdonhang i in sp.SanPham_DaChon.Values)
+                                    {
+                                        <li>@count. @ShopABC_SanPham.get_TenSP_Theo_MaSP(i.Masp) <span>@String.Format("{0:0,0}", i.Thanhtien) <u>đ</u></span></li>
+                                        count++;
+                                    }
+                                }
+                            </ul>
+                            <ul class="checkout__total__all">
+                                <li>Thành tiền <span>@String.Format("{0:0,0}", sp.calc_TongThanhToan()) <u>đ</u></span></li>
+                                <li>Khuyến mãi <span>- 15.000 <u>đ</u></span></li>
+                                @{
+                                    decimal? tongTT = 0;
+                                    if (sp.calc_TongThanhToan() != 0)
+                                    {
+                                        tongTT = sp.calc_TongThanhToan() - 15000;
+                                    }
+                                    <li>Tổng thanh toán <span>@String.Format("{0:0,0}", tongTT) <u>đ</u></span></li>
+                                }
+                            </ul>
+                            <div class="checkout__input__checkbox">
+                                <label for="payment">
+                                    Ví Momo, Viettel Pay,...
+                                    <input type="checkbox" id="payment">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="paypal">
+                                    Thẻ Visa, MasterCard, ...
+                                    <input type="checkbox" id="paypal">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <button type="submit" class="site-btn">Xác nhận thanh toán</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->

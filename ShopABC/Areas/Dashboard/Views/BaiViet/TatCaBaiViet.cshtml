@@ -1,0 +1,94 @@
+﻿@using ShopABC.Models
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Tất cả bài viết";
+}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>@ViewBag.Title</h3>
+                <p class="text-subtitle text-muted">Trang hiển thị tất cả bài viết có trên hệ thống</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Tables start -->
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                Dữ liệu bài viết
+            </div>
+            <div class="card-body overflow-auto">
+                <table class="table" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Mã bài viết</th>
+                            <th>Tên bài viết</th>
+                            <th>Ngày đăng</th>
+                            <th>Người đăng</th>
+                            <th>Tình trạng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Baiviet i in ShopABC_BaiViet.get_BaiViet_Ko_Nhap())
+                        {
+                            <tr>
+                                <td>@i.Mabv</td>
+                                <td>@i.Tieude</td>
+                                <td>@i.Ngaydang.Value</td>
+                                <td>@ShopABC_NhanVien.get_HoTen(i.Manv)</td>
+                                <td>
+                                    @if (i.Duyet == false)
+                                    {
+                                        <span class="badge bg-danger">Chưa duyệt</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Đã duyệt</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { p = i.Tieude, bvid = i.Mabv, pkey = this.Context.Session.GetString("pkey") })" class="btn btn-sm btn-primary">Xem</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+    <!-- Basic Tables end -->
+</div>
+
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+        });
+    </script>
+}
+
+
+

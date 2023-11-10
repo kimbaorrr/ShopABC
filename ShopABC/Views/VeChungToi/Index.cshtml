@@ -1,0 +1,154 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Về chúng tôi";
+    ThongtinCty a = ShopABC_ThongTinCty.get_ThongTin_Theo_TieuDe(ViewBag.Title);
+}
+@section Breadcum {
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>@ViewBag.Title</h4>
+                        <div class="breadcrumb__links">
+                            <a href='@Url.Action("Index", "Home")'>Trang chủ</a>
+                            <span>@ViewBag.Title</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+}
+<!-- About Section Begin -->
+<section class="about spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="about__pic">
+                    <img src="/assets/Public/img/about/ve-chung-toi.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-4 col-sm-6">
+                <div class="about__item">
+                    @Html.Raw(a.Noidung)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About Section End -->
+<!-- Testimonial Section Begin -->
+<section class="testimonial">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 p-0">
+                <div class="testimonial__text">
+                    <span class="icon_quotations"></span>
+                    <p>
+                        “Chất lượng sản phẩm rất tốt. Rất đáng mua !”
+                    </p>
+                    <div class="testimonial__author">
+                        <div class="testimonial__author__pic">
+                            <img src="/assets/Public/img/about/testimonial-author.jpg">
+                        </div>
+                        <div class="testimonial__author__text">
+                            <h5>Nguyễn Hoàng Thịnh</h5>
+                            <p>Khách hàng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 p-0">
+                <div class="testimonial__pic set-bg" data-setbg="/assets/Public/img/about/testimonial-pic.jpg"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Testimonial Section End -->
+<!-- Counter Section Begin -->
+<section class="counter spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">102</h2>
+                    </div>
+                    <span>Our <br />Clients</span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">30</h2>
+                    </div>
+                    <span>Total <br />Categories</span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">102</h2>
+                    </div>
+                    <span>In <br />Country</span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">98</h2>
+                        <strong>%</strong>
+                    </div>
+                    <span>Happy <br />Customer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Counter Section End -->
+<!-- Client Section Begin -->
+<section class="clients spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h3 class="text-danger">ĐỐI TÁC</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-1.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-2.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-3.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-4.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-5.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-6.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-7.png"></a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                <a href="#" class="client__item"><img src="/assets/Public/img/clients/client-8.png"></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Client Section End -->
