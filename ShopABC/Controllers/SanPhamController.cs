@@ -7,6 +7,7 @@ namespace ShopABC.Controllers
     {
         // GET: SanPham
         [HttpGet]
+        [Route("danh-sach-san-pham/{page?}")]
         public IActionResult Index(int page = 1)
         {
 
