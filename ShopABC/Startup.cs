@@ -41,9 +41,9 @@ namespace ShopABC
             this.UngDungWeb.UseRouting();
             this.UngDungWeb.UseAuthorization();
             this.UngDungWeb.UseSession();
-            this.UngDungWeb.MapRazorPages();
-            dinhTuyen_Public();
-            dinhTuyen_Private();
+            this.UngDungWeb.MapDefaultControllerRoute();
+            // dinhTuyen_Public();
+            // dinhTuyen_Private();
             this.UngDungWeb.Run();
         }
         /// <summary>
@@ -54,18 +54,7 @@ namespace ShopABC
         {
             this.UngDungWeb.UseEndpoints(endpoints =>
             {
-                // Định tuyến: Blog
-                endpoints.MapControllerRoute(
-                    name: "r_blog",
-                    pattern: "blog/{page?}",
-                    defaults: new { controller = "Blog", action = "Index" }
-                );
-                // Định tuyến: Xem_Blog
-                endpoints.MapControllerRoute(
-                    name: "r_blog_chitiet",
-                    pattern: "blog/d/{bid?}",
-                    defaults: new { controller = "Blog", action = "Xem_Blog" }
-                );
+
                 // Định tuyến: SanPham
                 endpoints.MapControllerRoute(
                     name: "r_sanpham",
