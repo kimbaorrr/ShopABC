@@ -5,6 +5,7 @@ namespace ShopABC.Controllers
     {
         // GET: LienHe
         [HttpGet]
+        [Route("thong-tin-lien-he")]
         public IActionResult Index() => View();
     }
 }

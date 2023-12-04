@@ -6,12 +6,14 @@ namespace ShopABC.Controllers
     {
         // GET: GioHang
         [HttpGet]
+        [Route("gio-hang")]
         public IActionResult Index()
         {
             ViewData["GioHangCuaToi"] = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
             return View();
         }
         [HttpGet]
+        [Route("thanh-toan-truc-tuyen")]
         public IActionResult ThanhToan(string pkey, string ttid)
         {
 
@@ -29,6 +31,7 @@ namespace ShopABC.Controllers
             return Redirect("404");
         }
         [HttpGet]
+        [Route("them-vao-gio")]
         public IActionResult ThemVaoGio(int spid, string pkey, int kichco = 38, int soluong = 1)
         {
 
@@ -49,6 +52,7 @@ namespace ShopABC.Controllers
             return Redirect("/404");
         }
         [HttpGet]
+        [Route("xoa-khoi-gio")]
         public IActionResult XoaKhoiGio(int spid, string pkey, string r)
         {
 
@@ -69,6 +73,7 @@ namespace ShopABC.Controllers
             return Redirect("~/404");
         }
         [HttpGet]
+        [Route("xoa-tat-ca")]
         public IActionResult XoaTatCaSanPham(string pkey, string r)
         {
             try
@@ -88,6 +93,7 @@ namespace ShopABC.Controllers
             return Redirect("~/404");
         }
         [HttpGet]
+        [Route("giam-so-luong")]
         public IActionResult GiamSoLuong(int spid, string pkey, string r)
         {
 
@@ -108,6 +114,7 @@ namespace ShopABC.Controllers
             return Redirect("~/404");
         }
         [HttpGet]
+        [Route("thanh-toan-thanh-cong")]
         public IActionResult ThanhToanThanhCong(string pkey, string ttid, string ngaygd, int t)
         {
             try

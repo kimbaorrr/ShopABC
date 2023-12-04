@@ -5,6 +5,7 @@ namespace ShopABC.Controllers
     {
         // GET: FAQs
         [HttpGet]
+        [Route("cau-hoi-thuong-gap")]
         public IActionResult Index() => View();
     }
 }

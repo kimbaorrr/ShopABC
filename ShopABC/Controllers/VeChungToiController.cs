@@ -5,6 +5,7 @@ namespace ShopABC.Controllers
     {
         // GET: VeChungToi
         [HttpGet]
+        [Route("ve-chung-toi")]
         public IActionResult Index() => View();
     }
 }

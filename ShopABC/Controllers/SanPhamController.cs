@@ -23,6 +23,7 @@ namespace ShopABC.Controllers
             return Redirect("~/404");
         }
         [HttpGet]
+        [Route("san-pham/{p?}/{spid?}")]
         public IActionResult ChiTiet(string p, int spid)
         {
 
@@ -30,30 +31,35 @@ namespace ShopABC.Controllers
             return View();
         }
         [HttpGet]
+        [Route("danh-sach-san-pham/tim-kiem/{search?}/{page?}")]
         public IActionResult TimKiem(string search = null, int page = 1)
         {
             ThucThi(search: search, page: page);
             return View("Index");
         }
         [HttpGet]
+        [Route("danh-sach-san-pham/theo-loai/{loai?}/{page?}")]
         public IActionResult LocSanPham_TheoLoai(string loai = null, int page = 1)
         {
             ThucThi(loai: loai, page: page);
             return View("Index");
         }
         [HttpGet]
+        [Route("danh-sach-san-pham/theo-hsx/{hsx?}/{page?}")]
         public IActionResult LocSanPham_TheoHSX(string hsx = null, int page = 1)
         {
             ThucThi(hsx: hsx, page: page);
             return View("Index");
         }
         [HttpGet]
+        [Route("danh-sach-san-pham/theo-gia-ban/{giaban?}/{page?}")]
         public IActionResult LocSanPham_TheoGiaBan(string giaban = null, int page = 1)
         {
             ThucThi(giaban: giaban, page: page);
             return View("Index");
         }
         [HttpGet]
+        [Route("danh-sach-san-pham/theo-mau/{color?}/{page?}")]
         public IActionResult LocSanPham_TheoMau(string color = null, int page = 1)
         {
             ThucThi(mausac: color, page: page);
