@@ -8,27 +8,9 @@ namespace ShopABC.Areas.Dashboard.Controllers
     {
         // GET: Dashboard/Login
         [HttpGet]
-        [Route("admin/dang-nhap-he-thong/{date?}")]
-        public IActionResult Index(string date)
-        {
-            try
-            {
-                if (date.Equals(DateTime.Today.Date.ToString("ddMMyyyy")))
-                    /*
-                    if (check_SoLanDN())
-                    {
-                        if (khoiPhuc_SoLanDN() == false)
-                            ViewBag.ThongBao = "Vượt quá số lần đăng nhập !";
-                    }
-                    */
-                    return View();
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return Redirect("~/404");
-        }
+        [Route("admin/dang-nhap-he-thong")]
+        public IActionResult Index()
+            => View();
         [HttpGet]
         [Route("admin/quen-mat-khau")]
         public IActionResult QuenMatKhau()
