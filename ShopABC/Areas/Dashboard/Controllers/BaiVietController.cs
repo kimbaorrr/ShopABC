@@ -75,15 +75,32 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    a.MaNV = (int)get_Session().GetInt32("manv");
-                    if (hanhdong.Equals("draft"))
-                        a.IsDraft = true;
-                    a.dang_BaiViet();
-                    set_ThongBao(a.ThongBaoLoi.Item1, a.ThongBaoLoi.Item2);
-                    if (a.ThongBaoLoi.Item1.Contains("thành công"))
-                        log_History("Thêm bài viết " + a.ThongBaoLoi.Item3);
-                    ModelState.Clear();
+                    using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
+                    {
+                        try
+                        {
+                            if (kiemtra_Tep(a))
+                            {
+                                Baiviet bv = new Baiviet()
+                                {
+                                    Manv = a.MaNV,
+                                    Tieude = a.TieuDe,
+                                    Noidung = a.NoiDung,
+                                    Duyet = a.Duyet,
+                                    Hinhbv = a.rand_HinhBV,
+                                    Draft = a.IsDraft
+                                };
+                                e.Baiviets.Add(bv);
+                                e.SaveChanges();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ShopABC_CSDL.log_errs(ex.Message);
+                        }
+                    }
                 }
+                ModelState.Clear();
                 return View();
             }
             catch (Exception ex)
@@ -143,6 +160,43 @@ namespace ShopABC.Areas.Dashboard.Controllers
                 ShopABC_CSDL.log_errs(ex.Message);
             }
             return Redirect("~/404");
+        }
+
+        private bool kiemtra_Tep(ShopABC_ChiTietBaiViet a)
+        {
+            try
+            {
+                if (a.HinhBV == null)
+                {
+                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Chưa chọn tệp tải lên !", 1, a.MaBV);
+                    return false;
+                }
+                if (a.HinhBV.Length <= 0)
+                {
+                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp rỗng !", 1, a.MaBV);
+                    return false;
+                }
+                if (a.HinhBV.Length >= 10485760)
+                {
+                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Dung lượng tệp không được vượt quá 10MB ! !", 1, a.MaBV);
+                    return false;
+                }
+                if (!a.HinhBV.ContentType.Contains("image/"))
+                {
+                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp không đúng định dạng !", 1, a.MaBV);
+                    return false;
+                }
+                string randName = "blog-" + DateTime.Now.ToString("ddMMyyyyHHmmssfffff") + ".webp";
+                using (FileStream stream = new FileStream("wwwroot/uploads/images/Blog/" + randName, FileMode.Create))
+                    a.HinhBV.CopyTo(stream);
+                a.rand_HinhBV = randName;
+
+            }
+            catch (Exception ex)
+            {
+                ShopABC_CSDL.log_errs(ex.Message);
+            }
+            return true;
         }
     }
 }

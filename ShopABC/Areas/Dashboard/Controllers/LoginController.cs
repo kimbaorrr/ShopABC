@@ -14,9 +14,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [HttpGet]
         [Route("admin/quen-mat-khau")]
         public IActionResult QuenMatKhau()
-        {
-            return View();
-        }
+            => View();
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Index(ShopABC_TaiKhoan a)
         {
@@ -24,7 +22,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 if (ModelState.IsValid && a.dangNhap())
                 {
-                    ISession my_sess = this.HttpContext.Session;
+                    ISession my_sess = get_Session();
                     my_sess.SetString("pkey", ShopABC_TaiKhoan.privateKey());
                     my_sess.SetString("tendn", a.TenDN);
                     my_sess.SetInt32("manv", ShopABC_NhanVien.get_MaNV(a.TenDN));
@@ -32,7 +30,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
                 }
                 ViewBag.ThongBao = "Thông tin đăng nhập không chính xác !";
                 ModelState.Clear();
-                get_Session().SetInt32("SoLanDN", (int)get_Session().GetInt32("SoLanDN") + 1);
                 return View();
             }
             catch (Exception ex)
@@ -43,23 +40,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         }
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult QuenMatKhau(ShopABC_QuenMatKhau a)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return View();
-        }
-        [HttpPost]
-        [Route("admin/gui-ma-xac-minh")]
-        public void GuiMaXacMinh(string Email)
-        {
-            new ShopABC_QuenMatKhau().gui_MaXacMinh(Email);
-        }
+            => View();
         /*
         private bool check_SoLanDN()
         {
@@ -79,6 +60,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
             return false;
         }
         */
-        public ISession get_Session() => this.HttpContext.Session;
+        public ISession get_Session() => HttpContext.Session;
     }
 }

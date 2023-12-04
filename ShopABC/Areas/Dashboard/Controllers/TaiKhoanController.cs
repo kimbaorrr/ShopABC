@@ -11,7 +11,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         public IActionResult Logout()
         {
             get_Session().Clear();
-            return RedirectToAction("Index", "Login", new { Area = "Dashboard", date = DateTime.Today.ToString("ddMMyyyy") });
+            return RedirectToAction("Index", "Login", new { Area = "Dashboard" });
         }
         [HttpGet]
         [Route("admin/phan-quyen-truy-cap")]

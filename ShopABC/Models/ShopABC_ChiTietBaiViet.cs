@@ -22,7 +22,7 @@ namespace ShopABC.Models
         public IFormFile HinhBV { get; set; }
         public int MaBV { get; set; }
         public bool Duyet { get; set; }
-        private string rand_HinhBV { get; set; }
+        public string rand_HinhBV { get; set; }
         [Display(Name = "Số lần đọc")]
         public int? SoLanDoc { get; set; }
         public bool IsDraft { get; set; }
@@ -71,36 +71,7 @@ namespace ShopABC.Models
         /// <returns>Nội dung thông báo & Mã trạng thái</returns>
         public void dang_BaiViet()
         {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                using (e.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        if (kiemtra_Tep(this))
-                        {
-                            Baiviet bv = new Baiviet()
-                            {
-                                Manv = this.MaNV,
-                                Tieude = this.TieuDe,
-                                Noidung = this.NoiDung,
-                                Duyet = this.Duyet,
-                                Hinhbv = this.rand_HinhBV,
-                                Draft = this.IsDraft
-                            };
-                            e.Baiviets.Add(bv);
-                            e.SaveChanges();
-                            e.Database.CommitTransaction();
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Thêm bài viết thành công !", 0, bv.Mabv);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ShopABC_CSDL.log_errs(ex.Message);
-                        e.Database.RollbackTransaction();
-                    }
-                }
-            }
+            
         }
         /// <summary>
         /// Cập nhật thông tin Bài viết trên CSDL
@@ -207,42 +178,7 @@ namespace ShopABC.Models
         /// </summary>
         /// <param name="a">Bài viết</param>
         /// <returns>Đúng/Sai</returns>
-        private bool kiemtra_Tep(ShopABC_ChiTietBaiViet a)
-        {
-            try
-            {
-                if (a.HinhBV == null)
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Chưa chọn tệp tải lên !", 1, a.MaBV);
-                    return false;
-                }
-                if (a.HinhBV.Length <= 0)
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp rỗng !", 1, a.MaBV);
-                    return false;
-                }
-                if (a.HinhBV.Length >= 10485760)
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Dung lượng tệp không được vượt quá 10MB ! !", 1, a.MaBV);
-                    return false;
-                }
-                if (!a.HinhBV.ContentType.Contains("image/"))
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp không đúng định dạng !", 1, a.MaBV);
-                    return false;
-                }
-                string randName = "blog-" + DateTime.Now.ToString("ddMMyyyyHHmmssfffff") + ".webp";
-                using (FileStream stream = new FileStream("wwwroot/uploads/images/Blog/" + randName, FileMode.Create))
-                    a.HinhBV.CopyTo(stream);
-                a.rand_HinhBV = randName;
-
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return true;
-        }
+        
         /// <summary>
         /// Cập nhật số lần đọc (lượt xem) của bài viết
         /// </summary>
