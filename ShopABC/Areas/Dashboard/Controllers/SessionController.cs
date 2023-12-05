@@ -14,7 +14,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
             if (my_sess.GetString("tendn") == null || my_sess.GetInt32("manv") == null || my_sess.GetString("pkey") == null)
             {
                 filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary(new { controller = "Login", action = "Index", area = "Dashboard", date = DateTime.Today.Date.ToString("ddMMyyyy") }));
+                    new RouteValueDictionary(new { controller = "Login", action = "Index", area = "Dashboard" }));
             }
         }
         public void set_ThongBao(string thongbao, byte matt)
