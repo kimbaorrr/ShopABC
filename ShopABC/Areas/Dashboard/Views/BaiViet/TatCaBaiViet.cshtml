@@ -60,7 +60,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { p = i.Tieude, bvid = i.Mabv, pkey = this.Context.Session.GetString("pkey") })" class="btn btn-sm btn-primary">Xem</a>
+                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { bvid = i.Mabv, pkey = Context.Session.GetString("pkey") })" class="btn btn-sm btn-primary">Xem</a>
                                 </td>
                             </tr>
                         }

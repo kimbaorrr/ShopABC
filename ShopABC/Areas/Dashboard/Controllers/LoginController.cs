@@ -16,6 +16,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         public IActionResult QuenMatKhau()
             => View();
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/dang-nhap-he-thong")]
         public IActionResult Index(ShopABC_TaiKhoan a)
         {
             try

@@ -74,6 +74,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <param name="a">Đối tượng ChiTietBaiViet</param>
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/dang-bai-viet")]
         public IActionResult DangBaiViet(ShopABC_ChiTietBaiViet a)
         {
             try
@@ -100,10 +101,12 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                 e.SaveChanges();
                                 log_History($"Thêm bài viết {bv.Mabv}"); // Lưu log
                                 set_ThongBao("Thêm bài viết thành công !", 0);
+                                return View();
                             }
                             else
                             {
                                 set_ThongBao(kt_Tep, 1);
+                                return View(a);
                             }
                         }
                         catch (Exception ex)
@@ -111,8 +114,8 @@ namespace ShopABC.Areas.Dashboard.Controllers
                             ShopABC_CSDL.log_errs(ex.Message);
                         }
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
                 return View();
             }
             catch (Exception ex)
@@ -128,6 +131,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <param name="hd">Hành động/Thao tác</param>
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/duyet-bai-viet")]
         public string DuyetBaiViet(int bvid, string hd)
         {
             try
@@ -168,6 +172,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <param name="hanhdong">Hành động/Thao tác</param>
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/bai-viet/{bvid?}/{pkey?}")]
         public IActionResult ChiTietBaiViet(ShopABC_ChiTietBaiViet a, string hanhdong)
         {
             try

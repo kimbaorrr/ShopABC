@@ -52,7 +52,7 @@
                                 <td><span class="badge bg-success">Còn hàng</span>
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("ChiTietSanPham", "SanPham", new { p = i.Tensp, spid = i.Masp, pkey = this.Context.Session.GetString("pkey") })' class="btn btn-sm btn-primary">Xem</a>
+                                    <a href='@Url.Action("ChiTietSanPham", "SanPham", new { spid = i.Masp, pkey = Context.Session.GetString("pkey") })' class="btn btn-sm btn-primary">Xem</a>
                                 </td>
                             </tr>
                         }

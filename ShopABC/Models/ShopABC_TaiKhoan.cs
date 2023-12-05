@@ -56,18 +56,7 @@ namespace ShopABC.Models
         /// </summary>
         /// <returns>Khớp/Không khớp</returns>
         public bool dangNhap()
-        {
-            try
-            {
-                byte chk_DangNhap = (byte)ShopABC_NhanVien.get_NV_DangNhap().Count(x => x.Tendn.Equals(this.TenDN.ToLower().Trim()) && x.Matkhau.Equals(hash_MatKhau(this.MatKhau)));
-                return chk_DangNhap == 1;
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return false;
-        }
+            => ShopABC_NhanVien.get_NV_DangNhap().Any(x => x.Tendn.Equals(this.TenDN.ToLower().Trim()) && x.Matkhau.Equals(hash_MatKhau(this.MatKhau)));
         /// <summary>
         /// Đổi mật khẩu nhân viên
         /// </summary>

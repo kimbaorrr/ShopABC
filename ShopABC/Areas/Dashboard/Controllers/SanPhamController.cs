@@ -31,8 +31,8 @@ namespace ShopABC.Areas.Dashboard.Controllers
             return Redirect("404");
         }
         [HttpGet]
-        [Route("admin/san-pham/{p?}/{spid?}/{pkey?}")]
-        public IActionResult ChiTietSanPham(string p, int spid, string pkey)
+        [Route("admin/san-pham/{spid?}/{pkey?}")]
+        public IActionResult ChiTietSanPham(int spid, string pkey)
         {
             try
             {
@@ -66,6 +66,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         }
         // POST Method
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/them-san-pham")]
         public IActionResult ThemSanPham(ShopABC_ChiTietSanPham a)
         {
             try
@@ -124,6 +125,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     }
                     ModelState.Clear();
                 }
+                return View();
             }
             catch (Exception ex)
             {
@@ -132,6 +134,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
             return Redirect("~/404");
         }
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/san-pham/{spid?}/{pkey?}")]
         public IActionResult ChiTietSanPham(ShopABC_ChiTietSanPham a, string hanhdong)
         {
             try
@@ -202,6 +205,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <param name="hd">Hành động</param>
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("admin/duyet-san-pham")]
         public string DuyetSanPham(int spid, string hd)
         {
             try
