@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShopABC_DB;
 using Newtonsoft.Json;
+using ShopABC_DB;
 namespace ShopABC.Models
 {
     public static class ShopABC_SanPham

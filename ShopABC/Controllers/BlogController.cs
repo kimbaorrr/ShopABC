@@ -23,7 +23,7 @@ namespace ShopABC.Controllers
             if (p == 1)
                 ViewBag.PhanHoi = "=> Chúng tôi đã ghi nhận phản hồi. Cám ơn bạn !";
             ViewData["ChiTiet_Blog"] = ShopABC_BaiViet.get_BaiViet_Theo_ID(bid);
-            ShopABC_ChiTietBaiViet.capNhat_SoLanDoc(bid);
+            ShopABC_BaiViet.capNhat_SoLanDoc(bid);
             ViewBag.ThisBlog = bid;
             return View();
         }

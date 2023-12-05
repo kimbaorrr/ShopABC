@@ -1,5 +1,4 @@
-﻿using ShopABC_DB;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 namespace ShopABC.Models
 {
     public class ShopABC_ChiTietBaiViet
@@ -15,7 +14,6 @@ namespace ShopABC.Models
         [Display(Name = "Ngày đăng")]
         [DataType(DataType.DateTime, ErrorMessage = "Giá trị không hợp lệ !")]
         public DateTime? NgayDang { get; set; }
-        public Tuple<string, byte, int> ThongBaoLoi { get; set; }
         [Display(Name = "Nhân viên")]
         public int MaNV { get; set; }
         [Display(Name = "Hình bài viết")]
@@ -34,12 +32,11 @@ namespace ShopABC.Models
         public ShopABC_ChiTietBaiViet()
         {
             this.MaBV = 0;
-            this.TieuDe = null;
+            this.TieuDe = string.Empty;
             this.MaNV = 0;
-            this.NoiDung = null;
+            this.NoiDung = string.Empty;
             this.HinhBV = null;
             this.Duyet = false;
-            this.ThongBaoLoi = Tuple.Create<string, byte, int>(null, 0, 0);
             this.SoLanDoc = 0;
             this.NgayDang = DateTime.Now;
             this.IsDraft = false;
@@ -58,146 +55,9 @@ namespace ShopABC.Models
             this.NgayDang = a.NgayDang;
             this.HinhBV = a.HinhBV;
             this.Duyet = a.Duyet;
-            this.ThongBaoLoi = a.ThongBaoLoi;
             this.SoLanDoc = a.SoLanDoc;
             this.IsDraft = a.IsDraft;
             this.IsPublic = a.IsPublic;
-        }
-        /// <summary>
-        /// Thêm mới một bài viết vào CSDL
-        /// </summary>
-        /// <param name="manv">Truyền tham số Mã Nhân viên</param>
-        /// <param name="hinhsp">Truyền tham số Hình sản phẩm</param>
-        /// <returns>Nội dung thông báo & Mã trạng thái</returns>
-        public void dang_BaiViet()
-        {
-            
-        }
-        /// <summary>
-        /// Cập nhật thông tin Bài viết trên CSDL
-        /// </summary>
-        /// <returns>Nội dung thông báo & Mã trạng thái</returns>
-        public void sua_BaiViet()
-        {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                using (e.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        Baiviet bv = e.Baiviets.Where(x => x.Mabv == this.MaBV).FirstOrDefault();
-                        bv.Tieude = this.TieuDe;
-                        bv.Noidung = this.NoiDung;
-                        bv.Ngaydang = this.NgayDang;
-                        bv.Duyet = false;
-                        if (this.IsPublic)
-                            bv.Draft = false;
-                        else
-                            bv.Draft = true;
-                        e.SaveChanges();
-                        e.Database.CommitTransaction();
-                        this.ThongBaoLoi = Tuple.Create<string, byte, int>("Sửa bài viết thành công !", 0, bv.Mabv);
-                    }
-                    catch (Exception ex)
-                    {
-                        ShopABC_CSDL.log_errs(ex.Message);
-                        e.Database.RollbackTransaction();
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Xóa bài viết trên CSDL
-        /// </summary>
-        public void xoa_BaiViet()
-        {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                using (e.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        Baiviet bv = e.Baiviets.Where(x => x.Mabv == this.MaBV).FirstOrDefault();
-                        File.Delete(@"wwwroot\\uploads\\images\\Blog\\" + bv.Hinhbv);
-                        e.Baiviets.Remove(bv);
-                        e.SaveChanges();
-                        e.Database.CommitTransaction();
-                        this.ThongBaoLoi = Tuple.Create<string, byte, int>(null, 0, this.MaBV);
-                    }
-                    catch (Exception ex)
-                    {
-                        ShopABC_CSDL.log_errs(ex.Message);
-                        e.Database.RollbackTransaction();
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Duyệt bài viết bằng cách thay đổi giá trị cột Duyet trên CSDL
-        /// </summary>
-        /// <param name="mabv">Truyền tham số Mã bài viết</param>
-        /// <param name="hd">Truyền tham số Hành động</param>
-        /// <returns></returns>
-        public static string duyet_BaiViet(int manv, string hd, int? nguoiduyet)
-        {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                using (e.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        Baiviet a = e.Baiviets.Where(x => x.Mabv == manv).FirstOrDefault();
-                        switch (hd)
-                        {
-                            case "duyetbai":
-                                a.Duyet = true;
-                                a.Ngayduyet = DateTime.Now;
-                                a.Nguoiduyet = nguoiduyet;
-                                e.SaveChanges();
-                                e.Database.CommitTransaction();
-                                return "Duyệt bài viết " + manv + " thành công !";
-                            case "huybo":
-                                File.Delete(@"wwwroot\\uploads\\images\\Blog\\" + a.Hinhbv);
-                                e.Baiviets.Remove(a);
-                                e.SaveChanges();
-                                e.Database.CommitTransaction();
-                                return "Đã hủy bài viết " + manv + " !";
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ShopABC_CSDL.log_errs(ex.Message);
-                        e.Database.RollbackTransaction();
-                    }
-                }
-                return null;
-            }
-        }
-        /// <summary>
-        /// Thực hiện kiểm tra tệp và thêm tệp vào hệ thống
-        /// </summary>
-        /// <param name="a">Bài viết</param>
-        /// <returns>Đúng/Sai</returns>
-        
-        /// <summary>
-        /// Cập nhật số lần đọc (lượt xem) của bài viết
-        /// </summary>
-        /// <param name="bvid">Mã bài viết</param>
-        public static void capNhat_SoLanDoc(int bvid)
-        {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                try
-                {
-                    Baiviet n = e.Baiviets.FirstOrDefault(x => x.Mabv == bvid);
-                    n.Luotxem++;
-                    e.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    ShopABC_CSDL.log_errs(ex.Message);
-                }
-            }
         }
     }
 }

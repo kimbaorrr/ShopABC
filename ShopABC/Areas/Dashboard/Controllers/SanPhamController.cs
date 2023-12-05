@@ -10,7 +10,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/them-san-pham")]
         public IActionResult ThemSanPham()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).ThemSanpham.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).ThemSanpham.Value)
                 return View();
             return Redirect("404");
         }
@@ -18,7 +18,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/danh-sach-san-pham")]
         public IActionResult DanhSachSanPham()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).XemSanphamDssp.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).XemSanphamDssp.Value)
                 return View();
             return Redirect("404");
         }
@@ -26,7 +26,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/duyet-san-pham")]
         public IActionResult DuyetSanPham()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).DuyetSanpham.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).DuyetSanpham.Value)
                 return View();
             return Redirect("404");
         }
@@ -36,23 +36,25 @@ namespace ShopABC.Areas.Dashboard.Controllers
         {
             try
             {
-                if (pkey.Equals(get_Session().GetString("pkey")))
+                if (get_pkey_Session())
                 {
-                    ShopABC_ChiTietSanPham a = new ShopABC_ChiTietSanPham();
                     Sanpham l = ShopABC_SanPham.get_SanPham_Theo_MaSP(spid);
-                    a.MaSP = l.Masp;
-                    a.TenSP = l.Tensp;
-                    a.GiaBan = l.Giaban;
-                    a.GiamGia = l.Giamgia;
-                    a.KieuDang = l.Kieudang;
-                    a.ChatLieu = l.Chatlieu;
-                    a.MaDM = l.Madm;
-                    a.MaHSX = l.Mahsx;
-                    a.MaLoai = l.MadmNavigation.MaloaiNavigation.Maloai;
-                    a.MaMau = l.Mamau;
+                    ShopABC_ChiTietSanPham a = new ShopABC_ChiTietSanPham()
+                    {
+                        MaSP = l.Masp,
+                        TenSP = l.Tensp,
+                        GiaBan = l.Giaban,
+                        GiamGia = l.Giamgia,
+                        KieuDang = l.Kieudang,
+                        ChatLieu = l.Chatlieu,
+                        MaDM = l.Madm,
+                        MaHSX = l.Mahsx,
+                        MaLoai = l.MadmNavigation.MaloaiNavigation.Maloai,
+                        MaMau = l.Mamau,
+                        a.MaNV = (int)l.Manv,
+                        a.NgayNhap = l.Ngaynhap.Value
+                    };
                     get_Session().SetString("HinhSP", l.Hinhsp);
-                    a.MaNV = (int)l.Manv;
-                    a.NgayNhap = l.Ngaynhap.Value;
                     return View(a);
                 }
             }
@@ -70,18 +72,49 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    try
+                    using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                     {
-                        a.MaNV = (int)get_Session().GetInt32("manv");
-                        a.them_SanPham();
-                        set_ThongBao(a.ThongBaoLoi.Item1, a.ThongBaoLoi.Item2);
-                        if (a.ThongBaoLoi.Item1.Contains("thành công"))
-                            log_History("Thêm sản phẩm " + a.ThongBaoLoi.Item3);
-                    }
-                    catch (Exception ex)
-                    {
-                        set_ThongBao("Lỗi hệ thống !" + "\n" + DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy") + " " + ex.Message, 2);
-                        return View();
+                        try
+                        {
+                            bool chk_SanPham = ShopABC_chk_DieuKien.chk_SanPham_TonTai(a.TenSP);
+                            if (chk_SanPham)
+                                set_ThongBao("Sản phẩm đã tồn tại trên hệ thống", 1);
+                            bool chk_DanhMuc = ShopABC_chk_DieuKien.chk_DanhMuc_TonTai_LoaiSP(a.MaLoai, a.MaDM);
+                            if (!chk_DanhMuc)
+                                set_ThongBao("Danh mục không khớp với Loại sản phẩm đã chọn", 1);
+                            string kt_tep = kiemtra_Tep(a);
+                            if (string.IsNullOrEmpty(kt_tep))
+                            {
+                                Sanpham sp = new Sanpham()
+                                {
+                                    Madm = a.MaDM,
+                                    Tensp = a.TenSP,
+                                    Chatlieu = a.ChatLieu,
+                                    Kieudang = a.KieuDang,
+                                    Giaban = a.GiaBan,
+                                    Giamgia = a.GiamGia,
+                                    Mahsx = a.MaHSX,
+                                    Hinhsp = string.Join("#", a.rand_HinhSP),
+                                    Mamau = a.MaMau,
+                                    Duyet = false,
+                                    Manv = a.MaNV,
+                                    Mota = a.MoTa,
+                                    Noidung = a.NoiDung,
+                                    Thuevat = a.ThueVAT
+                                };
+                                e.Sanphams.Add(sp);
+                                e.SaveChanges();
+                                set_ThongBao("Thêm sản phẩm thành công !", 0);
+                            }
+                            else
+                            {
+                                set_ThongBao(kt_tep, 1);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ShopABC_CSDL.log_errs(ex.Message);
+                        }
                     }
                     ModelState.Clear();
                 }
@@ -99,25 +132,58 @@ namespace ShopABC.Areas.Dashboard.Controllers
             try
             {
                 if (ModelState.IsValid)
-                    switch (hanhdong)
+                {
+                    using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                     {
-                        case "suadoi":
-                            a.sua_SanPham();
-                            set_ThongBao(a.ThongBaoLoi.Item1, a.ThongBaoLoi.Item2);
-                            if (a.ThongBaoLoi.Item1.Contains("thành công"))
-                                log_History("Sửa sản phẩm " + a.ThongBaoLoi.Item3);
-                            return View(a);
-                        case "xoabo":
-                            a.xoa_SanPham();
-                            set_ThongBao(a.ThongBaoLoi.Item1, a.ThongBaoLoi.Item2);
-                            if (string.IsNullOrEmpty(ViewBag.ThongBao))
-                            {
-                                log_History("Xóa sản phẩm " + a.ThongBaoLoi.Item3);
+                        Sanpham sp = e.Sanphams.FirstOrDefault(x => x.Masp == a.MaSP);
+                        switch (hanhdong)
+                        {
+                            case "suadoi":
+
+                                string kt_sp = kiemTra_SanPham(sp, a);
+                                if (string.IsNullOrEmpty(kt_sp))
+                                {
+                                    sp.Tensp = a.TenSP;
+                                    sp.Mota = a.MoTa;
+                                    sp.Chatlieu = a.ChatLieu;
+                                    sp.Kieudang = a.KieuDang;
+                                    sp.Giaban = a.GiaBan;
+                                    sp.Giamgia = a.GiamGia;
+                                    sp.Mamau = a.MaMau;
+                                    sp.Madm = a.MaDM;
+                                    sp.MadmNavigation.Maloai = a.MaLoai;
+                                    sp.Noidung = a.NoiDung;
+                                    sp.Duyet = false;
+                                    sp.Manv = a.MaNV;
+                                    sp.Mahsx = a.MaHSX;
+                                    sp.Ngaynhap = a.NgayNhap;
+                                    sp.Thuevat = a.ThueVAT;
+                                    e.SaveChanges();
+                                    set_ThongBao("Sửa sản phẩm thành công !", 0);
+                                }
+                                else
+                                {
+                                    set_ThongBao(kt_sp, 1);
+                                }
+                            case "xoabo":
+                                if (ShopABC_DonHang.get_ChiTietDonHang().Any(x => x.Masp == masp))
+                                {
+                                    set_ThongBao("Sản phẩm đã có đơn hàng. Không thể xóa !", 1);
+                                    return View(a);
+                                }
+                                // Xóa các hình ảnh đã lưu
+                                foreach (string i in sp.Hinhsp.Split("#"))
+                                    ShopABC_Tools.del_Image($"SanPham/{i}");
+                                e.Sanphams.Remove(sp);
+                                e.SaveChanges();
+                                log_History($"Xóa sản phẩm {a.MaSP}");
                                 return RedirectToAction("DanhSachSanPham", "SanPham");
-                            }
-                            return View(a);
+                            default:
+                                break;
+                        }
                     }
-                return View();
+                    return View(a);
+                }
             }
             catch (Exception ex)
             {
@@ -125,28 +191,86 @@ namespace ShopABC.Areas.Dashboard.Controllers
             }
             return Redirect("~/404");
         }
+        /// <summary>
+        /// Duyệt sản phẩm
+        /// </summary>
+        /// <param name="spid">Mã sản phẩm</param>
+        /// <param name="hd">Hành động</param>
+        /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
         public string DuyetSanPham(int spid, string hd)
         {
             try
             {
-                string b = ShopABC_ChiTietSanPham.duyet_SanPham(spid, hd, get_Session().GetInt32("manv"));
-                switch (hd)
+                using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                 {
-                    case "duyetbai":
-                        log_History("Duyệt sản phẩm " + spid);
-                        break;
-                    case "huybo":
-                        log_History("Hủy duyệt sản phẩm " + spid);
-                        break;
+                    Sanpham a = e.Sanphams.FirstOrDefault(x => x.Masp == spid);
+                    switch (hd)
+                    {
+                        case "duyet":
+                            a.Duyet = true;
+                            a.Ngayduyet = DateTime.Now;
+                            a.Nguoiduyet = nguoiduyet;
+                            e.SaveChanges();
+                            log_History($"Duyệt sản phẩm {spid} !");
+                            return $"Duyệt sản phẩm {spid} thành công !";
+                        case "huybo":
+                            foreach (string i in a.Hinhsp.Split("#"))
+                                ShopABC_Tools.del_Image($"SanPham/{i}");
+                            e.Sanphams.Remove(a);
+                            e.SaveChanges();
+                            log_History($"Hủy duyệt sản phẩm {spid} !");
+                            return $"Đã hủy sản phẩm {spid} !";
+                        default:
+                            break;
+                    }
+                    return string.Empty;
                 }
-                return b;
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return null;
+            return Redirect("~/404");
+        }
+        private string kiemtra_Tep(ShopABC_ChiTietSanPham a)
+        {
+            byte dem = 0;
+            a.rand_HinhSP = new string[a.HinhSP.Count];
+            foreach (IFormFile in_hinhsp in a.HinhSP)
+            {
+                if (a.HinhSP.Count == 0)
+                    return "Chưa chọn tệp tải lên !";
+                if (a.HinhSP.Count > 5)
+                    return "Không được tải lên nhiều hơn 5 tệp !";
+                if (in_hinhsp.Length <= 0)
+                    return $"Tệp thứ {dem + 1} rỗng !";
+                if (in_hinhsp.Length >= 10485760)
+                    return $"Dung lượng tệp thứ {dem + 1} không được vượt quá 10MB !";
+                if (!in_hinhsp.ContentType.Contains("image/"))
+                    return $"Tệp thứ {dem + 1} không đúng định dạng !";
+                string randName = $"sp-{DateTime.Now.ToString("ddMMyyyyHHmmssfffff")}.webp";
+                string today = DateTime.Now.ToString("ddMMyyyy");
+                Directory.CreateDirectory($"wwwroot/uploads/images/SanPham/{today}");
+                using (FileStream stream = new FileStream($"wwwroot/uploads/images/SanPham/{today}/{randName}.webp", FileMode.Create))
+                    in_hinhsp.CopyTo(stream);
+                a.rand_HinhSP[dem] = randName;
+                dem++;
+            }
+            return string.Empty;
+        }
+        private string kiemTra_SanPham(Sanpham sp, ShopABC_ChiTietSanPham a)
+        {
+            if (!sp.Tensp.Equals(a.TenSP))
+            {
+                if (ShopABC_SanPham.get_SanPham().Any(x => x.Tensp.Equals(a.TenSP)))
+                    return "Đã có sản phẩm cùng tên trên hệ thống. Không thể sửa !";
+            }
+            if (ShopABC_DonHang.get_ChiTietDonHang().Any(x => x.Masp == a.MaSP))
+                return "Sản phẩm này đã có đơn đặt hàng. Không thể sửa !";
+            if (!ShopABC_SanPham.get_DanhMucSP().Any(x => x.Madm == a.MaDM && x.Maloai == a.MaDM))
+                return "Danh mục không khớp với Loại sản phẩm đã chọn !";
+            return string.Empty;
         }
     }
 }

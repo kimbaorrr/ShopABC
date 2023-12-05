@@ -58,7 +58,7 @@ namespace ShopABC.Models
         public short ThueVAT { get; set; }
         public int MaNV { get; set; }
         public DateTime? NgayNhap { get; set; }
-        private string[] rand_HinhSP { get; set; }
+        public string[] rand_HinhSP { get; set; }
 
         /// <summary>
         /// Default Constructor
@@ -66,17 +66,17 @@ namespace ShopABC.Models
         public ShopABC_ChiTietSanPham()
         {
             this.MaSP = 0;
-            this.TenSP = null;
+            this.TenSP = string.Empty;
             this.GiaBan = 0;
             this.GiamGia = 0;
-            this.ChatLieu = null;
-            this.KieuDang = null;
+            this.ChatLieu = string.Empty;
+            this.KieuDang = string.Empty;
             this.MaLoai = 0;
             this.MaDM = 0;
             this.MaHSX = 0;
-            this.MaMau = null;
-            this.MoTa = null;
-            this.NoiDung = null;
+            this.MaMau = string.Empty;
+            this.MoTa = string.Empty;
+            this.NoiDung = string.Empty;
             this.HinhSP = new List<IFormFile>();
             this.Duyet = false;
             this.ThueVAT = 8;
@@ -113,50 +113,7 @@ namespace ShopABC.Models
         /// </summary>
         public void them_SanPham()
         {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                using (e.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        bool chk_SanPham = ShopABC_chk_DieuKien.chk_SanPham_TonTai(this.TenSP);
-                        if (chk_SanPham)
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Sản phẩm đã tồn tại trên hệ thống", 1, 0);
-                        bool chk_DanhMuc = ShopABC_chk_DieuKien.chk_DanhMuc_TonTai_LoaiSP(this.MaLoai, this.MaDM);
-                        if (!chk_DanhMuc)
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Danh mục không khớp với Loại sản phẩm đã chọn", 1, 0);
-                        if (kiemtra_Tep(this) && string.IsNullOrEmpty(this.ThongBaoLoi.Item1))
-                        {
-                            Sanpham sp = new Sanpham()
-                            {
-                                Madm = this.MaDM,
-                                Tensp = this.TenSP,
-                                Chatlieu = this.ChatLieu,
-                                Kieudang = this.KieuDang,
-                                Giaban = this.GiaBan,
-                                Giamgia = this.GiamGia,
-                                Mahsx = this.MaHSX,
-                                Hinhsp = string.Join("#", this.rand_HinhSP),
-                                Mamau = this.MaMau,
-                                Duyet = false,
-                                Manv = this.MaNV,
-                                Mota = this.MoTa,
-                                Noidung = this.NoiDung,
-                                Thuevat = this.ThueVAT
-                            };
-                            e.Sanphams.Add(sp);
-                            e.SaveChanges();
-                            e.Database.CommitTransaction();
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Thêm sản phẩm thành công !", 0, this.MaSP);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ShopABC_CSDL.log_errs(ex.Message);
-                        e.Database.RollbackTransaction();
-                    }
-                }
-            }
+
         }
         /// <summary>
         /// Cập nhật thông tin sản phẩm trên CSDL
@@ -223,20 +180,7 @@ namespace ShopABC.Models
                 {
                     try
                     {
-                        Sanpham sp = e.Sanphams.Where(x => x.Masp == this.MaSP).FirstOrDefault();
-                        bool chk_SanPham_DonHang = ShopABC_chk_DieuKien.chk_SanPham_TonTai_DonHang(sp.Masp);
-                        if (chk_SanPham_DonHang)
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Sản phẩm đã có đơn hàng. Không thể xóa !", 1, 0);
-                        if (string.IsNullOrEmpty(this.ThongBaoLoi.Item1))
-                        {
-                            // Xóa các hình ảnh đã lưu
-                            foreach (string i in sp.Hinhsp.Split("#"))
-                                File.Delete(@"wwwroot\\uploads\\images\\SanPham\\" + i);
-                            e.Sanphams.Remove(sp);
-                            e.SaveChanges();
-                            e.Database.CommitTransaction();
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>(null, 0, sp.Masp);
-                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -245,97 +189,6 @@ namespace ShopABC.Models
                     }
                 }
             }
-        }
-        /// <summary>
-        /// Duyệt sản phẩm
-        /// </summary>
-        /// <param name="masp">Mã sản phẩm</param>
-        /// <param name="hd">Hành động</param>
-        /// <param name="nguoiduyet">Người duyệt (Mã nhân viên)</param>
-        /// <returns></returns>
-        public static string duyet_SanPham(int masp, string hd, int? nguoiduyet)
-        {
-            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
-            {
-                using (e.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        Sanpham a = e.Sanphams.Where(x => x.Masp == masp).FirstOrDefault();
-                        switch (hd)
-                        {
-                            case "duyet":
-                                a.Duyet = true;
-                                a.Ngayduyet = DateTime.Now;
-                                a.Nguoiduyet = nguoiduyet;
-                                e.SaveChanges();
-                                e.Database.CommitTransaction();
-                                return "Duyệt sản phẩm " + masp + " thành công !";
-                            case "huybo":
-                                foreach (string i in a.Hinhsp.Split("#"))
-                                    File.Delete(@"wwwroot\\uploads\\images\\SanPham\\" + i);
-                                e.Sanphams.Remove(a);
-                                e.SaveChanges();
-                                e.Database.CommitTransaction();
-                                return "Đã hủy sản phẩm " + masp + " !";
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ShopABC_CSDL.log_errs(ex.Message);
-                        e.Database.RollbackTransaction();
-                    }
-                }
-                return null;
-            }
-        }
-        private bool kiemtra_Tep(ShopABC_ChiTietSanPham a)
-        {
-            try
-            {
-                byte dem = 0;
-                a.rand_HinhSP = new string[a.HinhSP.Count];
-                foreach (IFormFile in_hinhsp in a.HinhSP)
-                {
-                    if (a.HinhSP.Count == 0)
-                    {
-                        a.ThongBaoLoi = Tuple.Create<string, byte, int>("Chưa chọn tệp tải lên !", 1, a.MaSP);
-                        return false;
-                    }
-                    if (a.HinhSP.Count > 5)
-                    {
-                        a.ThongBaoLoi = Tuple.Create<string, byte, int>("Không được tải lên nhiều hơn 5 tệp !", 1, a.MaSP);
-                        return false;
-                    }
-                    if (in_hinhsp.Length <= 0)
-                    {
-                        a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp thứ " + (dem + 1) + " rỗng !", 1, a.MaSP);
-                        return false;
-                    }
-                    if (in_hinhsp.Length >= 10485760)
-                    {
-                        a.ThongBaoLoi = Tuple.Create<string, byte, int>("Dung lượng tệp thứ " + (dem + 1) + " không được vượt quá 10MB ! !", 1, a.MaSP);
-                        return false;
-                    }
-                    if (!in_hinhsp.ContentType.Contains("image/"))
-                    {
-                        a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp thứ " + (dem + 1) + " không đúng định dạng ! !", 1, a.MaSP);
-                        return false;
-                    }
-                    string randName = "sp-" + DateTime.Now.ToString("ddMMyyyyHHmmssfffff") + ".webp";
-                    string today = DateTime.Now.ToString("ddMMyyyy");
-                    Directory.CreateDirectory("wwwroot/uploads/images/SanPham/" + today);
-                    using (FileStream stream = new FileStream("wwwroot/uploads/images/SanPham/" + today + "/" + randName, FileMode.Create))
-                        in_hinhsp.CopyTo(stream);
-                    a.rand_HinhSP[dem] = randName;
-                    dem++;
-                }
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return true;
         }
     }
 }

@@ -43,7 +43,13 @@ namespace ShopABC.Areas.Dashboard.Controllers
             else
                 ShopABC_TaiKhoan._History(get_Connection().LocalIpAddress.ToString(), get_Session().GetInt32("manv"), message, this.HttpContext.Request.Headers["User-Agent"]);
         }
-        public ISession get_Session() => this.HttpContext.Session;
-        public ConnectionInfo get_Connection() => this.HttpContext.Connection;
+        public ISession get_Session()
+            => this.HttpContext.Session;
+        public ConnectionInfo get_Connection()
+            => this.HttpContext.Connection;
+        public int? get_MaNV_Session()
+            => get_Session().GetInt32("manv");
+        public string get_pkey_Session()
+            => get_Session().GetString("pkey");
     }
 }

@@ -8,12 +8,13 @@ namespace ShopABC.Areas.Dashboard.Controllers
         // GET: Dashboard/HeThong
         [HttpGet]
         [Route("admin/trang-thai-he-thong")]
-        public IActionResult TrangThai() => View();
+        public IActionResult TrangThai()
+            => View();
         [HttpGet]
         [Route("admin/nhat-ky-truy-cap")]
         public IActionResult NhatKyTruyCap()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).Nhatkytruycap.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).Nhatkytruycap.Value)
                 return View();
             return Redirect("404");
         }

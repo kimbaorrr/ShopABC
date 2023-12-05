@@ -137,5 +137,25 @@ namespace ShopABC.Models
             }
             return Enumerable.Empty<Baiviet>();
         }
+        /// <summary>
+        /// Cập nhật số lần đọc (lượt xem) của bài viết
+        /// </summary>
+        /// <param name="bvid">Mã bài viết</param>
+        public static void capNhat_SoLanDoc(int bvid)
+        {
+            using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
+            {
+                try
+                {
+                    Baiviet n = e.Baiviets.FirstOrDefault(x => x.Mabv == bvid);
+                    n.Luotxem++;
+                    e.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    ShopABC_CSDL.log_errs(ex.Message);
+                }
+            }
+        }
     }
 }

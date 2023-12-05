@@ -7,9 +7,11 @@ namespace ShopABC.Areas.Dashboard.Controllers
         // GET: Dashboard/KhachHang
         [HttpGet]
         [Route("admin/danh-sach-khach-hang")]
-        public IActionResult DanhSachKhachHang() => View();
+        public IActionResult DanhSachKhachHang()
+            => View();
         [HttpGet]
         [Route("admin/khach-hang-than-thiet")]
-        public IActionResult KhachHangThanThiet() => View();
+        public IActionResult KhachHangThanThiet()
+            => View();
     }
 }

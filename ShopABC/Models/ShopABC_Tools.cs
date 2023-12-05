@@ -53,5 +53,9 @@ namespace ShopABC.Models
             }
             return string.Empty;
         }
+        public static void del_Image(string image_path)
+        {
+            File.Delete($@"wwwroot\\uploads\\images\\{image_path}");
+        }
     }
 }

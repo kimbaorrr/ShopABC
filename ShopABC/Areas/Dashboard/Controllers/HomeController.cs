@@ -10,7 +10,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin")]
         public IActionResult Index()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).XemBangdieukhien.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).XemBangdieukhien.Value)
                 return View();
             return Redirect("404");
         }
@@ -21,7 +21,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         {
             try
             {
-                if (get_Session().GetString("tendn") != null && get_Session().GetInt32("manv") != null && get_Session().GetString("pkey") != null)
+                if (get_Session().GetString("tendn") != null && get_MaNV_Session() != null && !string.IsNullOrEmpty(get_pkey_Session()))
                     return ShopABC_SanPham.get_DoanhThu_Theo_Tuan();
                 return "Không thể vượt qua xác thực !";
             }
@@ -29,7 +29,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return null;
+            return string.Empty;
         }
     }
 }

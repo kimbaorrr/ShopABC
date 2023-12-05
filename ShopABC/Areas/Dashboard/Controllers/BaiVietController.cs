@@ -11,7 +11,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/dang-bai-viet")]
         public IActionResult DangBaiViet()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).ThemBaiviet.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).ThemBaiviet.Value)
                 return View();
             return Redirect("404");
         }
@@ -19,7 +19,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/duyet-bai-viet")]
         public IActionResult DuyetBaiViet()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).DuyetBaiviet.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).DuyetBaiviet.Value)
                 return View();
             return Redirect("404");
         }
@@ -27,33 +27,33 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/tat-ca-bai-viet")]
         public IActionResult TatCaBaiViet()
         {
-            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_Session().GetInt32("manv")).XemBaivietTatcabaiviet.Value)
+            if (ShopABC_NhanVien.get_PhanQuyen_NhanVien(get_MaNV_Session()).XemBaivietTatcabaiviet.Value)
                 return View();
             return Redirect("404");
         }
         [HttpGet]
         [Route("admin/bai-viet-cua-toi")]
         public IActionResult BaiVietCuaToi()
-        {
-            return View();
-        }
+            => View();
         [HttpGet]
-        [Route("admin/bai-viet/{p?}/{bvid?}/{pkey?}")]
-        public IActionResult ChiTietBaiViet(string p, int bvid, string pkey)
+        [Route("admin/bai-viet/{bvid?}/{pkey?}")]
+        public IActionResult ChiTietBaiViet(int bvid, string pkey)
         {
             try
             {
                 if (pkey.Equals(get_Session().GetString("pkey")))
                 {
-                    ShopABC_ChiTietBaiViet a = new ShopABC_ChiTietBaiViet();
                     Baiviet bv = ShopABC_BaiViet.get_BaiViet_Theo_ID(bvid);
-                    a.TieuDe = bv.Tieude;
-                    a.NoiDung = bv.Noidung;
+                    ShopABC_ChiTietBaiViet a = new ShopABC_ChiTietBaiViet()
+                    {
+                        TieuDe = bv.Tieude,
+                        NoiDung = bv.Noidung,
+                        NgayDang = bv.Ngaydang.Value,
+                        MaBV = bv.Mabv,
+                        SoLanDoc = bv.Luotxem,
+                    };
                     get_Session().SetString("HinhBV", bv.Hinhbv);
                     get_Session().SetInt32("bv-manv", bv.Manv);
-                    a.NgayDang = bv.Ngaydang.Value;
-                    a.MaBV = bv.Mabv;
-                    a.SoLanDoc = bv.Luotxem;
                     if (bv.Draft == false)
                         a.IsPublic = true;
                     else
@@ -68,8 +68,13 @@ namespace ShopABC.Areas.Dashboard.Controllers
             return Redirect("~/Dashboard/404");
         }
         // POST Methods
+        /// <summary>
+        /// Đăng bài viết
+        /// </summary>
+        /// <param name="a">Đối tượng ChiTietBaiViet</param>
+        /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult DangBaiViet(ShopABC_ChiTietBaiViet a, string hanhdong = null)
+        public IActionResult DangBaiViet(ShopABC_ChiTietBaiViet a)
         {
             try
             {
@@ -79,7 +84,8 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     {
                         try
                         {
-                            if (kiemtra_Tep(a))
+                            string kt_Tep = kiemtra_Tep(a);
+                            if (string.IsNullOrEmpty(kt_Tep))
                             {
                                 Baiviet bv = new Baiviet()
                                 {
@@ -92,6 +98,12 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                 };
                                 e.Baiviets.Add(bv);
                                 e.SaveChanges();
+                                log_History($"Thêm bài viết {bv.Mabv}"); // Lưu log
+                                set_ThongBao("Thêm bài viết thành công !", 0);
+                            }
+                            else
+                            {
+                                set_ThongBao(kt_Tep, 1);
                             }
                         }
                         catch (Exception ex)
@@ -109,29 +121,52 @@ namespace ShopABC.Areas.Dashboard.Controllers
             }
             return Redirect("~/404");
         }
+        /// <summary>
+        /// Duyệt bài viết
+        /// </summary>
+        /// <param name="bvid">Mã bài viết</param>
+        /// <param name="hd">Hành động/Thao tác</param>
+        /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
         public string DuyetBaiViet(int bvid, string hd)
         {
             try
             {
-                string a = ShopABC_ChiTietBaiViet.duyet_BaiViet(bvid, hd, get_Session().GetInt32("manv"));
-                switch (hd)
+                using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                 {
-                    case "duyetbai":
-                        log_History("Đã xuất bản bài viết " + bvid + " !");
-                        break;
-                    case "huybo":
-                        log_History("Hủy bài viết " + bvid + " !");
-                        break;
+                    Baiviet a = e.Baiviets.FirstOrDefault(x => x.Mabv == bvid);
+                    switch (hd)
+                    {
+                        case "duyetbai":
+                            a.Duyet = true;
+                            a.Ngayduyet = DateTime.Now;
+                            a.Nguoiduyet = get_MaNV_Session();
+                            e.SaveChanges();
+                            log_History($"Xuất bản bài viết {bvid} !");
+                            return $"Đã duyệt bài viết {bvid} !";
+                        case "huybo":
+                            ShopABC_Tools.del_Image($"Blog/{a.Hinhbv}");
+                            e.Baiviets.Remove(a);
+                            e.SaveChanges();
+                            log_History($"Hủy xuất bản & xóa bài viết {bvid}");
+                            return $"Đã hủy bài viết {bvid}!";
+                        default:
+                            break;
+                    }
                 }
-                return a;
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return null;
+            return string.Empty;
         }
+        /// <summary>
+        /// Cập nhật & xóa bài viết
+        /// </summary>
+        /// <param name="a">Đối tượng ChiTietBaiViet chứa thông tin bài viết cụ thể</param>
+        /// <param name="hanhdong">Hành động/Thao tác</param>
+        /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult ChiTietBaiViet(ShopABC_ChiTietBaiViet a, string hanhdong)
         {
@@ -139,21 +174,35 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    switch (hanhdong)
+                    using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                     {
-                        case "suadoi":
-                            a.sua_BaiViet();
-                            set_ThongBao(a.ThongBaoLoi.Item1, a.ThongBaoLoi.Item2);
-                            if (a.ThongBaoLoi.Item1.Contains("thành công"))
-                                log_History("Sửa bài viết " + a.ThongBaoLoi.Item3);
-                            return View(a);
-                        case "xoabo":
-                            a.xoa_BaiViet();
-                            log_History("Xóa bài viết " + a.ThongBaoLoi.Item3);
-                            return RedirectToAction("BaiVietCuaToi", "BaiViet");
+                        Baiviet bv = e.Baiviets.FirstOrDefault(x => x.Mabv == a.MaBV);
+                        switch (hanhdong)
+                        {
+                            case "suadoi":
+                                bv.Tieude = a.TieuDe;
+                                bv.Noidung = a.NoiDung;
+                                bv.Ngaydang = a.NgayDang;
+                                bv.Duyet = false;
+                                if (a.IsPublic)
+                                    bv.Draft = false;
+                                else
+                                    bv.Draft = true;
+                                e.SaveChanges();
+                                set_ThongBao($"Sửa bài viết thành công !", 0);
+                                log_History($"Sửa bài viết {a.MaBV}");
+                                return View(a);
+                            case "xoabo":
+                                ShopABC_Tools.del_Image($@"Blog/{bv.Hinhbv}");
+                                e.Baiviets.Remove(bv);
+                                e.SaveChanges();
+                                log_History($"Xóa bài viết {a.MaBV}");
+                                return RedirectToAction("BaiVietCuaToi", "BaiViet");
+                            default:
+                                break;
+                        }
                     }
                 }
-                return View();
             }
             catch (Exception ex)
             {
@@ -161,42 +210,27 @@ namespace ShopABC.Areas.Dashboard.Controllers
             }
             return Redirect("~/404");
         }
-
-        private bool kiemtra_Tep(ShopABC_ChiTietBaiViet a)
+        /// <summary>
+        /// Thực hiện kiểm tra tệp và thêm tệp vào hệ thống
+        /// </summary>
+        /// <param name="a">Đối tượng Chi tiết Bài viết</param>
+        /// <returns>Chuỗi rỗng nếu không có lỗi</returns>
+        private string kiemtra_Tep(ShopABC_ChiTietBaiViet a)
         {
-            try
-            {
-                if (a.HinhBV == null)
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Chưa chọn tệp tải lên !", 1, a.MaBV);
-                    return false;
-                }
-                if (a.HinhBV.Length <= 0)
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp rỗng !", 1, a.MaBV);
-                    return false;
-                }
-                if (a.HinhBV.Length >= 10485760)
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Dung lượng tệp không được vượt quá 10MB ! !", 1, a.MaBV);
-                    return false;
-                }
-                if (!a.HinhBV.ContentType.Contains("image/"))
-                {
-                    a.ThongBaoLoi = Tuple.Create<string, byte, int>("Tệp không đúng định dạng !", 1, a.MaBV);
-                    return false;
-                }
-                string randName = "blog-" + DateTime.Now.ToString("ddMMyyyyHHmmssfffff") + ".webp";
-                using (FileStream stream = new FileStream("wwwroot/uploads/images/Blog/" + randName, FileMode.Create))
-                    a.HinhBV.CopyTo(stream);
-                a.rand_HinhBV = randName;
-
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return true;
+            if (a.HinhBV == null)
+                return "Chưa chọn tệp tải lên !";
+            if (a.HinhBV.Length <= 0)
+                return "Tệp rỗng !";
+            if (a.HinhBV.Length >= 10485760)
+                return "Dung lượng tệp không được vượt quá 10MB ! !";
+            if (!a.HinhBV.ContentType.Contains("image/"))
+                return "Tệp không đúng định dạng !";
+            // Tải ảnh lên Server
+            string randName = $"blog-{DateTime.Now.ToString("ddMMyyyyHHmmssfffff")}.webp";
+            using (FileStream stream = new FileStream($"wwwroot/uploads/images/Blog/{randName}", FileMode.Create))
+                a.HinhBV.CopyTo(stream);
+            a.rand_HinhBV = randName;
+            return string.Empty;
         }
     }
 }
