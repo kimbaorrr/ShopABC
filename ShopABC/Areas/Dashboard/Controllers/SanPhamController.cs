@@ -36,7 +36,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         {
             try
             {
-                if (get_pkey_Session())
+                if (get_pkey_Session().Equals(pkey))
                 {
                     Sanpham l = ShopABC_SanPham.get_SanPham_Theo_MaSP(spid);
                     ShopABC_ChiTietSanPham a = new ShopABC_ChiTietSanPham()
@@ -51,8 +51,8 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         MaHSX = l.Mahsx,
                         MaLoai = l.MadmNavigation.MaloaiNavigation.Maloai,
                         MaMau = l.Mamau,
-                        a.MaNV = (int)l.Manv,
-                        a.NgayNhap = l.Ngaynhap.Value
+                        MaNV = (int)l.Manv,
+                        NgayNhap = l.Ngaynhap.Value
                     };
                     get_Session().SetString("HinhSP", l.Hinhsp);
                     return View(a);
@@ -76,12 +76,16 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     {
                         try
                         {
-                            bool chk_SanPham = ShopABC_chk_DieuKien.chk_SanPham_TonTai(a.TenSP);
-                            if (chk_SanPham)
+                            if (ShopABC_DonHang.get_ChiTietDonHang().Any(x => x.Masp == a.MaSP))
+                            {
                                 set_ThongBao("Sản phẩm đã tồn tại trên hệ thống", 1);
-                            bool chk_DanhMuc = ShopABC_chk_DieuKien.chk_DanhMuc_TonTai_LoaiSP(a.MaLoai, a.MaDM);
-                            if (!chk_DanhMuc)
+                                return View(a);
+                            }
+                            if (!ShopABC_SanPham.get_DanhMucSP().Any(x => x.Madm == a.MaDM && x.Maloai == a.MaLoai))
+                            {
                                 set_ThongBao("Danh mục không khớp với Loại sản phẩm đã chọn", 1);
+                                return View(a);
+                            }
                             string kt_tep = kiemtra_Tep(a);
                             if (string.IsNullOrEmpty(kt_tep))
                             {
@@ -105,10 +109,12 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                 e.Sanphams.Add(sp);
                                 e.SaveChanges();
                                 set_ThongBao("Thêm sản phẩm thành công !", 0);
+                                return View();
                             }
                             else
                             {
                                 set_ThongBao(kt_tep, 1);
+                                return View(a);
                             }
                         }
                         catch (Exception ex)
@@ -118,7 +124,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     }
                     ModelState.Clear();
                 }
-                return View();
             }
             catch (Exception ex)
             {
@@ -139,7 +144,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         switch (hanhdong)
                         {
                             case "suadoi":
-
                                 string kt_sp = kiemTra_SanPham(sp, a);
                                 if (string.IsNullOrEmpty(kt_sp))
                                 {
@@ -165,8 +169,9 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                 {
                                     set_ThongBao(kt_sp, 1);
                                 }
+                                return View(a);
                             case "xoabo":
-                                if (ShopABC_DonHang.get_ChiTietDonHang().Any(x => x.Masp == masp))
+                                if (ShopABC_DonHang.get_ChiTietDonHang().Any(x => x.Masp == a.MaSP))
                                 {
                                     set_ThongBao("Sản phẩm đã có đơn hàng. Không thể xóa !", 1);
                                     return View(a);
@@ -182,7 +187,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                 break;
                         }
                     }
-                    return View(a);
                 }
             }
             catch (Exception ex)
@@ -210,7 +214,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         case "duyet":
                             a.Duyet = true;
                             a.Ngayduyet = DateTime.Now;
-                            a.Nguoiduyet = nguoiduyet;
+                            a.Nguoiduyet = get_MaNV_Session();
                             e.SaveChanges();
                             log_History($"Duyệt sản phẩm {spid} !");
                             return $"Duyệt sản phẩm {spid} thành công !";
@@ -224,14 +228,13 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         default:
                             break;
                     }
-                    return string.Empty;
                 }
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return Redirect("~/404");
+            return string.Empty;
         }
         private string kiemtra_Tep(ShopABC_ChiTietSanPham a)
         {
