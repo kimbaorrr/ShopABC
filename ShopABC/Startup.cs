@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
+using ShopABC_DB;
+using Microsoft.Extensions.Options;
 
 namespace ShopABC
 {
     public class Startup
     {
         public IConfiguration ConfigRoot { get; }
-        public WebApplication UngDungWeb { get; set; }
-        public IServiceCollection DichVuWeb { get; set; }
+        public WebApplication app { get; set; }
+        public IServiceCollection services { get; set; }
         public Startup(IConfiguration configuration)
         { ConfigRoot = configuration; }
         /// <summary>
@@ -15,15 +18,15 @@ namespace ShopABC
         /// </summary>
         public void cauHinh_DichVu()
         {
-            this.DichVuWeb.AddDistributedMemoryCache();
-            this.DichVuWeb.AddSession(options =>
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
             {
                 options.Cookie.Name = "Male_Fashion";
                 options.Cookie.MaxAge = TimeSpan.FromMinutes(120);
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
-            this.DichVuWeb.AddRazorPages();
-            this.DichVuWeb.Configure<ForwardedHeadersOptions>(options =>
+            services.AddRazorPages();
+            services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                 options.RequireHeaderSymmetry = false;
@@ -37,12 +40,12 @@ namespace ShopABC
         public void cauHinh_Chung()
         {
 
-            this.UngDungWeb.UseStaticFiles();
-            this.UngDungWeb.UseRouting();
-            this.UngDungWeb.UseAuthorization();
-            this.UngDungWeb.UseSession();
-            this.UngDungWeb.MapDefaultControllerRoute();
-            this.UngDungWeb.Run();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseSession();
+            app.MapDefaultControllerRoute();
+            app.Run();
         }
     }
 }

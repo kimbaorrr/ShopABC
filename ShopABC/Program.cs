@@ -5,9 +5,9 @@ public static class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         Startup startup = new Startup(builder.Configuration);
-        startup.DichVuWeb = builder.Services;
+        startup.services = builder.Services;
         startup.cauHinh_DichVu(); // calling ConfigureServices method
-        startup.UngDungWeb = builder.Build();
+        startup.app = builder.Build();
         startup.cauHinh_Chung();
     }
 }
