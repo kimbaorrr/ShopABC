@@ -42,28 +42,8 @@ namespace ShopABC.Models
         /// <returns>Khớp/Không khớp</returns>
         public static string privateKey()
          => Guid.NewGuid().ToString().Replace("-", "");
-        /// <summary>
-        /// Thực hiện băm mật khẩu bằng thuật toán băm SHA3-512 bits trên CSDL
-        /// </summary>
-        /// <param name="matkhau">Truyền tham số Mật khẩu gốc</param>
-        /// <returns>Mật khẩu đã được băm</returns>
-        public static string hash_MatKhau(string matkhau)
-        {
-            try
-            {
-                Sha3Digest hash = new Sha3Digest(512);
-                byte[] input = Encoding.ASCII.GetBytes(matkhau);
-                hash.BlockUpdate(input, 0, input.Length);
-                byte[] result = new byte[64];
-                hash.DoFinal(result, 0);
-                return BitConverter.ToString(result).Replace("-", "").ToLower();
-            }
-            catch (Exception ex)
-            {
-                ShopABC_CSDL.log_errs(ex.Message);
-            }
-            return null;
-        }
+        public static string salt()
+            => File.ReadAllText("salt.txt");
         /// <summary>
         /// Ghi nhật ký truy cập trang Quản trị
         /// </summary>
