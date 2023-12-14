@@ -1,7 +1,5 @@
-﻿using Org.BouncyCastle.Crypto.Digests;
-using ShopABC_DB;
+﻿using ShopABC_DB;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 namespace ShopABC.Models
 {
     public class ShopABC_TaiKhoan

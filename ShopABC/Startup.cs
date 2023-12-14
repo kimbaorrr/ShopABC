@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.HttpOverrides;
 using System.Net;
+using WebMarkupMin.AspNetCore6;
 
 namespace ShopABC
 {
@@ -30,6 +31,20 @@ namespace ShopABC
                 options.ForwardLimit = null;
                 options.KnownProxies.Add(IPAddress.Loopback);
             });
+            services.AddWebMarkupMin(
+            options =>
+            {
+               options.AllowMinificationInDevelopmentEnvironment = true;
+               options.AllowCompressionInDevelopmentEnvironment = true;
+            })
+            .AddHtmlMinification(
+                options =>
+                {
+                   options.MinificationSettings.RemoveRedundantAttributes = true;
+                   options.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
+                   options.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
+                })
+            .AddHttpCompression();
         }
         /// <summary>
         /// Cấu hình cho ứng dụng Web
@@ -38,6 +53,7 @@ namespace ShopABC
         {
 
             app.UseStaticFiles();
+            app.UseWebMarkupMin();
             app.UseRouting();
             app.UseAuthorization();
             app.UseSession();
