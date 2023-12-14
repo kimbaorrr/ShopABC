@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Đơn hàng giao thành công";
+    ISession sess = Context.Session;
 }
 
 <div class="page-heading">
@@ -38,7 +39,7 @@
                             <th>Ngày nhận</th>
                             <th>Người mua</th>
                             <th>Tình trạng</th>
-                            <th>Hành động</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,7 +52,7 @@
                                 <td>@i.Makh</td>
                                 <td><span class="badge bg-success">@i.MattNavigation.Tentt</span></td>
                                 <td>
-                                    <a class="btn btn-primary btn-sm" href='@Url.Action("ChiTietDonHang", "DonHang", new {hdid = i.Sohd, pkey = this.Context.Session.GetString("pkey")})'>Xem</a>
+                                    <a class="btn btn-primary btn-sm" href='@Url.Action("ChiTietDonHang", "DonHang", new {hdid = i.Sohd, pkey = sess.GetString("pkey")})'>Xem</a>
                                 </td>
                             </tr>
                         }

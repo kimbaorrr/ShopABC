@@ -10,8 +10,8 @@ namespace ShopABC.Models
         /// </summary>
         public ShopABC_DonHang()
         {
-            this.SoHD = 0;
-            this.ThongBaoLoi = string.Empty;
+            SoHD = 0;
+            ThongBaoLoi = string.Empty;
         }
         /// <summary>
         /// Khởi tạo tham số mới bằng cách truyền vào đối tượng
@@ -19,8 +19,8 @@ namespace ShopABC.Models
         /// <param name="a"></param>
         public ShopABC_DonHang(ShopABC_DonHang a)
         {
-            this.SoHD = a.SoHD;
-            this.ThongBaoLoi = a.ThongBaoLoi;
+            SoHD = a.SoHD;
+            ThongBaoLoi = a.ThongBaoLoi;
         }
         // Raw Query
         /// <summary>

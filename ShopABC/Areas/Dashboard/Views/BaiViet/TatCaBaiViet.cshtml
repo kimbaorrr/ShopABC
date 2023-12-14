@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Tất cả bài viết";
+    ISession sess = Context.Session;
 }
 
 <div class="page-heading">
@@ -38,7 +39,7 @@
                             <th>Ngày đăng</th>
                             <th>Người đăng</th>
                             <th>Tình trạng</th>
-                            <th>Hành động</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,7 +61,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { bvid = i.Mabv, pkey = Context.Session.GetString("pkey") })" class="btn btn-sm btn-primary">Xem</a>
+                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { bvid = i.Mabv, pkey = sess.GetString("pkey") })" class="btn btn-sm btn-primary">Xem</a>
                                 </td>
                             </tr>
                         }

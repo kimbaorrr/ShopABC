@@ -7,7 +7,7 @@
     <title>@ViewBag.Title</title>
     <link rel="icon" href="data:," />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
-    <script src="https://cdn.jsdelivr.net/gh/kimbaorrr/cdn/tailwindcss-3.4.0.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/kimbaorrr/cdn/tailwindcss-3.4.0.js"></script>
 </head>
 <body>
     <div class="flex items-center justify-center h-screen bg-gray-100">
@@ -23,17 +23,35 @@
             </p>
         </div>
     </div>
-    @if (ViewBag.ThongBao != null)
-    {
-        <div class="absolute max-w-md m-auto shadow-md inset-x-0 top-0 p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg dark:bg-yellow-200 dark:text-yellow-800" role="alert">
-           <span class="font-medium ml-3">Cảnh báo: </span>@ViewBag.ThongBao
-        </div>
-
-    }
+    <div class="absolute max-w-md m-auto shadow-md inset-x-0 top-0 p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg dark:bg-yellow-200 dark:text-yellow-800" role="alert" style="display: none;" id="Message">
+        <span class="font-medium ml-3">Cảnh báo: </span>
+    </div>
     <plugins>
         <script>window.history.replaceState && window.history.replaceState(null, null, window.location.href)</script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha3.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("button").click(function () {
+                    var hash = CryptoJS.SHA3($("MatKhau").val(), { outputLength: 512 });
+                    $("#MatKhau").val(hash);
+                    var login_form = $("form");
+                    $.ajax({
+                        url: login_form.attr("action"),
+                        method: "post",
+                        data: login_form.serialize(),
+                        success: function (result) {
+                        },
+                        error: function (xhr, statusText, error) {
+                            var errorMessage = xhr.responseText;
+                            alert(errorMessage);
+                            location.reload();
+                        }
+                    });
+                });
+            });
+        </script>
         @RenderSection("More_Scripts", required: false)
     </plugins>
 </body>

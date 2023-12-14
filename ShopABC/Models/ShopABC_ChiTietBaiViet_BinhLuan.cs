@@ -27,8 +27,8 @@ namespace ShopABC.Models
         /// </summary>
         public ShopABC_ChiTietBaiViet_BinhLuan()
         {
-            this.MaBV = 0;
-            this.HoTen = this.Email = this.SDT = this.BinhLuan = string.Empty;
+            MaBV = 0;
+            HoTen = Email = SDT = BinhLuan = string.Empty;
         }
         /// <summary>
         /// Object Contructors
@@ -36,10 +36,10 @@ namespace ShopABC.Models
         /// <param name="a"></param>
         public ShopABC_ChiTietBaiViet_BinhLuan(ShopABC_ChiTietBaiViet_BinhLuan a)
         {
-            this.MaBV = a.MaBV;
-            this.BinhLuan = a.BinhLuan;
-            this.HoTen = a.HoTen;
-            this.Email = a.Email;
+            MaBV = a.MaBV;
+            BinhLuan = a.BinhLuan;
+            HoTen = a.HoTen;
+            Email = a.Email;
         }
         /// <summary>
         /// Thêm một bình luận mới vào CSDL
@@ -54,11 +54,11 @@ namespace ShopABC.Models
                     {
                         BvBinhluan a = new BvBinhluan()
                         {
-                            Mabv = this.MaBV,
-                            Hoten = this.HoTen,
-                            Email = this.Email,
-                            Sdt = this.SDT,
-                            Binhluan = this.BinhLuan
+                            Mabv = MaBV,
+                            Hoten = HoTen,
+                            Email = Email,
+                            Sdt = SDT,
+                            Binhluan = BinhLuan
                         };
                         e.Add(a);
                         e.SaveChanges();

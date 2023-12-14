@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Duyệt bài viết";
+    ISession sess = Context.Session;
 }
 
 <div class="page-heading">
@@ -37,14 +38,14 @@
                             <th>Tên bài viết</th>
                             <th>Ngày đăng</th>
                             <th>Người đăng</th>
-                            <th>Hành động</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (Baiviet i in ShopABC_BaiViet.get_BaiViet_ChuaDuyet())
                         {
                             <tr>
-                                <td><a href='@Url.Action("ChiTietBaiViet", "BaiViet", new {p = i.Tieude, bvid = i.Mabv, pkey = (string)this.Context.Session.GetString("pkey")})'>@i.Mabv</a></td>
+                                <td><a href='@Url.Action("ChiTietBaiViet", "BaiViet", new {p = i.Tieude, bvid = i.Mabv, pkey = sess.GetString("pkey")})'>@i.Mabv</a></td>
                                 <td>@i.Tieude</td>
                                 <td>@i.Ngaydang.Value</td>
                                 <td>@ShopABC_NhanVien.get_HoTen(i.Manv)</td>

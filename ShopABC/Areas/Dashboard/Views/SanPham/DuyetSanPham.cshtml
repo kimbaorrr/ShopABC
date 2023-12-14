@@ -2,6 +2,7 @@
 @using ShopABC_DB;
 
 @{
+    ISession sess = Context.Session;
     ViewBag.Title = "Duyệt sản phẩm";
 }
 
@@ -37,14 +38,14 @@
                             <th>Tên sản phẩm</th>
                             <th>Ngày nhập</th>
                             <th>Người nhập</th>
-                            <th>Hành động</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (Sanpham i in ShopABC_SanPham.get_SanPham_ChuaDuyet())
                         {
                             <tr>
-                                <td><a href='@Url.Action("ChiTietSanPham", "SanPham", new {p = i.Tensp, spid = i.Masp, pkey = this.Context.Session.GetString("pkey")})'>@i.Masp</a></td>
+                                <td><a href='@Url.Action("ChiTietSanPham", "SanPham", new {p = i.Tensp, spid = i.Masp, pkey = sess.GetString("pkey")})'>@i.Masp</a></td>
                                 <td>@i.Tensp</td>
                                 <td>@i.Ngaynhap</td>
                                 <td>@ShopABC_NhanVien.get_HoTen((int)i.Manv)</td>

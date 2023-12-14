@@ -65,23 +65,23 @@ namespace ShopABC.Models
         /// </summary>
         public ShopABC_ChiTietSanPham()
         {
-            this.MaSP = 0;
-            this.TenSP = string.Empty;
-            this.GiaBan = 0;
-            this.GiamGia = 0;
-            this.ChatLieu = string.Empty;
-            this.KieuDang = string.Empty;
-            this.MaLoai = 0;
-            this.MaDM = 0;
-            this.MaHSX = 0;
-            this.MaMau = string.Empty;
-            this.MoTa = string.Empty;
-            this.NoiDung = string.Empty;
-            this.HinhSP = new List<IFormFile>();
-            this.Duyet = false;
-            this.ThueVAT = 8;
-            this.NgayNhap = DateTime.Now;
-            this.ThongBaoLoi = new Tuple<string, byte, int>(null, 0, 0);
+            MaSP = 0;
+            TenSP = string.Empty;
+            GiaBan = 0;
+            GiamGia = 0;
+            ChatLieu = string.Empty;
+            KieuDang = string.Empty;
+            MaLoai = 0;
+            MaDM = 0;
+            MaHSX = 0;
+            MaMau = string.Empty;
+            MoTa = string.Empty;
+            NoiDung = string.Empty;
+            HinhSP = new List<IFormFile>();
+            Duyet = false;
+            ThueVAT = 8;
+            NgayNhap = DateTime.Now;
+            ThongBaoLoi = new Tuple<string, byte, int>(null, 0, 0);
         }
         /// <summary>
         /// Khởi gán giá trị cho biến từ đối tượng truyền vào
@@ -89,24 +89,24 @@ namespace ShopABC.Models
         /// <param name="a">Truyền tham số Đối tượng</param>
         public ShopABC_ChiTietSanPham(ShopABC_ChiTietSanPham a)
         {
-            this.MaSP = a.MaSP;
-            this.TenSP = a.TenSP;
-            this.GiaBan = a.GiaBan;
-            this.GiamGia = a.GiamGia;
-            this.ChatLieu = a.ChatLieu;
-            this.KieuDang = a.KieuDang;
-            this.MaLoai = a.MaLoai;
-            this.MaDM = a.MaDM;
-            this.MaHSX = a.MaHSX;
-            this.MaMau = a.MaMau;
-            this.Duyet = a.Duyet;
-            this.MoTa = a.MoTa;
-            this.NoiDung = a.NoiDung;
-            this.HinhSP = a.HinhSP;
-            this.NgayNhap = a.NgayNhap;
-            this.ThueVAT = a.ThueVAT;
-            this.ThongBaoLoi = a.ThongBaoLoi;
-            this.NgayNhap = a.NgayNhap;
+            MaSP = a.MaSP;
+            TenSP = a.TenSP;
+            GiaBan = a.GiaBan;
+            GiamGia = a.GiamGia;
+            ChatLieu = a.ChatLieu;
+            KieuDang = a.KieuDang;
+            MaLoai = a.MaLoai;
+            MaDM = a.MaDM;
+            MaHSX = a.MaHSX;
+            MaMau = a.MaMau;
+            Duyet = a.Duyet;
+            MoTa = a.MoTa;
+            NoiDung = a.NoiDung;
+            HinhSP = a.HinhSP;
+            NgayNhap = a.NgayNhap;
+            ThueVAT = a.ThueVAT;
+            ThongBaoLoi = a.ThongBaoLoi;
+            NgayNhap = a.NgayNhap;
         }
         /// <summary>
         /// Thêm một sản phẩm vào CSDL
@@ -126,39 +126,39 @@ namespace ShopABC.Models
                 {
                     try
                     {
-                        Sanpham sp = e.Sanphams.Where(x => x.Masp == this.MaSP).FirstOrDefault();
-                        if (!sp.Tensp.Equals(this.TenSP))
+                        Sanpham sp = e.Sanphams.Where(x => x.Masp == MaSP).FirstOrDefault();
+                        if (!sp.Tensp.Equals(TenSP))
                         {
-                            bool chk_SanPham_TonTai = ShopABC_chk_DieuKien.chk_SanPham_TonTai(this.TenSP);
+                            bool chk_SanPham_TonTai = ShopABC_chk_DieuKien.chk_SanPham_TonTai(TenSP);
                             if (chk_SanPham_TonTai)
-                                this.ThongBaoLoi = Tuple.Create<string, byte, int>("Tên sản phẩm đã tồn tại. Không thể sửa !", 1, 0);
+                                ThongBaoLoi = Tuple.Create<string, byte, int>("Tên sản phẩm đã tồn tại. Không thể sửa !", 1, 0);
                         }
-                        bool chk_SanPham_DonHang = ShopABC_chk_DieuKien.chk_SanPham_TonTai_DonHang(this.MaSP);
+                        bool chk_SanPham_DonHang = ShopABC_chk_DieuKien.chk_SanPham_TonTai_DonHang(MaSP);
                         if (chk_SanPham_DonHang)
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Sản phẩm đã có đơn hàng. Không thể sửa !", 1, 0);
-                        bool chk_DanhMuc = ShopABC_chk_DieuKien.chk_DanhMuc_TonTai_LoaiSP(this.MaLoai, this.MaDM);
+                            ThongBaoLoi = Tuple.Create<string, byte, int>("Sản phẩm đã có đơn hàng. Không thể sửa !", 1, 0);
+                        bool chk_DanhMuc = ShopABC_chk_DieuKien.chk_DanhMuc_TonTai_LoaiSP(MaLoai, MaDM);
                         if (!chk_DanhMuc)
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Danh mục không khớp với Loại sản phẩm đã chọn !", 1, 0);
-                        if (string.IsNullOrEmpty(this.ThongBaoLoi.Item1))
+                            ThongBaoLoi = Tuple.Create<string, byte, int>("Danh mục không khớp với Loại sản phẩm đã chọn !", 1, 0);
+                        if (string.IsNullOrEmpty(ThongBaoLoi.Item1))
                         {
-                            sp.Tensp = this.TenSP;
-                            sp.Mota = this.MoTa;
-                            sp.Chatlieu = this.ChatLieu;
-                            sp.Kieudang = this.KieuDang;
-                            sp.Giaban = this.GiaBan;
-                            sp.Giamgia = this.GiamGia;
-                            sp.Mamau = this.MaMau;
-                            sp.Madm = this.MaDM;
-                            sp.MadmNavigation.Maloai = this.MaLoai;
-                            sp.Noidung = this.NoiDung;
+                            sp.Tensp = TenSP;
+                            sp.Mota = MoTa;
+                            sp.Chatlieu = ChatLieu;
+                            sp.Kieudang = KieuDang;
+                            sp.Giaban = GiaBan;
+                            sp.Giamgia = GiamGia;
+                            sp.Mamau = MaMau;
+                            sp.Madm = MaDM;
+                            sp.MadmNavigation.Maloai = MaLoai;
+                            sp.Noidung = NoiDung;
                             sp.Duyet = false;
-                            sp.Manv = this.MaNV;
-                            sp.Mahsx = this.MaHSX;
-                            sp.Ngaynhap = this.NgayNhap;
-                            sp.Thuevat = this.ThueVAT;
+                            sp.Manv = MaNV;
+                            sp.Mahsx = MaHSX;
+                            sp.Ngaynhap = NgayNhap;
+                            sp.Thuevat = ThueVAT;
                             e.SaveChanges();
                             e.Database.CommitTransaction();
-                            this.ThongBaoLoi = Tuple.Create<string, byte, int>("Sửa sản phẩm thành công !", 0, 0);
+                            ThongBaoLoi = Tuple.Create<string, byte, int>("Sửa sản phẩm thành công !", 0, 0);
                         }
                     }
                     catch (Exception ex)

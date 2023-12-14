@@ -3,7 +3,9 @@
 
 @{
     ViewBag.Title = "Chi tiết bài viết";
+    ISession sess = Context.Session;
     @model ShopABC_ChiTietBaiViet
+    
 }
 
 <div class="page-heading">
@@ -55,7 +57,7 @@
                                     <div class="col-lg-4 mb-1">
                                         <div class="form-group mb-3">
                                             @Html.LabelFor(m => m.MaNV, new { @class = "fw-bold" })
-                                            <input type="text" class="form-control mt-1" value="@ShopABC_NhanVien.get_HoTen((int)this.Context.Session.GetInt32("bv-manv"))" readonly=""/>
+                                            <input type="text" class="form-control mt-1" value="@ShopABC_NhanVien.get_HoTen((int)sess.GetInt32("bv-manv"))" readonly=""/>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 mb-1">
@@ -75,7 +77,7 @@
                             <div class="card-body">
                                 <h4 class="card-title pb-3">@Html.LabelFor(m => m.HinhBV, new { @class = "fw-bold" })</h4>
                                 <div class="ratio ratio-4x3 border border-secondary rounded">
-                                    <img class="img-fluid" src="@ShopABC_Tools.get_Images_over_CDN(this.Context.Session.GetString("HinhBV"), 1)" />
+                                    <img class="img-fluid" src="@ShopABC_Tools.get_Images_over_CDN(sess.GetString("HinhBV"), 1)" />
                                 </div>
                             </div>
                         </div>

@@ -41,14 +41,14 @@ namespace ShopABC.Models
         /// </summary>
         public ShopABC_ThanhToan()
         {
-            this.HoDem = null;
-            this.TenKH = null;
-            this.DiaChi = null;
-            this.SDT = null;
-            this.Email = null;
-            this.GhiChu = null;
-            this.TongGT = 0;
-            this.NgayGiao = DateTime.Today.AddDays(5);
+            HoDem = null;
+            TenKH = null;
+            DiaChi = null;
+            SDT = null;
+            Email = null;
+            GhiChu = null;
+            TongGT = 0;
+            NgayGiao = DateTime.Today.AddDays(5);
         }
         /// <summary>
         /// Khởi gán giá trị cho biến từ đối tượng truyền vào
@@ -56,14 +56,14 @@ namespace ShopABC.Models
         /// <param name="a">Truyền tham số của Đối tượng</param>
         public ShopABC_ThanhToan(ShopABC_ThanhToan a)
         {
-            this.HoDem = a.HoDem;
-            this.TenKH = a.TenKH;
-            this.DiaChi = a.DiaChi;
-            this.SDT = a.SDT;
-            this.Email = a.Email;
-            this.GhiChu = a.GhiChu;
-            this.TongGT = a.TongGT;
-            this.NgayGiao = a.NgayGiao;
+            HoDem = a.HoDem;
+            TenKH = a.TenKH;
+            DiaChi = a.DiaChi;
+            SDT = a.SDT;
+            Email = a.Email;
+            GhiChu = a.GhiChu;
+            TongGT = a.TongGT;
+            NgayGiao = a.NgayGiao;
         }
         /// <summary>
         /// Thêm một đơn hàng vào CSDL 
@@ -79,20 +79,20 @@ namespace ShopABC.Models
                     try
                     {
                         int sohd = 0;
-                        if (ShopABC_chk_DieuKien.chk_KhachHang_TonTai(this.HoDem, this.TenKH, this.SDT))
+                        if (ShopABC_chk_DieuKien.chk_KhachHang_TonTai(HoDem, TenKH, SDT))
                         {
-                            Khachhang kh = ShopABC_KhachHang.get_KhachHang().FirstOrDefault(x => x.Hodem.Equals(this.HoDem) && x.Tenkh.Equals(this.TenKH) && x.Sdt.Equals(this.SDT));
+                            Khachhang kh = ShopABC_KhachHang.get_KhachHang().FirstOrDefault(x => x.Hodem.Equals(HoDem) && x.Tenkh.Equals(TenKH) && x.Sdt.Equals(SDT));
                             sohd = ThucThi(e, kh, list, tonggt);
                         }
                         else
                         {
                             Khachhang kh = new Khachhang()
                             {
-                                Hodem = this.HoDem,
-                                Tenkh = this.TenKH,
-                                Email = this.Email,
-                                Sdt = this.SDT,
-                                Diachi = this.DiaChi
+                                Hodem = HoDem,
+                                Tenkh = TenKH,
+                                Email = Email,
+                                Sdt = SDT,
+                                Diachi = DiaChi
                             };
                             e.Khachhangs.Add(kh);
                             e.SaveChanges();
@@ -123,9 +123,9 @@ namespace ShopABC.Models
             {
                 Makh = a.Makh,
                 Tonggt = tonggt,
-                Ghichu = this.GhiChu,
+                Ghichu = GhiChu,
                 Matt = 5,
-                Ngaygiao = this.NgayGiao
+                Ngaygiao = NgayGiao
             };
             e.Donhangs.Add(dh);
             e.SaveChanges();

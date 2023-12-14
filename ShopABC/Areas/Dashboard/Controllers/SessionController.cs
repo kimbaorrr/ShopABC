@@ -10,7 +10,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         // GET: Dashboard/Session
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ISession my_sess = this.HttpContext.Session;
+            ISession my_sess = HttpContext.Session;
             if (my_sess.GetString("tendn") == null || my_sess.GetInt32("manv") == null || my_sess.GetString("pkey") == null)
             {
                 filterContext.Result = new RedirectToRouteResult(
@@ -39,17 +39,23 @@ namespace ShopABC.Areas.Dashboard.Controllers
         public void log_History(string message)
         {
             if (string.IsNullOrEmpty(get_Connection().RemoteIpAddress.ToString()))
-                ShopABC_TaiKhoan._History(get_Connection().RemoteIpAddress.ToString(), get_Session().GetInt32("manv"), message, this.HttpContext.Request.Headers["User-Agent"]);
+                ShopABC_TaiKhoan._History(get_Connection().RemoteIpAddress.ToString(), get_MaNV_Session(), message, HttpContext.Request.Headers["User-Agent"]);
             else
-                ShopABC_TaiKhoan._History(get_Connection().LocalIpAddress.ToString(), get_Session().GetInt32("manv"), message, this.HttpContext.Request.Headers["User-Agent"]);
+                ShopABC_TaiKhoan._History(get_Connection().LocalIpAddress.ToString(), get_MaNV_Session(), message, HttpContext.Request.Headers["User-Agent"]);
         }
         public ISession get_Session()
-            => this.HttpContext.Session;
+            => HttpContext.Session;
         public ConnectionInfo get_Connection()
-            => this.HttpContext.Connection;
-        public int? get_MaNV_Session()
-            => get_Session().GetInt32("manv");
+            => HttpContext.Connection;
+        public int get_MaNV_Session()
+            => (int)get_Session().GetInt32("manv");
         public string get_pkey_Session()
             => get_Session().GetString("pkey");
+        public string get_tendn_Session()
+            => get_Session().GetString("tendn");
+        public int get_BV_MaNV_Session()
+            => (int)get_Session().GetInt32("bv-manv");
+        public string get_HinhBV_Session()
+            => get_Session().GetString("HinhBV");
     }
 }

@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
-using ShopABC_DB;
-using Microsoft.Extensions.Options;
 
 namespace ShopABC
 {

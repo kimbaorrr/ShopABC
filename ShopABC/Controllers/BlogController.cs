@@ -12,7 +12,7 @@ namespace ShopABC.Controllers
         {
             ViewData["list_blogs"] = ShopABC_BaiViet.get_BaiViet_DaDuyet().ToPagedList(page, 6);
             ViewBag.Here = page;
-            ViewBag.Redirect = this.ControllerContext.RouteData.Values["action"];
+            ViewBag.Redirect = ControllerContext.RouteData.Values["action"];
             return View();
         }
         [HttpGet]

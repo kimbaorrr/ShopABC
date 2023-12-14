@@ -4,6 +4,7 @@
     ViewBag.Title = "Đăng nhập hệ thống";
     Layout = "_Layout_Login";
     @model ShopABC_TaiKhoan
+
 }
 
 <div class="mt-4">
@@ -22,12 +23,12 @@
         @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-sm text-red-500", @autocomplete = "off" })
         <div class="flex items-baseline justify-between">
             <button class="px-3 py-2 mt-4 text-white transition-colors duration-150 border border-transparent bg-blue-800 rounded-lg hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
-                    type="submit">
+                type="button">
                 Đăng nhập
             </button>
             <a href='@Url.Action("QuenMatKhau", "Login")' class="text-sm text-blue-900 hover:underline">Quên mật khẩu?</a>
         </div>
-     }
+    }
 </div>
 
 

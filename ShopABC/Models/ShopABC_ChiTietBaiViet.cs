@@ -31,16 +31,16 @@ namespace ShopABC.Models
         /// </summary>
         public ShopABC_ChiTietBaiViet()
         {
-            this.MaBV = 0;
-            this.TieuDe = string.Empty;
-            this.MaNV = 0;
-            this.NoiDung = string.Empty;
-            this.HinhBV = null;
-            this.Duyet = false;
-            this.SoLanDoc = 0;
-            this.NgayDang = DateTime.Now;
-            this.IsDraft = false;
-            this.IsPublic = false;
+            MaBV = 0;
+            TieuDe = string.Empty;
+            MaNV = 0;
+            NoiDung = string.Empty;
+            HinhBV = null;
+            Duyet = false;
+            SoLanDoc = 0;
+            NgayDang = DateTime.Now;
+            IsDraft = false;
+            IsPublic = false;
         }
         /// <summary>
         /// Khởi gán giá trị cho các biến từ đối tượng truyền vào
@@ -48,16 +48,16 @@ namespace ShopABC.Models
         /// <param name="a">Truyền tham số của Đối tượng</param>
         public ShopABC_ChiTietBaiViet(ShopABC_ChiTietBaiViet a)
         {
-            this.MaBV = a.MaBV;
-            this.TieuDe = a.TieuDe;
-            this.NoiDung = a.NoiDung;
-            this.MaNV = a.MaNV;
-            this.NgayDang = a.NgayDang;
-            this.HinhBV = a.HinhBV;
-            this.Duyet = a.Duyet;
-            this.SoLanDoc = a.SoLanDoc;
-            this.IsDraft = a.IsDraft;
-            this.IsPublic = a.IsPublic;
+            MaBV = a.MaBV;
+            TieuDe = a.TieuDe;
+            NoiDung = a.NoiDung;
+            MaNV = a.MaNV;
+            NgayDang = a.NgayDang;
+            HinhBV = a.HinhBV;
+            Duyet = a.Duyet;
+            SoLanDoc = a.SoLanDoc;
+            IsDraft = a.IsDraft;
+            IsPublic = a.IsPublic;
         }
     }
 }

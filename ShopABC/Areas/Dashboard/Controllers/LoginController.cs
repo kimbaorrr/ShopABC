@@ -15,23 +15,22 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [Route("admin/quen-mat-khau")]
         public IActionResult QuenMatKhau()
             => View();
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken()]
         [Route("admin/dang-nhap-he-thong")]
         public IActionResult Index(ShopABC_TaiKhoan a)
         {
             try
             {
-                if (ModelState.IsValid && a.dangNhap())
+                bool dn = ShopABC_NhanVien.get_NV_DangNhap().Any(x => x.Tendn.Equals(a.TenDN.Trim().Normalize().ToLower()) && x.Matkhau.Equals(ShopABC_TaiKhoan.hash_MatKhau(a.MatKhau)));
+                if (ModelState.IsValid && dn)
                 {
-                    ISession my_sess = get_Session();
-                    my_sess.SetString("pkey", ShopABC_TaiKhoan.privateKey());
-                    my_sess.SetString("tendn", a.TenDN);
-                    my_sess.SetInt32("manv", ShopABC_NhanVien.get_MaNV(a.TenDN));
-                    return RedirectToAction("Index", "Home", new { Area = "Dashboard" });
+                    ISession sess = get_Session();
+                    sess.SetString("pkey", ShopABC_TaiKhoan.privateKey());
+                    sess.SetString("tendn", a.TenDN);
+                    sess.SetInt32("manv", ShopABC_NhanVien.get_MaNV(a.TenDN));
+                    return Ok();
                 }
-                ViewBag.ThongBao = "Thông tin đăng nhập không chính xác !";
-                ModelState.Clear();
-                return View();
+                return Unauthorized("Thông tin đăng nhập không đúng !");
             }
             catch (Exception ex)
             {
@@ -42,25 +41,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult QuenMatKhau(ShopABC_QuenMatKhau a)
             => View();
-        /*
-        private bool check_SoLanDN()
-        {
-            if (get_Session().GetInt32("SoLanDN") >= 5)
-            {
-                get_Session().SetObject("Retries_Time", DateTime.Now);
-                return true;
-            }
-            return false;
-        }
-        
-        private bool khoiPhuc_SoLanDN()
-        {
-            DateTime a = get_Session().GetObject<DateTime>("Retries_Time");
-            if (DateTime.Now.Minute - a.Minute >= 15)
-                return true;
-            return false;
-        }
-        */
         public ISession get_Session() => HttpContext.Session;
     }
 }

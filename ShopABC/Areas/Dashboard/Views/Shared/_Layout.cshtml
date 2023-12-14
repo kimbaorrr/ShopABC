@@ -2,7 +2,8 @@
 @using ShopABC_DB;
 
 @{
-    Phanquyen x = ShopABC_NhanVien.get_PhanQuyen_NhanVien(this.Context.Session.GetInt32("manv"));
+    ISession sess = Context.Session;
+    Phanquyen x = ShopABC_NhanVien.get_PhanQuyen_NhanVien((int)sess.GetInt32("manv"));
 }
 
 <!DOCTYPE html>
@@ -28,11 +29,11 @@
                 <div class="sidebar-header position-relative">
                     <div class="avatar avatar-xl d-block mx-auto">
                         <a href='@Url.Action("Index", "Home")'>
-                            <img src="/nv_zone/images/@ShopABC_NhanVien.get_HinhAnh((int)this.Context.Session.GetInt32("manv"))" loading="lazy"/>
+                            <img src="/nv_zone/images/@ShopABC_NhanVien.get_HinhAnh((int)sess.GetInt32("manv"))" loading="lazy"/>
                         </a>
                         <span class="avatar-status bg-success"></span>
                     </div>
-                    <h5 class="font-bold pt-3 text-center">Chào, @ShopABC_NhanVien.get_Ten((int)this.Context.Session.GetInt32("manv"))</h5>
+                    <h5 class="font-bold pt-3 text-center">Chào, @ShopABC_NhanVien.get_Ten((int)sess.GetInt32("manv"))</h5>
                     <h6 class="text-muted mb-0 text-center">ID: @ShopABC_NhanVien.get_MaNV(this.Context.Session.GetString("tendn"))</h6>
                     <div class="theme-toggle d-flex gap-2 justify-content-center mt-4">
                         <?xml version="1.0" encoding="UTF-8" ?>

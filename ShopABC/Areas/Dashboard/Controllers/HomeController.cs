@@ -21,7 +21,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         {
             try
             {
-                if (get_Session().GetString("tendn") != null && get_MaNV_Session() != null && !string.IsNullOrEmpty(get_pkey_Session()))
+                if (!string.IsNullOrEmpty(get_tendn_Session()) && get_MaNV_Session() > -1 && !string.IsNullOrEmpty(get_pkey_Session()))
                     return ShopABC_SanPham.get_DoanhThu_Theo_Tuan();
                 return "Không thể vượt qua xác thực !";
             }

@@ -2,6 +2,7 @@
 @using ShopABC_DB;
 
 @{
+    ISession sess = Context.Session;
     ViewBag.Title = "Danh sách sản phẩm";
 }
 
@@ -38,7 +39,7 @@
                             <th>Giá bán (VNĐ)</th>
                             <th>Giảm giá (%)</th>
                             <th>Tình trạng</th>
-                            <th>Hành động</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +53,7 @@
                                 <td><span class="badge bg-success">Còn hàng</span>
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("ChiTietSanPham", "SanPham", new { spid = i.Masp, pkey = Context.Session.GetString("pkey") })' class="btn btn-sm btn-primary">Xem</a>
+                                    <a href='@Url.Action("ChiTietSanPham", "SanPham", new { spid = i.Masp, pkey = sess.GetString("pkey") })' class="btn btn-sm btn-primary">Xem</a>
                                 </td>
                             </tr>
                         }

@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Đăng bài viết";
+    ISession sess = Context.Session;
     @model ShopABC_ChiTietBaiViet
 }
 
@@ -47,7 +48,7 @@
                                     <div class="col-lg-4 mb-1">
                                         <div class="form-group mb-3">
                                             @Html.LabelFor(m => m.MaNV, new { @class = "fw-bold" })
-                                            <input type="text" class="form-control mt-1" value="@ShopABC_NhanVien.get_HoTen((int)this.Context.Session.GetInt32("manv"))" readonly/>
+                                            <input type="text" class="form-control mt-1" value="@ShopABC_NhanVien.get_HoTen((int)sess.GetInt32("manv"))" readonly/>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 mb-1">

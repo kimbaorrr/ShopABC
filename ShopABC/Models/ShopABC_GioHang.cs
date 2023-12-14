@@ -9,7 +9,7 @@ namespace ShopABC.Models
         /// </summary>
         public ShopABC_GioHang()
         {
-            this.SanPham_DaChon = new SortedList<int, Chitietdonhang>();
+            SanPham_DaChon = new SortedList<int, Chitietdonhang>();
         }
         /// <summary>
         /// Khởi gán giá trị cho biến từ Đối tượng truyền vào
@@ -17,7 +17,7 @@ namespace ShopABC.Models
         /// <param name="a">Truyền tham số Đối tượng</param>
         public ShopABC_GioHang(ShopABC_GioHang a)
         {
-            this.SanPham_DaChon = a.SanPham_DaChon;
+            SanPham_DaChon = a.SanPham_DaChon;
         }
         /// <summary>
         /// Kiểm tra xem giỏ hàng có rỗng không ?
@@ -25,7 +25,7 @@ namespace ShopABC.Models
         /// <returns>Rỗng/Không rỗng</returns>
         public bool kt_GioHang_Rong()
         {
-            return this.SanPham_DaChon.Keys.Count == 0;
+            return SanPham_DaChon.Keys.Count == 0;
         }
         /// <summary>
         /// Thêm một sản phẩm vào giỏ hàng.
@@ -37,12 +37,12 @@ namespace ShopABC.Models
         {
             try
             {
-                if (this.SanPham_DaChon.Keys.Contains(masp))
+                if (SanPham_DaChon.Keys.Contains(masp))
                 {
-                    Chitietdonhang x = this.SanPham_DaChon[masp];
+                    Chitietdonhang x = SanPham_DaChon[masp];
                     x.Soluong += soluong;
                     x.Thanhtien = calc_GiaBan_Sau_GiamGia(masp) * x.Soluong;
-                    this.SanPham_DaChon[masp] = x;
+                    SanPham_DaChon[masp] = x;
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace ShopABC.Models
                     c.Masp = masp;
                     c.Soluong = soluong;
                     c.Thanhtien = calc_GiaBan_Sau_GiamGia(masp);
-                    this.SanPham_DaChon.Add(masp, c);
+                    SanPham_DaChon.Add(masp, c);
                 }
             }
             catch (Exception ex)
@@ -66,8 +66,8 @@ namespace ShopABC.Models
         {
             try
             {
-                if (this.SanPham_DaChon.Keys.Contains(masp))
-                    this.SanPham_DaChon.Remove(masp);
+                if (SanPham_DaChon.Keys.Contains(masp))
+                    SanPham_DaChon.Remove(masp);
             }
             catch (Exception ex)
             {
@@ -81,8 +81,8 @@ namespace ShopABC.Models
         {
             try
             {
-                if (!this.kt_GioHang_Rong())
-                    this.SanPham_DaChon.Clear();
+                if (!kt_GioHang_Rong())
+                    SanPham_DaChon.Clear();
             }
             catch (Exception ex)
             {
@@ -97,17 +97,17 @@ namespace ShopABC.Models
         {
             try
             {
-                if (this.SanPham_DaChon.Keys.Contains(masp))
+                if (SanPham_DaChon.Keys.Contains(masp))
                 {
-                    Chitietdonhang a = this.SanPham_DaChon[masp];
+                    Chitietdonhang a = SanPham_DaChon[masp];
                     if (a.Soluong > 1)
                     {
                         a.Soluong--;
                         a.Thanhtien = calc_GiaBan_Sau_GiamGia(masp) * a.Soluong;
-                        this.SanPham_DaChon[masp] = a;
+                        SanPham_DaChon[masp] = a;
                     }
                     else
-                        this.xoa_SanPham_GioHang(masp);
+                        xoa_SanPham_GioHang(masp);
                 }
             }
             catch (Exception ex)
