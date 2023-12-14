@@ -35,28 +35,26 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <returns>Thông báo trạng thái thay đổi</returns>
         [HttpPost, ValidateAntiForgeryToken]
         [Route("admin/doi-mat-khau")]
-        public string DoiMatKhau(string mkcu, string mkmoi, string nhaplaimk)
+        public IActionResult DoiMatKhau(string mkcu, string mkmoi)
         {
             try
             {
                 using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                 {
 
-                    NvDangnhap a = e.NvDangnhaps.FirstOrDefault(x => x.Manv == (int)get_MaNV_Session() && x.Tendn.Equals(get_tendn_Session()));
-                    if (!mkmoi.Equals(nhaplaimk))
-                        return "Mật khẩu mới và nhập lại không chính xác !";
-                    if (!ShopABC_TaiKhoan.hash_MatKhau(mkcu).Equals(a.Matkhau))
-                        return "Mật khẩu cũ không chính xác !";
-                    a.Matkhau = ShopABC_TaiKhoan.hash_MatKhau(mkmoi);
+                    NvDangnhap a = e.NvDangnhaps.FirstOrDefault(x => x.Manv == get_MaNV_Session() && x.Tendn.Equals(get_tendn_Session()));
+                    if (!mkcu.Equals(a.Matkhau))
+                        return Unauthorized("Mật khẩu cũ không chính xác !");
+                    a.Matkhau = mkmoi;
                     e.SaveChanges();
-                    return "Đổi mật khẩu thành công !";
+                    return Ok("Đổi mật khẩu thành công !");
                 }
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return null;
+            return Redirect("~/404");
         }
     }
 }

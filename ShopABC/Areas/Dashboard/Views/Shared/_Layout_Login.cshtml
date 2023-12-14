@@ -41,7 +41,8 @@
                         url: login_form.attr("action"),
                         method: "post",
                         data: login_form.serialize(),
-                        success: function (result) {
+                        success: function () {
+                            location.replace('@Url.Action("Index", "Home", new {Area = "Dashboard"})');
                         },
                         error: function (xhr, statusText, error) {
                             var errorMessage = xhr.responseText;
