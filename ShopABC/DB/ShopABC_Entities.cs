@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ShopABC_DB;
 
-public partial class ShopABC_Entities : IdentityDbContext
+public partial class ShopABC_Entities : DbContext
 {
     public ShopABC_Entities()
     {
