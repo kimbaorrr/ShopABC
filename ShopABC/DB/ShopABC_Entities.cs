@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopABC_DB;
 
-public partial class ShopABC_Entities : DbContext
+public partial class ShopABC_Entities : IdentityDbContext
 {
     public ShopABC_Entities()
     {
@@ -57,8 +58,12 @@ public partial class ShopABC_Entities : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
         optionsBuilder.UseLazyLoadingProxies();
-        optionsBuilder.UseNpgsql("Host=192.168.1.2;Port=5432;Database=shopabc;Username=k_shopabc;Password=dK8rcOj0Cl7vftiX#;SSLMode=Allow;Integrated Security=true;Persist Security Info=true;Timezone=Asia/Bangkok;Encoding=UTF8;Client Encoding=UTF8");
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
