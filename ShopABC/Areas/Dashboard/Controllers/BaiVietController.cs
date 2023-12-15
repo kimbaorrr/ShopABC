@@ -132,7 +132,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
         [Route("admin/duyet-bai-viet")]
-        public string DuyetBaiViet(int bvid, string hd)
+        public IActionResult DuyetBaiViet(int bvid, string hd)
         {
             try
             {
@@ -141,19 +141,19 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     Baiviet a = e.Baiviets.FirstOrDefault(x => x.Mabv == bvid);
                     switch (hd)
                     {
-                        case "duyetbai":
+                        case "duyet":
                             a.Duyet = true;
                             a.Ngayduyet = DateTime.Now;
                             a.Nguoiduyet = get_MaNV_Session();
                             e.SaveChanges();
                             log_History($"Xuất bản bài viết {bvid} !");
-                            return $"Đã duyệt bài viết {bvid} !";
+                            return Ok($"Đã duyệt bài viết {bvid} !");
                         case "huybo":
                             ShopABC_Tools.del_Image($"Blog/{a.Hinhbv}");
                             e.Baiviets.Remove(a);
                             e.SaveChanges();
                             log_History($"Hủy xuất bản & xóa bài viết {bvid}");
-                            return $"Đã hủy bài viết {bvid}!";
+                            return Ok($"Đã hủy bài viết {bvid} !");
                         default:
                             break;
                     }
@@ -163,7 +163,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return string.Empty;
+            return NotFound();
         }
         /// <summary>
         /// Cập nhật & xóa bài viết

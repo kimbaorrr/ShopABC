@@ -19,12 +19,12 @@
             <h2 class="text-2xl font-bold text-center mt-3">@ViewBag.Title</h2>
             @RenderBody()
             <p class="text-center text-gray-500 text-xs mt-2">
-                &copy; @DateTime.Now.ToString("yyyy") Bảo IT. All right reserved
+                &copy; @DateTime.Now.ToString("yyyy") BaoIT. All right reserved
             </p>
         </div>
     </div>
-    <div class="absolute max-w-md m-auto shadow-md inset-x-0 top-0 p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg dark:bg-yellow-200 dark:text-yellow-800" role="alert" style="display: none;" id="Message">
-        <span class="font-medium ml-3">Cảnh báo: </span>
+    <div class="absolute max-w-md m-auto shadow-md inset-x-0 top-0 p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg dark:bg-yellow-200 dark:text-yellow-800" role="alert" style="display: none;" id="thongbao">
+        <span class="font-medium ml-3"></span>
     </div>
     <plugins>
         <script>window.history.replaceState && window.history.replaceState(null, null, window.location.href)</script>
@@ -34,22 +34,28 @@
         <script>
             $(document).ready(function () {
                 $("button").click(function () {
-                    var hash = CryptoJS.SHA3($("MatKhau").val(), { outputLength: 512 });
-                    $("#MatKhau").val(hash);
-                    var login_form = $("form");
-                    $.ajax({
-                        url: login_form.attr("action"),
-                        method: "post",
-                        data: login_form.serialize(),
-                        success: function () {
-                            location.replace('@Url.Action("Index", "Home", new {Area = "Dashboard"})');
-                        },
-                        error: function (xhr, statusText, error) {
-                            var errorMessage = xhr.responseText;
-                            alert(errorMessage);
-                            location.reload();
-                        }
-                    });
+                    if ($("#MatKhau").val() != "") {
+                        var hash = CryptoJS.SHA3($("#MatKhau").val(), { outputLength: 512 });
+                        $("#MatKhau").val(hash);
+                        var login_form = $("form");
+                        $.ajax({
+                            url: login_form.attr("action"),
+                            method: "post",
+                            data: login_form.serialize(),
+                            success: function () {
+                                location.replace('@Url.Action("Index", "Home", new {Area = "Dashboard"})');
+                            },
+                            error: function (xhr, statusText, error) {
+                                $("input").val("");
+                                $("#TenDN").focus();
+                                var errorMessage = xhr.responseText;
+                                $("#thongbao").css("display", "block");
+                                $("#thongbao span").text(errorMessage);
+                            }
+                        });
+                    } else {
+                        $("#TenDN").focus();
+                    }
                 });
             });
         </script>

@@ -266,7 +266,7 @@
             @RenderBody()
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
-                    <p class="text-center">&copy; @DateTime.Now.ToString("yyyy") Bảo IT. All rights reserved</p>
+                    <p class="text-center">&copy; @DateTime.Now.ToString("yyyy") BaoIT. All rights reserved</p>
                 </div>
             </footer>
             <!--Modal Change Password-->
@@ -316,13 +316,17 @@
         @if (ViewBag.ThongBao != null)
         {
         <script>
-            Swal.fire({
-             icon: "@Html.Raw(ViewBag.TrangThai)",
-             title: "@Html.Raw(ViewBag.ThongBao)",
-            })
+            
         </script>
         }
         <script>
+            // Thông báo
+            function thong_bao(icon, noi_dung) {
+                Swal.fire({
+                    icon: icon,
+                    title: noi_dung,
+                })
+            }
             // Băm mật khẩu
             function hash_MK(mat_khau) {
                 return CryptoJS.SHA3(mat_khau, { outputLength: 512 });

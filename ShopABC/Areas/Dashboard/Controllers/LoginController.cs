@@ -30,7 +30,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     sess.SetInt32("manv", ShopABC_NhanVien.get_MaNV(a.TenDN));
                     return Ok();
                 }
-                return Unauthorized("Thông tin đăng nhập không đúng !");
+                return Unauthorized("Cảnh báo: Thông tin đăng nhập không đúng !");
             }
             catch (Exception ex)
             {

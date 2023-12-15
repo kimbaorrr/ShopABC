@@ -50,8 +50,8 @@
                                 <td>@i.Ngaynhap</td>
                                 <td>@ShopABC_NhanVien.get_HoTen((int)i.Manv)</td>
                                 <td>
-                                    <button class="btn btn-sm btn-danger btn_HuyBo">Hủy bỏ</button>
-                                    <button class="btn btn-sm btn-success btn_DuyetSanPham">Duyệt</button>
+                                    <button class="btn btn-sm btn-danger" onclick='thao_tac_duyet("huybo", @i.Masp);'>Hủy bỏ</button>
+                                    <button class="btn btn-sm btn-success" onclick='thao_tac_duyet("duyet", @i.Masp);'>Duyệt</button>
                                 </td>
                             </tr>
                         }
@@ -77,49 +77,26 @@
             $("#table1").DataTable();
             $("#table1_filter").wrap("<form>");
             $("#table1_filter").closest("form").attr("autocomplete", "off");
-            function gettoken() {
-                var token = '@Html.AntiForgeryToken()';
-                token = $(token).val();
-                return token;
+            // Thao tác duyệt
+            function thao_tac_duyet(thao_tac, masp) {
+                $.ajax({
+                    url: '@Url.Action("DuyetSanPham", "SanPham", new {Area = "Dashboard"})',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        hd: thao_tac,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        alert(result);
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
             }
-            $('.btn_DuyetSanPham').click(function () {
-                $.ajax({
-                    url: "/admin/duyet-san-pham",
-                    type: "post",
-                    data: {
-                        spid: $(this).parents("tr").find("td:first a").text(),
-                        hd: "duyet",
-                        __RequestVerificationToken: gettoken()
-                    },
-                    success: function (data) {
-                        alert(data);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert("Có lỗi xảy ra. Thử lại !");
-                        location.reload();
-                    }
-                });
-            });
-            $('.btn_HuyBo').click(function () {
-                $.ajax({
-                    url: "/admin/duyet-san-pham",
-                    type: "post",
-                    data: {
-                        spid: $(this).parents("tr").find("td:first a").text(),
-                        hd: "huybo",
-                        __RequestVerificationToken: gettoken()
-                    },
-                    success: function (data) {
-                        alert(data);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert("Có lỗi xảy ra. Thử lại !");
-                        location.reload();
-                    }
-                });
-            });
         });
     </script>
 }
