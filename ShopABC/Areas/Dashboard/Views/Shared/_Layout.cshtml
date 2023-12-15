@@ -359,6 +359,7 @@
                             location.reload();
                         },
                         error: function (xhr, statusText, error) {
+                            removeLoadingMarkFull();
                             var errorMessage = xhr.responseText;
                             alert(errorMessage);
                             $("#Modal_DoiMatKhau").css("display", "block");

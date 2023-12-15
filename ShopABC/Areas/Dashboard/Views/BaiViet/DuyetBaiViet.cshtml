@@ -98,6 +98,7 @@
                     location.reload();
                 },
                 error: function (xhr, statusText, error) {
+                    removeLoadingMarkFull();
                     alert("Có lỗi xảy ra. Thử lại !");
                     location.reload();
                 }
