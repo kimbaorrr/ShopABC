@@ -34,15 +34,15 @@ namespace ShopABC
             services.AddWebMarkupMin(
             options =>
             {
-               options.AllowMinificationInDevelopmentEnvironment = true;
-               options.AllowCompressionInDevelopmentEnvironment = true;
+                options.AllowMinificationInDevelopmentEnvironment = true;
+                options.AllowCompressionInDevelopmentEnvironment = true;
             })
             .AddHtmlMinification(
                 options =>
                 {
-                   options.MinificationSettings.RemoveRedundantAttributes = true;
-                   options.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
-                   options.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
+                    options.MinificationSettings.RemoveRedundantAttributes = true;
+                    options.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
+                    options.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
                 })
             .AddHttpCompression();
         }

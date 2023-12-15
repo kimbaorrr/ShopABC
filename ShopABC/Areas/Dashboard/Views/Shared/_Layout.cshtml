@@ -264,7 +264,29 @@
                     <i class="bi bi-justify fs-3"></i>
                 </a>
             </header>
-            @RenderBody()
+            <div class="page_heading">
+                <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>@ViewBag.Title</h3>
+                @if (ViewBag.Description != null)
+                {
+                    <p class="text-subtitle text-muted">@ViewBag.Description</p>
+                }           
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+                @RenderBody()
+            </div>
+            
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <p class="text-center">&copy; @DateTime.Now.ToString("yyyy") BaoIT. All rights reserved</p>
@@ -329,7 +351,7 @@
             }
             // Hiện mặt nạ loading
             function loadingMarkFull() {
-                var html = '<div class="loading-mask" style="width: 100%;height: 100%;top: 0px;left: 0px;z-index: 99999999999999;display: block;background-color: #607d8b2b;position: fixed;bottom: 0px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="position:absolute;top:10px;left:50%;color:#f73900;margin-top:20%;margin-left:-45px;font-size:90px;"></i></div>';
+                var html = '<div class="loading-mask" style="width: 100%;height: 100%;top: 0px;left: 0px;z-index: 99999999999999;display: block;background-color: #607d8b2b;position: fixed;bottom: 0px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="position:absolute;top:10px;left:50%;color:#397FAE;margin-top:20%;margin-left:-45px;font-size:90px;"></i></div>';
                 $(html).appendTo(document.body);
             }
             // Băm mật khẩu
