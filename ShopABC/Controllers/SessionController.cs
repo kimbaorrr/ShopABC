@@ -7,12 +7,11 @@ namespace ShopABC.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ISession my_sess = HttpContext.Session;
-            if (my_sess.GetString("GioHang") == null || my_sess.GetString("kh-pkey") == null || my_sess.GetInt32("SoLanDN") == null)
+            ISession sess = HttpContext.Session;
+            if (string.IsNullOrEmpty(sess.GetString("GioHang")) || string.IsNullOrEmpty(sess.GetString("kh-pkey")))
             {
-                ShopABC_Tools.SetObject(my_sess, "GioHang", new ShopABC_GioHang());
-                my_sess.SetString("kh-pkey", ShopABC_TaiKhoan.privateKey());
-                my_sess.SetInt32("SoLanDN", 0);
+                ShopABC_Tools.SetObject(sess, "GioHang", new ShopABC_GioHang());
+                sess.SetString("kh-pkey", ShopABC_TaiKhoan.privateKey());
             }
         }
         public ISession get_Session() => HttpContext.Session;

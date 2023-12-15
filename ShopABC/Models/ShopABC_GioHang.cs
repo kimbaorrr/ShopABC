@@ -24,9 +24,7 @@ namespace ShopABC.Models
         /// </summary>
         /// <returns>Rỗng/Không rỗng</returns>
         public bool kt_GioHang_Rong()
-        {
-            return SanPham_DaChon.Keys.Count == 0;
-        }
+            => SanPham_DaChon.Keys.Count == 0;
         /// <summary>
         /// Thêm một sản phẩm vào giỏ hàng.
         /// Nếu đã tồn tại thì tăng Số lượng.
@@ -136,7 +134,7 @@ namespace ShopABC.Models
         /// Tính tổng tiền cần phải thanh toán cho tất cả sản phẩm có trong giỏ hàng
         /// </summary>
         /// <returns>Tổng tiền của tất cả sản phẩm</returns>
-        public int? calc_TongThanhToan()
+        public int calc_TongThanhToan()
         {
             int? thanhTien = 0;
             if (!kt_GioHang_Rong())
@@ -145,7 +143,7 @@ namespace ShopABC.Models
                 {
                     thanhTien += i.Thanhtien;
                 }
-                return thanhTien;
+                return (int)thanhTien;
             }
             return 0;
         }

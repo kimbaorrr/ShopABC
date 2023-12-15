@@ -16,7 +16,6 @@ namespace ShopABC.Controllers
         [Route("thanh-toan-truc-tuyen")]
         public IActionResult ThanhToan(string pkey, string ttid)
         {
-
             try
             {
                 ShopABC_GioHang x = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
@@ -30,88 +29,80 @@ namespace ShopABC.Controllers
             }
             return Redirect("404");
         }
-        [HttpGet]
+        [HttpPost, ValidateAntiForgeryToken]
         [Route("them-vao-gio")]
-        public IActionResult ThemVaoGio(int spid, string pkey, int kichco = 38, int soluong = 1)
+        public IActionResult ThemVaoGio(int spid)
         {
-
             try
             {
-                if (get_Session().GetString("kh-pkey").Equals(pkey))
-                {
-                    ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
-                    a.them_SanPham_GioHang(spid, soluong);
-                    ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
-                    return RedirectToAction("Index", "SanPham");
-                }
+                ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
+                a.them_SanPham_GioHang(spid, 1);
+                ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
+                return Ok();
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return Redirect("/404");
+            return NotFound();
         }
-        [HttpGet]
+        [HttpPost]
+        public IActionResult CapNhat_TongThanhToan()
+        {
+            ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
+            return Ok(a.calc_TongThanhToan());;
+        }
+        [HttpPost, ValidateAntiForgeryToken]
         [Route("xoa-khoi-gio")]
-        public IActionResult XoaKhoiGio(int spid, string pkey, string r)
+        public IActionResult XoaKhoiGio(int spid)
         {
 
             try
             {
-                if (pkey.Equals(get_Session().GetString("kh-pkey")))
-                {
-                    ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
-                    a.xoa_SanPham_GioHang(spid);
-                    ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
-                    return RedirectToAction("Index", "GioHang");
-                }
+                ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
+                a.xoa_SanPham_GioHang(spid);
+                ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
+                return Ok();
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return Redirect("~/404");
+            return NotFound();
         }
-        [HttpGet]
+        [HttpPost, ValidateAntiForgeryToken]
         [Route("xoa-tat-ca")]
-        public IActionResult XoaTatCaSanPham(string pkey, string r)
+        public IActionResult XoaTatCaSanPham()
         {
             try
             {
-                if (pkey.Equals(get_Session().GetString("kh-pkey")))
-                {
-                    ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
-                    a.xoa_TatCaSanPham_GioHang();
-                    ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
-                    return RedirectToAction("Index", "GioHang");
-                }
+                ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
+                a.xoa_TatCaSanPham_GioHang();
+                ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
+                return Ok();
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return Redirect("~/404");
+            return NotFound();
         }
-        [HttpGet]
+        [HttpPost, ValidateAntiForgeryToken]
         [Route("giam-so-luong")]
-        public IActionResult GiamSoLuong(int spid, string pkey, string r)
+        public IActionResult GiamSoLuong(int spid)
         {
-
             try
             {
-                if (pkey.Equals(get_Session().GetString("kh-pkey")))
-                {
-                    ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
-                    a.giam_SoLuong(spid);
-                    ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
-                    return RedirectToAction("Index", "GioHang");
-                }
+                ShopABC_GioHang a = ShopABC_Tools.GetObject<ShopABC_GioHang>(get_Session(), "GioHang");
+                a.giam_SoLuong(spid);
+                ShopABC_Tools.SetObject(get_Session(), "GioHang", a);
+                return Ok();
             }
             catch (Exception ex)
             {
                 ShopABC_CSDL.log_errs(ex.Message);
             }
-            return Redirect("~/404");
+            return NotFound();
         }
         [HttpGet]
         [Route("thanh-toan-thanh-cong")]

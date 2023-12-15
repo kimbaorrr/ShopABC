@@ -3,7 +3,8 @@
 @using System.Linq;
 @using ShopABC.Controllers;
 @{
-    ViewBag.Title = "Trang chủ"; 
+    ISession sess = Context.Session;
+    ViewBag.Title = "Trang chủ";
 }
 <!-- Hero Section Begin -->
 <section class="hero">
@@ -38,7 +39,7 @@
 <section class="banner spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7 offset-lg-4">
+            <div class="col-lg-7 offset-lg-4" style="z-index: 100;">
                 <div class="banner__item">
                     <div class="banner__item__pic">
                         <img src="@ShopABC_Tools.get_Images_over_CDN("home_banner_1_image_1.webp", 3)">
@@ -49,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-5" style="z-index: 99;">
                 <div class="banner__item banner__item--middle">
                     <div class="banner__item__pic">
                         <img src="@ShopABC_Tools.get_Images_over_CDN("vi-da-nam-2022.webp", 3)">
@@ -60,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-7" style="z-index: 98;">
                 <div class="banner__item banner__item--last">
                     <div class="banner__item__pic">
                         <img src="/assets/Public/img/banner/banner-3.jpg">
@@ -102,7 +103,7 @@
                         </div>
                         <div class="product__item__text">
                             <h6>@a.Tensp</h6>
-                            <a href='@Url.Action("ThemVaoGio", "GioHang", new {spid = a.Masp, pkey = this.Context.Session.GetString("kh-pkey")})' class="add-cart">+ Thêm vào giỏ</a>
+                            <a href="#" class="add-cart" onclick="them_vao_gio(@a.Masp);">+ Thêm vào giỏ</a>
                             <div class="rating">
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
@@ -138,7 +139,7 @@
                         </div>
                         <div class="product__item__text">
                             <h6>@i.Tensp</h6>
-                            <a href='@Url.Action("ThemVaoGio", "GioHang", new {spid = i.Masp, pkey = SessionExtensions.GetString(this.Context.Session, "kh-pkey")})' class="add-cart">+ Thêm vào giỏ</a>
+                            <a href="#" class="add-cart" onclick="them_vao_gio(@i.Masp);">+ Thêm vào giỏ</a>
                             <div class="rating">
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
@@ -229,10 +230,10 @@
                 <div class="instagram__text">
                     <h2>Instagram</h2>
                     <p>
-                        Một trong những đề tài nóng hổi nhất mà hàng ngày chúng ta 
-                        không thể bỏ qua đó là nhu cầu may mặc mua sắm. Nếu bạn 
-                        nào còn băn khoăn hay đang muốn tìm cho mình một bộ quần áo nam đẹp, 
-                        hấp dẫn, chất lượng, hãy theo dõi chúng tôi trên Instagram nhé ! 
+                        Một trong những đề tài nóng hổi nhất mà hàng ngày chúng ta
+                        không thể bỏ qua đó là nhu cầu may mặc mua sắm. Nếu bạn
+                        nào còn băn khoăn hay đang muốn tìm cho mình một bộ quần áo nam đẹp,
+                        hấp dẫn, chất lượng, hãy theo dõi chúng tôi trên Instagram nhé !
                     </p>
                     <h3>#Male_Fashion</h3>
                 </div>

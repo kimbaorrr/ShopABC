@@ -53,15 +53,15 @@
                                             <td class="quantity__item">
                                                 <div class="quantity">
                                                     <div class="pro-qty-2">
-                                                        <a href='@Url.Action("GiamSoLuong", "GioHang", new {spid = i.Masp, pkey = this.Context.Session.GetString("kh-pkey")})' class="fa fa-angle-left dec qtybtn"></a>
+                                                        <a href="#" class="fa fa-angle-left dec qtybtn" onclick="giam_so_luong(@i.Masp);"></a>
                                                         <input type="text" value="@i.Soluong" readonly>
-                                                        <a href='@Url.Action("ThemVaoGio", "GioHang", new {spid = i.Masp, pkey = this.Context.Session.GetString("kh-pkey")})' class="fa fa-angle-right inc qtybtn"></a>
+                                                        <a href="#" class="fa fa-angle-right inc qtybtn" onclick="them_vao_gio(@i.Masp);"></a>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="cart__price">@String.Format("{0:0,0}", i.Thanhtien) <u>đ</u></td>
                                             <td class="cart__close">
-                                                <a href='@Url.Action("XoaKhoiGio", "GioHang", new {spid = i.Masp, pkey = this.Context.Session.GetString("kh-pkey")})'><i class="fa fa-close"></i></a>
+                                                <a href="#" class="fa fa-close" onclick="xoa_khoi_gio(@i.Masp);"></a>
                                             </td>
                                         </tr>
                                     }
@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href='@Url.Action("XoaTatCaSanPham", "GioHang", new {pkey = this.Context.Session.GetString("kh-pkey")})'> Xóa tất cả</a>
+                            <a href="#" onclick="xoa_tat_ca();">Xóa tất cả</a>
                         </div>
                     </div>
                 </div>

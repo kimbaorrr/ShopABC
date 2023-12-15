@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="product__item__text">
                                     <h6>@sp.Tensp</h6>
-                                    <a href='@Url.Action("ThemVaoGio", "GioHang", new { spid = sp.Masp, pkey = this.Context.Session.GetString("kh-pkey") })' class="add-cart">+ Thêm vào giỏ</a>
+                                    <a href="#" class="add-cart" onclick="them_vao_gio(@sp.Masp);">+ Thêm vào giỏ</a>
                                     <div class="rating">
                                         @{
                                             byte rate = 1;

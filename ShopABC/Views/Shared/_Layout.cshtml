@@ -3,13 +3,14 @@
 @using ShopABC;
 
 @{
-    ShopABC_GioHang sp = ShopABC_Tools.GetObject<ShopABC_GioHang>(this.Context.Session, "GioHang");
+    ISession sess = Context.Session;
+    ShopABC_GioHang sp = ShopABC_Tools.GetObject<ShopABC_GioHang>(sess, "GioHang");
 }
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8″ />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8″   />
     <meta http-equiv="content-language" content="vi" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -19,8 +20,6 @@
     <meta name="revisit-after" content="15 minutes" />
     <link rel="preconnect" href="https://fonts.bunny.net/">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
-    <link rel="dns-prefetch" href="https://fonts.bunny.net/">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/">
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=nunito-sans:200,300,400,500,600,700,800,900&display=swap">
     <link rel="stylesheet" href="/assets/Public/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/Public/css/elegant-icons.css">
@@ -46,7 +45,7 @@
             <a href='#' class="search-switch"><img src="/assets/Public/img/icon/search.png"></a>
             <a href="#"><img src="/assets/Public/img/icon/heart.png"></a>
             <a href='@Url.Action("Index", "GioHang")'><img src="/assets/Public/img/icon/cart.png"></a>
-            <div class="price">@String.Format("{0:0,0}", sp.calc_TongThanhToan()) <u>đ</u></div>
+            <div class="price">@String.Format("{0:0,0}", sp.calc_TongThanhToan())<u>đ</u></div>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -158,7 +157,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="footer__copyright__text">
-                        <p>&copy; @DateTime.Now.ToString("yyyy") Bảo IT. All right reserved</p>
+                        <p>&copy; @DateTime.Now.ToString("yyyy") BaoIT. All right reserved</p>
                     </div>
                 </div>
             </div>
@@ -176,6 +175,7 @@
         </div>
     </div>
     <!-- Search End -->
+    @Html.AntiForgeryToken()
     <!-- Js Plugins -->
     <plugins>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -194,7 +194,94 @@
                 $(this).parents('li').toggleClass('active', $(this).attr('href') == loc);
             });
         </script>
+        <script>
+            // Thêm vào giỏ
+            function them_vao_gio(masp) {
+                $.ajax({
+                    url: '@Url.Action("ThemVaoGio", "GioHang")',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                        $(window).scrollTo(0, previousY);
+                    }
+                });
+            }
+            // Xóa khỏi giỏ
+            function xoa_khoi_gio(masp) {
+                $.ajax({
+                    url: '@Url.Action("XoaKhoiGio", "GioHang")',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+            // Xóa tất cả
+            function xoa_tat_ca(masp) {
+                $.ajax({
+                    url: '@Url.Action("XoaTatCa", "GioHang")',
+                    type: "post",
+                    data: {
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+            // Giảm số lượng
+            function giam_so_luong(masp) {
+                $.ajax({
+                    url: '@Url.Action("GiamSoLuong", "GioHang")',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+            /*
+            function update_tongtt() {
+                $.ajax({
+                    url: '@Url.Action("Update_TongThanhToan", "GioHang")',
+                    type: "post",
+                    data: {
+                    },
+                    success: function (result) {
+                        $(".price").text(result);
+                    },
+                });
+            }
+            */
+        </script>
     </plugins>
-    
+
 </body>
 </html>
