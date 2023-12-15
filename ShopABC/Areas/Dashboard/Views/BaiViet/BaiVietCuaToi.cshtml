@@ -69,7 +69,7 @@
 
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { bvid = i.Mabv, pkey = sess.GetString("pkey") })" class="btn btn-sm btn-primary">Xem</a>
+                                    <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { bvid = i.Mabv, pkey = sess.GetString("pkey"), returnURL = Url.PageLink() })" class="btn btn-sm btn-primary">Xem</a>
                                 </td>
                             </tr>
                         }

@@ -99,17 +99,18 @@
             </div>
             <div class="row">
                 <div class="col-4">
-                    <button type="submit" name="hanhdong" value="suadoi" class="btn btn-warning mx-auto d-block">Sửa đổi</button>
+                    <button type="submit" name="hd" value="suadoi" class="btn btn-warning mx-auto d-block">Sửa đổi</button>
                 </div>
                 <div class="col-4">
-                    <button type="submit" name="hanhdong" value="xoabo" class="btn btn-danger mx-auto d-block">Xóa bỏ</button>
+                    <button type="submit" name="hd" value="xoabo" class="btn btn-danger mx-auto d-block">Xóa bỏ</button>
                 </div>
                 <div class="col-4">
-                    <button type="button" class="btn btn-secondary mx-auto d-block" onclick='location.href="@Url.Action("TatCaBaiViet", "BaiViet")"'>Trở lại</button>
+                    <button type="button" class="btn btn-secondary mx-auto d-block" onclick='location.href="@ViewBag.returnURL"'>Trở lại</button>
                 </div>
             </div>
         </section>
         @Html.TextBoxFor(m => m.MaBV, new {@hidden = ""})
+        <input name="returnURL" value="@ViewBag.returnURL" hidden />
     }
 </div>
 

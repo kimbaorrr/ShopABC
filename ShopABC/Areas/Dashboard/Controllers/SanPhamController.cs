@@ -32,7 +32,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         }
         [HttpGet]
         [Route("admin/san-pham/{spid?}/{pkey?}")]
-        public IActionResult ChiTietSanPham(int spid, string pkey)
+        public IActionResult ChiTietSanPham(int spid, string pkey, string returnURL)
         {
             try
             {
@@ -55,6 +55,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         NgayNhap = l.Ngaynhap.Value
                     };
                     get_Session().SetString("HinhSP", l.Hinhsp);
+                    ViewBag.returnURL = returnURL;
                     return View(a);
                 }
             }
@@ -129,7 +130,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         }
         [HttpPost, ValidateAntiForgeryToken]
         [Route("admin/san-pham/{spid?}/{pkey?}")]
-        public IActionResult ChiTietSanPham(ShopABC_ChiTietSanPham a, string hanhdong)
+        public IActionResult ChiTietSanPham(ShopABC_ChiTietSanPham a, string hd, string returnURL)
         {
             try
             {
@@ -138,7 +139,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                     {
                         Sanpham sp = e.Sanphams.FirstOrDefault(x => x.Masp == a.MaSP);
-                        switch (hanhdong)
+                        switch (hd)
                         {
                             case "suadoi":
                                 string kt_sp = kiemTra_SanPham(sp, a);
@@ -179,7 +180,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                 e.Sanphams.Remove(sp);
                                 e.SaveChanges();
                                 log_History($"Xóa sản phẩm {a.MaSP}");
-                                return RedirectToAction("DanhSachSanPham", "SanPham");
+                                return Redirect(returnURL);
                             default:
                                 break;
                         }

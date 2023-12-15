@@ -37,7 +37,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
             => View();
         [HttpGet]
         [Route("admin/bai-viet/{bvid?}/{pkey?}")]
-        public IActionResult ChiTietBaiViet(int bvid, string pkey)
+        public IActionResult ChiTietBaiViet(int bvid, string pkey, string returnURL)
         {
             try
             {
@@ -58,6 +58,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         a.IsPublic = true;
                     else
                         a.IsPublic = false;
+                    ViewBag.returnURL = returnURL;
                     return View(a);
                 }
             }
@@ -146,13 +147,23 @@ namespace ShopABC.Areas.Dashboard.Controllers
                             a.Ngayduyet = DateTime.Now;
                             a.Nguoiduyet = get_MaNV_Session();
                             e.SaveChanges();
-                            log_History($"Xuất bản bài viết {bvid} !");
+                            ShopABC_TaiKhoan._History(
+                                get_IP_Addr(),
+                                get_MaNV_Session(),
+                                $"Xuất bản bài viết {bvid} !",
+                                get_User_Agent()
+                                );
                             return Ok($"Đã duyệt bài viết {bvid} !");
                         case "huybo":
                             ShopABC_Tools.del_Image($"Blog/{a.Hinhbv}");
                             e.Baiviets.Remove(a);
                             e.SaveChanges();
-                            log_History($"Hủy xuất bản & xóa bài viết {bvid}");
+                            ShopABC_TaiKhoan._History(
+                                get_IP_Addr(),
+                                get_MaNV_Session(),
+                                $"Hủy xuất bản & xóa bài viết {bvid}",
+                                get_User_Agent()
+                                );
                             return Ok($"Đã hủy bài viết {bvid} !");
                         default:
                             break;
@@ -173,7 +184,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken]
         [Route("admin/bai-viet/{bvid?}/{pkey?}")]
-        public IActionResult ChiTietBaiViet(ShopABC_ChiTietBaiViet a, string hanhdong)
+        public IActionResult ChiTietBaiViet(ShopABC_ChiTietBaiViet a, string hd, string returnURL)
         {
             try
             {
@@ -182,7 +193,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                     {
                         Baiviet bv = e.Baiviets.FirstOrDefault(x => x.Mabv == a.MaBV);
-                        switch (hanhdong)
+                        switch (hd)
                         {
                             case "suadoi":
                                 bv.Tieude = a.TieuDe;
@@ -195,14 +206,26 @@ namespace ShopABC.Areas.Dashboard.Controllers
                                     bv.Draft = true;
                                 e.SaveChanges();
                                 set_ThongBao($"Sửa bài viết thành công !", 0);
-                                log_History($"Sửa bài viết {a.MaBV}");
+                                ShopABC_TaiKhoan._History(
+                                    get_IP_Addr(),
+                                    get_MaNV_Session(),
+                                    $"Sửa bài viết {a.MaBV}",
+                                    get_User_Agent()
+                                    );
                                 return View(a);
                             case "xoabo":
-                                ShopABC_Tools.del_Image($@"Blog/{bv.Hinhbv}");
+                                ShopABC_Tools.del_Image($"Blog/{bv.Hinhbv}");
+                                List<BvBinhluan> bl = e.BvBinhluans.Where(c => c.Mabv == bv.Mabv).ToList();
+                                e.BvBinhluans.RemoveRange(bl);
                                 e.Baiviets.Remove(bv);
                                 e.SaveChanges();
-                                log_History($"Xóa bài viết {a.MaBV}");
-                                return RedirectToAction("BaiVietCuaToi", "BaiViet");
+                                ShopABC_TaiKhoan._History(
+                                get_IP_Addr(),
+                                get_MaNV_Session(),
+                                $"Xóa bài viết {a.MaBV}",
+                                get_User_Agent()
+                                );
+                                return Redirect(returnURL);
                             default:
                                 break;
                         }

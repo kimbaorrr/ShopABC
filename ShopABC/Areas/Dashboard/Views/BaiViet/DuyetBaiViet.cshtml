@@ -84,12 +84,16 @@
             $.ajax({
                 url: '@Url.Action("DuyetBaiViet", "BaiViet", new {Area = "Dashboard"})',
                 type: "post",
+                beforeSend: function () {
+                    loadingMarkFull();
+                },
                 data: {
                     bvid: mabv,
                     hd: thao_tac,
                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                 },
                 success: function (result) {
+                    removeLoadingMarkFull();
                     alert(result);
                     location.reload();
                 },

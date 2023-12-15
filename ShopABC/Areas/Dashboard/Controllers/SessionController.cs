@@ -19,7 +19,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
         }
         public void set_ThongBao(string thongbao, byte matt)
         {
-            ViewBag.ThongBao = null; ViewBag.TrangThai = null;
             ViewBag.ThongBao = thongbao;
             switch (matt)
             {
@@ -53,9 +52,9 @@ namespace ShopABC.Areas.Dashboard.Controllers
             => get_Session().GetString("pkey");
         public string get_tendn_Session()
             => get_Session().GetString("tendn");
-        public int get_BV_MaNV_Session()
-            => (int)get_Session().GetInt32("bv-manv");
-        public string get_HinhBV_Session()
-            => get_Session().GetString("HinhBV");
+        public string get_IP_Addr()
+            => HttpContext.Connection.RemoteIpAddress.ToString();
+        public string get_User_Agent()
+            => Request.Headers["User-Agent"].ToString();
     }
 }

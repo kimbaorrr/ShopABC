@@ -28,6 +28,12 @@ namespace ShopABC.Areas.Dashboard.Controllers
                     sess.SetString("pkey", ShopABC_TaiKhoan.privateKey());
                     sess.SetString("tendn", a.TenDN);
                     sess.SetInt32("manv", ShopABC_NhanVien.get_MaNV(a.TenDN));
+                    ShopABC_TaiKhoan._History(
+                        HttpContext.Connection.RemoteIpAddress.ToString(),
+                        ShopABC_NhanVien.get_MaNV(a.TenDN),
+                        "Đăng nhập",
+                        Request.Headers["User-Agent"].ToString()
+                        );
                     return Ok();
                 }
                 return Unauthorized("Cảnh báo: Thông tin đăng nhập không đúng !");

@@ -82,12 +82,16 @@
                 $.ajax({
                     url: '@Url.Action("DuyetSanPham", "SanPham", new {Area = "Dashboard"})',
                     type: "post",
+                    beforeSend: function () {
+                        loadingMarkFull();
+                    },
                     data: {
                         spid: masp,
                         hd: thao_tac,
                         __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                     },
                     success: function (result) {
+                        removeLoadingMarkFull();
                         alert(result);
                         location.reload();
                     },

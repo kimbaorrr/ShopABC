@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="/assets/Dashboard/css/main/app.css">
     <link rel="stylesheet" href="/assets/Dashboard/css/main/app-dark.css">
     <link rel="stylesheet" href="/assets/Dashboard/css/shared/iconly.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css"/>
     @RenderSection("More_CSS", required: false)
 </head>
 <body>
@@ -256,6 +258,7 @@
             </div>
         </div>
         <div id="main">
+            
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
                     <i class="bi bi-justify fs-3"></i>
@@ -310,6 +313,7 @@
         <script src="/assets/Dashboard/js/app.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.js"></script>
         @RenderSection("More_Scripts", required: false)
         <script>
             // Thông báo
@@ -319,12 +323,18 @@
                     title: noi_dung,
                 })
             }
+            // Xóa mặt nạ loading
+            function removeLoadingMarkFull() {
+                $('.loading-mask').remove();
+            }
+            // Hiện mặt nạ loading
+            function loadingMarkFull() {
+                var html = '<div class="loading-mask" style="width: 100%;height: 100%;top: 0px;left: 0px;z-index: 99999999999999;display: block;background-color: #607d8b2b;position: fixed;bottom: 0px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="position:absolute;top:10px;left:50%;color:#f73900;margin-top:20%;margin-left:-45px;font-size:90px;"></i></div>';
+                $(html).appendTo(document.body);
+            }
             // Băm mật khẩu
             function hash_MK(mat_khau) {
-                console.log(mat_khau);
-                var h = CryptoJS.SHA3(mat_khau, { outputLength: 512 }).toString(CryptoJS.enc.Hex);
-                console.log(h);
-                return h;
+                return CryptoJS.SHA3(mat_khau, { outputLength: 512 }).toString(CryptoJS.enc.Hex);
             }
             $(document).ready(function () {
                 // Đổi mật khẩu
@@ -335,12 +345,16 @@
                     $.ajax({
                         url: '@Url.Action("DoiMatKhau", "TaiKhoan", new {Area = "Dashboard"})',
                         type: "post",
+                        beforeSend: function () {
+                            loadingMarkFull();
+                        },
                         data: {
                             mkcu: hash_MK($("#mkcu").val()),
                             mkmoi: hash_MK($("#mkmoi").val()),
                             __RequestVerificationToken: $("#Modal_DoiMatKhau input[name='__RequestVerificationToken']").val()
                         },
                         success: function (result) {
+                            removeLoadingMarkFull();
                             alert(result);
                             location.reload();
                         },
@@ -353,6 +367,12 @@
                 });
             });
         </script>
+        @if (!string.IsNullOrEmpty(ViewBag.ThongBao))
+        {
+            <script>
+                thong_bao("@Html.Raw(ViewBag.TrangThai)", "@Html.Raw(ViewBag.ThongBao)");
+            </script>
+        } 
     </plugins>
 </body>
 </html>
