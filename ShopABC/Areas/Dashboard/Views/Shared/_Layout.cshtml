@@ -14,8 +14,6 @@
     <title>@ViewBag.Title</title>
 	<link rel="preconnect" href="https://fonts.bunny.net/">
 	<link rel="preconnect" href="https://cdnjs.cloudflare.com/">
-    <link rel="preconnect" href="https://fonts.bunny.net/">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=nunito:200,300,400,500,600,700,800&display=swap">
     <link rel="stylesheet" href="/assets/Dashboard/css/main/app.css">
     <link rel="stylesheet" href="/assets/Dashboard/css/main/app-dark.css">
@@ -311,14 +309,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
         <script src="/assets/Dashboard/js/app.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha3.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
         @RenderSection("More_Scripts", required: false)
-        @if (ViewBag.ThongBao != null)
-        {
-        <script>
-            
-        </script>
-        }
         <script>
             // Thông báo
             function thong_bao(icon, noi_dung) {
@@ -329,25 +321,27 @@
             }
             // Băm mật khẩu
             function hash_MK(mat_khau) {
-                return CryptoJS.SHA3(mat_khau, { outputLength: 512 });
+                console.log(mat_khau);
+                var h = CryptoJS.SHA3(mat_khau, { outputLength: 512 }).toString(CryptoJS.enc.Hex);
+                console.log(h);
+                return h;
             }
             $(document).ready(function () {
                 // Đổi mật khẩu
                 $('#Modal_DoiMatKhau #btn_DoiMK').click(function () {
                     if ($("#mkmoi").val() != $("#nhaplaimk").val()) {
                         alert("Mật khẩu mới và nhập lại không khớp !");
-                        $('#Modal_DoiMatKhau input').val(''); 
-                    };
+                    }
                     $.ajax({
-                        url: '@Url.Action("DoiMatKhau", "TaiKhoan", new {Area = "Dashboard"} )',
+                        url: '@Url.Action("DoiMatKhau", "TaiKhoan", new {Area = "Dashboard"})',
                         type: "post",
                         data: {
                             mkcu: hash_MK($("#mkcu").val()),
                             mkmoi: hash_MK($("#mkmoi").val()),
                             __RequestVerificationToken: $("#Modal_DoiMatKhau input[name='__RequestVerificationToken']").val()
                         },
-                        success: function (data) {
-                            alert(data);
+                        success: function (result) {
+                            alert(result);
                             location.reload();
                         },
                         error: function (xhr, statusText, error) {

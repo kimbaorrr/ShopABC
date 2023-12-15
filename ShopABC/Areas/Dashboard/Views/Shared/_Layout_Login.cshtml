@@ -7,7 +7,8 @@
     <title>@ViewBag.Title</title>
     <link rel="icon" href="data:," />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
-    <script src="https://cdn.jsdelivr.net/gh/kimbaorrr/cdn/tailwindcss-3.4.0.js"></script>
+    <link rel="preconnect" href="https://cdn2.baoit.xyz/">
+    <script src="https://cdn2.baoit.xyz/tailwindcss-3.4.0.js"></script>
 </head>
 <body>
     <div class="flex items-center justify-center h-screen bg-gray-100">
@@ -30,12 +31,13 @@
         <script>window.history.replaceState && window.history.replaceState(null, null, window.location.href)</script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha3.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
         <script>
             $(document).ready(function () {
                 $("button").click(function () {
+                    $("#thongbao").css("display", "none");
                     if ($("#MatKhau").val() != "") {
-                        var hash = CryptoJS.SHA3($("#MatKhau").val(), { outputLength: 512 });
+                        var hash = CryptoJS.SHA3($("#MatKhau").val(), { outputLength: 512 }).toString(CryptoJS.enc.Hex);
                         $("#MatKhau").val(hash);
                         var login_form = $("form");
                         $.ajax({
@@ -46,11 +48,11 @@
                                 location.replace('@Url.Action("Index", "Home", new {Area = "Dashboard"})');
                             },
                             error: function (xhr, statusText, error) {
-                                $("input").val("");
-                                $("#TenDN").focus();
                                 var errorMessage = xhr.responseText;
                                 $("#thongbao").css("display", "block");
                                 $("#thongbao span").text(errorMessage);
+                                $("#MatKhau").val("");
+                                $("#TenDN").focus();
                             }
                         });
                     } else {

@@ -41,8 +41,9 @@ namespace ShopABC.Areas.Dashboard.Controllers
             {
                 using (ShopABC_Entities e = ShopABC_CSDL.ketNoi())
                 {
-                    NvDangnhap a = e.NvDangnhaps.FirstOrDefault(x => x.Manv == get_MaNV_Session() && x.Tendn.Equals(get_tendn_Session()));
-                    if (!mkcu.Equals(a.Matkhau + ShopABC_TaiKhoan.salt()))
+                    NvDangnhap a = e.NvDangnhaps.FirstOrDefault(x => x.Manv == get_MaNV_Session());
+                    a.Matkhau = a.Matkhau + ShopABC_TaiKhoan.salt();
+                    if (!mkcu.Equals(a.Matkhau))
                         return Unauthorized("Mật khẩu cũ không chính xác !");
                     a.Matkhau = mkmoi + ShopABC_TaiKhoan.salt();
                     e.SaveChanges();
