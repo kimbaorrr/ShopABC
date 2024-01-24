@@ -1,0 +1,105 @@
+﻿@using ShopABC.Models
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+    ViewBag.Description = "Trang hiển thị danh sách đơn hàng";
+    ISession sess = Context.Session;
+}
+
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Dữ liệu đơn hàng
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>Số hóa đơn</th>
+                        <th>Ngày mua</th>
+                        <th>Ngày nhận</th>
+                        <th>Ngày hủy</th>
+                        <th>Người mua</th>
+                        <th>Tình trạng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Donhang i in ShopABC_DonHang.get_DonHang())
+                    {
+                        <tr>
+                            <td>@i.Sohd</td>
+                            <td>@i.Ngaymua.Value</td>
+                            @{
+                                if (i.Ngaynhan.HasValue == false)
+                                {
+                                    <td>N/A</td>
+                                }
+                                else
+                                {
+                                    <td>@i.Ngaynhan.Value</td>
+                                }
+                            }
+                            @{
+                                if (i.Ngayhuy.HasValue == false)
+                                {
+                                    <td>N/A</td>
+                                }
+                                else
+                                {
+                                    <td>@i.Ngayhuy.Value</td>
+                                }
+                            }
+                            <td>@ShopABC_KhachHang.get_TenKhachHang_Theo_MaKH(i.Makh)</td>
+                            <td>
+                                @switch (i.Matt)
+                                {
+                                    case 1:
+                                        <span class="badge bg-danger">@i.MattNavigation.Tentt</span>
+                                        break;
+                                    case 2:
+                                        <span class="badge bg-warning">@i.MattNavigation.Tentt</span>
+                                        break;
+                                    case 5:
+                                        <span class="badge bg-secondary">@i.MattNavigation.Tentt</span>
+                                        break;
+                                    case 6:
+                                        <span class="badge bg-success">@i.MattNavigation.Tentt</span>
+                                        break;
+                                    case 7:
+                                        <span class="badge bg-danger">@i.MattNavigation.Tentt</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href='@Url.Action("ChiTietDonHang", "DonHang", new {hdid = i.Sohd, pkey = sess.GetString("pkey")})'>Xem</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<!-- Basic Tables end -->
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+        });
+    </script>
+}
+
+
+

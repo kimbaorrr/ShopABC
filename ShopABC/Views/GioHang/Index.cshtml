@@ -1,0 +1,128 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+@{
+    ViewBag.Title = "Giỏ hàng";
+    ShopABC_GioHang sp = ViewData["GioHangCuaToi"] as ShopABC_GioHang;
+}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Giỏ hàng</h4>
+                    <div class="breadcrumb__links">
+                        <a href='@Url.Action("Index", "Home")'>Trang chủ</a>
+                        <span>@ViewBag.Title</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (sp.kt_GioHang_Rong() == false)
+                                {
+                                    foreach (Chitietdonhang i in sp.SanPham_DaChon.Values)
+                                    {
+                                        <tr>
+                                            <td class="product__cart__item">
+                                                <div class="product__cart__item__pic">
+                                                </div>
+                                                <div class="product__cart__item__text">
+                                                    <h6>@ShopABC_SanPham.get_TenSP_Theo_MaSP(i.Masp)</h6>
+                                                    <h5>@String.Format("{0:0,0}", ShopABC_GioHang.calc_GiaBan_Sau_GiamGia(i.Masp)) <u>đ</u></h5>
+                                                </div>
+                                            </td>
+                                            <td class="quantity__item">
+                                                <div class="quantity">
+                                                    <div class="pro-qty-2">
+                                                        <a href="#" class="fa fa-angle-left dec qtybtn" onclick="giam_so_luong(@i.Masp);"></a>
+                                                        <input type="text" value="@i.Soluong" readonly>
+                                                        <a href="#" class="fa fa-angle-right inc qtybtn" onclick="them_vao_gio(@i.Masp);"></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="cart__price">@String.Format("{0:0,0}", i.Thanhtien) <u>đ</u></td>
+                                            <td class="cart__close">
+                                                <a href="#" class="fa fa-close" onclick="xoa_khoi_gio(@i.Masp);"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    @if (sp.kt_GioHang_Rong())
+                    {
+                        <p class="text-center text-danger fs-3 pt-3">Giỏ hàng rỗng !</p>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a href='@Url.Action("Index", "SanPham")'>Tiếp tục mua hàng</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn update__btn">
+                            <a href="#" onclick="xoa_tat_ca();">Xóa tất cả</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Mã khuyến mãi</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Mã khuyến mãi">
+                        <button type="submit">Áp dụng</button>
+                    </form>
+                </div>
+                <div class="cart__total">
+                    <h6>Thanh toán</h6>
+                    <ul>
+                        <li>Thành tiền <span>@String.Format("{0:0,0}", sp.calc_TongThanhToan()) <u>đ</u></span></li>
+                        <li>Khuyến mãi <span>- 15.000 <u>đ</u></span></li>
+                        @{
+                            decimal? tongTT = 0;
+                            if (sp.calc_TongThanhToan() != 0)
+                            {
+                                tongTT = sp.calc_TongThanhToan() - 15000;
+                            }
+                            <li>Tổng thanh toán <span>@String.Format("{0:0,0}", tongTT) <u>đ</u></span></li>
+                        }
+                    </ul>
+                    @{
+                        if (sp.kt_GioHang_Rong() == false)
+                        {
+                            this.Context.Session.SetString("tt_id", ShopABC_TaiKhoan.privateKey());
+                            <a href='@Url.Action("ThanhToan", "GioHang", new {pkey = this.Context.Session.GetString("kh-pkey"), ttid = this.Context.Session.GetString("tt_id") })' class="primary-btn">Tiến hành thanh toán</a>
+                        }
+                        else
+                        {
+                            <a href='#' class="primary-btn" onclick="alert('Giỏ hàng rỗng. Không thể thanh toán !')">Tiến hành thanh toán</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shopping Cart Section End -->

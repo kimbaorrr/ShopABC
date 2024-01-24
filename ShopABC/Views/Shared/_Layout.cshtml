@@ -1,0 +1,285 @@
+﻿@using ShopABC.Models;
+@using ShopABC.Controllers;
+@using ShopABC;
+
+@{
+    ISession sess = Context.Session;
+    ShopABC_GioHang sp = ShopABC_Tools.GetObject<ShopABC_GioHang>(sess, "GioHang");
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8″   />
+    <meta http-equiv="content-language" content="vi" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="Shop thời trang nam online chất lượng cao" />
+    <meta name="robots" content="all" />
+    <meta name="revisit-after" content="15 minutes" />
+    <link rel="preconnect" href="https://fonts.bunny.net/">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=nunito-sans:200,300,400,500,600,700,800,900&display=swap">
+    <link rel="stylesheet" href="/assets/Public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/Public/css/elegant-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.8/slicknav.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="/assets/Public/css/style.css" />
+    @RenderSection("More_CSS", required: false)
+</head>
+<body>
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+                <a href="@Url.Action("Index", "Login", new {Area = "Dashboard"})">Đăng nhập</a>
+                <a href='@Url.Action("Index", "FAQs")'>FAQs</a>
+            </div>
+        </div>
+        <div class="offcanvas__nav__option">
+            <a href='#' class="search-switch"><img src="/assets/Public/img/icon/search.png"></a>
+            <a href="#"><img src="/assets/Public/img/icon/heart.png"></a>
+            <a href='@Url.Action("Index", "GioHang")'><img src="/assets/Public/img/icon/cart.png"></a>
+            <div class="price">@String.Format("{0:0,0}", sp.calc_TongThanhToan())<u>đ</u></div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>30 ngày hoàn trả miễn phí !</p>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+    <!-- Header Section Begin -->
+    <header class="header sticky-top">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p>30 ngày hoàn trả miễn phí !</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            <div class="header__top__links">
+                                <a href="@Url.Action("Index", "Login", new {Area = "Dashboard"})">Đăng nhập</a>
+                                <a href='@Url.Action("Index", "FAQs")'>FAQs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                        <a href='@Url.Action("Index", "Home")'><img src="/assets/Public/img/logo.png"></a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li><a href='@Url.Action("Index", "Home")'>Trang chủ</a></li>
+                            <li><a href='@Url.Action("Index", "SanPham", new {page = 1})'>Sản phẩm</a></li>
+                            <li><a href='@Url.Action("Index", "Blog", new {page = 1})'>Tin tức</a></li>
+                            <li><a href='@Url.Action("Index", "LienHe")'>Liên hệ</a></li>
+                            <li><a href='@Url.Action("Index", "VeChungToi")'>Về chúng tôi</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+                        <a href='#' class="search-switch"><img src="/assets/Public/img/icon/search.png"></a>
+                        <a href="#"><img src="/assets/Public/img/icon/heart.png"></a>
+                        <a href='@Url.Action("Index", "GioHang")'><img src="/assets/Public/img/icon/cart.png"></a>
+                        <div class="price">@String.Format("{0:0,0}", sp.calc_TongThanhToan()) <u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+    @RenderSection("Breadcum", required: false)
+    @RenderBody()
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="/assets/Public/img/footer-logo.png"></a>
+                        </div>
+                        <p>Đồng hành cùng đẳng cấp thời trang.</p>
+                        <a href="#"><img src="/assets/Public/img/payment.png"></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Thông tin</h6>
+                        <ul>
+                            <li><a href='@Url.Action("Index", "LienHe")'>Liên hệ</a></li>
+                            <li><a href='@Url.Action("Index", "VeChungToi")'>Về chúng tôi</a></li>
+                            <li><a href='@Url.Action("Index", "DoiTac")'>Đối tác</a></li>
+                            <li><a href='@Url.Action("TuyenDung", "ChinhSach")'>Tuyển dụng</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Chính sách</h6>
+                        <ul>
+                            <li><a href='@Url.Action("DoiHang", "ChinhSach")'>Chính sách đổi hàng</a></li>
+                            <li><a href='@Url.Action("BaoHanh", "ChinhSach")'>Chính sách bảo hành</a></li>
+                            <li><a href='@Url.Action("BaoMat", "ChinhSach")'>Chính sách bảo mật</a></li>
+                            <li><a href='@Url.Action("HoanTien", "ChinhSach")'>Chính sách hoàn tiền</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Nhận khuyến mãi</h6>
+                        <div class="footer__newslatter">
+                            <form action="#">
+                                <input type="text" placeholder="Email của bạn">
+                                <button type="submit">Gửi</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <p>&copy; @DateTime.Now.ToString("yyyy") BaoIT. All right reserved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            @using (Html.BeginForm("TimKiem", "SanPham", FormMethod.Get, new { @class = "search-model-form" }))
+            {
+                <input name="search" type="text" id="search-input" placeholder="Tìm sản phẩm.....">
+            }
+        </div>
+    </div>
+    <!-- Search End -->
+    @Html.AntiForgeryToken()
+    <!-- Js Plugins -->
+    <plugins>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.8/jquery.slicknav.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js"></script>
+        @RenderSection("More_Scripts", required: false)
+        <script src="/assets/Public/js/main.js"></script>
+        <script>
+            var loc = $(location).attr('pathname');
+            $('.header__menu ul li').find('a').each(function () {
+                $(this).parents('li').toggleClass('active', $(this).attr('href') == loc);
+            });
+        </script>
+        <script>
+            // Thêm vào giỏ
+            function them_vao_gio(masp) {
+                $.ajax({
+                    url: '@Url.Action("ThemVaoGio", "GioHang")',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        location.reload();
+                    }
+                });
+            }
+            // Xóa khỏi giỏ
+            function xoa_khoi_gio(masp) {
+                $.ajax({
+                    url: '@Url.Action("XoaKhoiGio", "GioHang")',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+            // Xóa tất cả
+            function xoa_tat_ca(masp) {
+                $.ajax({
+                    url: '@Url.Action("XoaTatCa", "GioHang")',
+                    type: "post",
+                    data: {
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+            // Giảm số lượng
+            function giam_so_luong(masp) {
+                $.ajax({
+                    url: '@Url.Action("GiamSoLuong", "GioHang")',
+                    type: "post",
+                    data: {
+                        spid: masp,
+                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+            /*
+            function update_tongtt() {
+                $.ajax({
+                    url: '@Url.Action("Update_TongThanhToan", "GioHang")',
+                    type: "post",
+                    data: {
+                    },
+                    success: function (result) {
+                        $(".price").text(result);
+                    },
+                });
+            }
+            */
+        </script>
+    </plugins>
+
+</body>
+</html>

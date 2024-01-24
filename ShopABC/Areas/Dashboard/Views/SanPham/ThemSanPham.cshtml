@@ -1,0 +1,180 @@
+﻿@using ShopABC.Models
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    ViewBag.Description = "Thêm một sản phẩm mới";
+    @model ShopABC_ChiTietSanPham
+
+}
+@using (Html.BeginForm("ThemSanPham", "SanPham", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="section">
+        <div class="row">
+            <div class="col-12 col-md-5">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <h4 class="card-title pb-3">Hình sản phẩm</h4>
+                            <div class="ratio ratio-4x3 border border-2 border-secondary rounded-3">
+                                <img id="hinhsp" src="@ShopABC_Tools.get_Images_over_CDN("no-image.png", 0)" width="100%" />
+                            </div>
+                            <fieldset class="pb-4">
+                                <div class="mt-4 pb-1 pt-2">
+                                    @Html.TextBoxFor(m => m.HinhSP, new {@class = "form-control", @type = "file", @onchange = "readURL(this);", @multiple = ""})
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-7">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <h4 class="card-title pb-3">Thông tin sản phẩm</h4>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.TenSP, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                @Html.TextBoxFor(m => m.TenSP, new { @class = "form-control mt-1", @autofocus = "" })
+                                @Html.ValidationMessageFor(m => m.TenSP, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-4 mb-1">
+                                    <div class="form-group mb-3">
+                                        @Html.LabelFor(m => m.MaLoai, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                        @Html.DropDownListFor(m => m.MaLoai, new SelectList(ShopABC_SanPham.get_LoaiSP(), nameof(Loaisp.Maloai), nameof(Loaisp.Tenloai)), new { @class = "form-select mt-1" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <div class="form-group mb-3">
+                                        @Html.LabelFor(m => m.MaDM, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                        @Html.DropDownListFor(m => m.MaDM, new SelectList(ShopABC_SanPham.get_DanhMucSP(), nameof(Danhmucsp.Madm), nameof(Danhmucsp.Tendm)), new { @class = "form-select mt-1" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <div class="form-group mb-3">
+                                        @Html.LabelFor(m => m.MaHSX, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                        @Html.DropDownListFor(m => m.MaHSX, new SelectList(ShopABC_SanPham.get_HangSX(), nameof(Hangsx.Mahsx), nameof(Hangsx.Tenhsx)), new { @class = "form-select mt-1" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ChatLieu, new { @class = "fw-bold" })
+                                @Html.TextBoxFor(m => m.ChatLieu, new { @class = "form-control mt-1" })
+                                @Html.ValidationMessageFor(m => m.ChatLieu, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.KieuDang, new { @class = "fw-bold" })
+                                @Html.TextBoxFor(m => m.KieuDang, new { @class = "form-control mt-1" })
+                                @Html.ValidationMessageFor(m => m.KieuDang, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    @Html.LabelFor(m => m.GiaBan, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                    <div class="input-group mb-3">
+                                        @Html.TextBoxFor(m => m.GiaBan, new { @class = "form-control mt-1" })
+                                        <span class="input-group-text mt-1">VNĐ</span>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.GiaBan, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    @Html.LabelFor(m => m.GiamGia, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                    <div class="input-group mb-3">
+                                        @Html.TextBoxFor(m => m.GiamGia, new { @class = "form-control mt-1" })
+                                        <span class="input-group-text mt-1">%</span>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.GiamGia, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    @Html.LabelFor(m => m.ThueVAT, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                    <div class="input-group mb-3">
+                                        @Html.TextBoxFor(m => m.ThueVAT, new {@class = "form-control mt-1", @value = "8"})
+                                        <span class="input-group-text mt-1">%</span>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.ThueVAT, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    @Html.LabelFor(m => m.MaMau, new { @class = "fw-bold" })<span class="text-danger"> *</span>
+                                    @Html.DropDownListFor(m => m.MaMau, new SelectList(ShopABC_SanPham.get_MauSac(), nameof(Mausac.Mamau), nameof(Mausac.Tenmau)), new { @class = "form-select mt-1" })
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="fw-bold pb-1">Đơn vị tính</label>
+                                    <input class="form-control" type="text" value="cái" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <h4 class="card-title pb-3">Thông tin quảng cáo</h4>
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(m => m.MoTa, new { @class = "fw-bold" })
+                                @Html.TextAreaFor(m => m.MoTa, new { @class = "form-control mt-1 tinymce", @rows = "3" })
+                                @Html.ValidationMessageFor(m => m.MoTa, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(m => m.NoiDung, new { @class = "fw-bold" })
+                                @Html.TextAreaFor(m => m.NoiDung, new { @class = "form-control mt-1 tinymce", @rows = "6" })
+                                @Html.ValidationMessageFor(m => m.NoiDung, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <button type="submit" class="btn btn-success mx-auto d-block">Thêm mới</button>
+            </div>
+            <div class="col-4">
+                <button class="btn btn-danger mx-auto d-block">Nháp</button>
+            </div>
+            <div class="col-4">
+                <button type="reset" class="btn btn-secondary mx-auto d-block">Hoàn tác</button>
+            </div>
+        </div>
+    </section>
+}
+
+@section More_Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/tinymce/tinymce.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const themeOptions = document.body.classList.contains("theme-dark")
+                ? {
+                    skin: "oxide-dark",
+                    content_css: "dark",
+                }
+                : {
+                    skin: "oxide",
+                    content_css: "default",
+                }
+            tinymce.init({ selector: ".tinymce", ...themeOptions })
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#hinhbv')
+                        .attr('src', e.target.result)
+                        .width("100%")
+                        .height("100%");
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.js"></script>
+}
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css" />
+}

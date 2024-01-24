@@ -1,0 +1,48 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Danh sách khách hàng";
+    ViewBag.Description = "Trang hiển thị danh sách khách hàng";
+}
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12" style="max-height: 80vh;">
+            <div class="card" style="max-height: 80vh;">
+                <div class="card-header">
+                    <h4 class="card-title">Dữ liệu khách hàng</h4>
+                </div>
+                <div class="card-content overflow-auto">
+                    <!-- table hover -->
+                    <div class="table-responsive overflow-auto">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Mã khách hàng</th>
+                                    <th>Họ tên Khách hàng</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Lần mua gần nhất</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (Khachhang i in ShopABC_KhachHang.get_KhachHang())
+                                    {
+                                        <tr>
+                                            <td>@i.Makh</td>
+                                            <td>@ShopABC_KhachHang.get_TenKhachHang_Theo_MaKH(i.Makh)</td>
+                                            <td>@i.Email</td>
+                                            <td>@i.Sdt</td>
+                                            <td>@ShopABC_KhachHang.get_LanMuaGanNhat(i.Makh)</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

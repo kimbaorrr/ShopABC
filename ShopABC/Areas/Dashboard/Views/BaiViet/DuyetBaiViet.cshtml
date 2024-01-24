@@ -1,0 +1,91 @@
+﻿@using ShopABC.Models
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Duyệt bài viết";
+    ViewBag.Description = "Trang duyệt bài viết người dùng";
+    ISession sess = Context.Session;
+}
+
+<!-- Basic Tables start -->
+@Html.AntiForgeryToken()
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Dữ liệu bài viết
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>Mã bài viết</th>
+                        <th>Tên bài viết</th>
+                        <th>Ngày đăng</th>
+                        <th>Người đăng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Baiviet i in ShopABC_BaiViet.get_BaiViet_ChuaDuyet())
+                    {
+                        <tr>
+                            <td><a href='@Url.Action("ChiTietBaiViet", "BaiViet", new {p = i.Tieude, bvid = i.Mabv, pkey = sess.GetString("pkey")})'>@i.Mabv</a></td>
+                            <td>@i.Tieude</td>
+                            <td>@i.Ngaydang.Value</td>
+                            <td>@ShopABC_NhanVien.get_HoTen(i.Manv)</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick='thao_tac_duyet("huybo", @i.Mabv);'>Hủy bỏ</button>
+                                <button class="btn btn-sm btn-success" onclick='thao_tac_duyet("duyet", @i.Mabv);'>Duyệt bài</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<!-- Basic Tables end -->
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+
+        });
+        // Thao tác duyệt
+        function thao_tac_duyet(thao_tac, mabv) {
+            $.ajax({
+                url: '@Url.Action("DuyetBaiViet", "BaiViet", new {Area = "Dashboard"})',
+                type: "post",
+                beforeSend: function () {
+                    loadingMarkFull();
+                },
+                data: {
+                    bvid: mabv,
+                    hd: thao_tac,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (result) {
+                    removeLoadingMarkFull();
+                    alert(result);
+                    location.reload();
+                },
+                error: function (xhr, statusText, error) {
+                    removeLoadingMarkFull();
+                    alert("Có lỗi xảy ra. Thử lại !");
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}
+

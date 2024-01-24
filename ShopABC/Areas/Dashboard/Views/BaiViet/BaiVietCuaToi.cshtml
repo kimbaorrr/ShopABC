@@ -1,0 +1,84 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Bài viết của tôi";
+    ViewBag.Description = "Trang hiển thị bài viết của bạn";
+    ISession sess = Context.Session;
+}
+
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Dữ liệu bài viết
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>Mã bài viết</th>
+                        <th>Tên bài viết</th>
+                        <th>Ngày đăng</th>
+                        <th>Tình trạng</th>
+                        <th>Nháp ?</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Baiviet i in ShopABC_BaiViet.get_BaiViet_Theo_MaNV((int)sess.GetInt32("manv")))
+                    {
+                        <tr>
+                            <td>@i.Mabv</td>
+                            <td>@i.Tieude</td>
+                            <td>@i.Ngaydang</td>
+                            <td>
+                                @if (i.Duyet == false)
+                                {
+                                    <span class="badge bg-danger">Chưa duyệt</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Đã duyệt</span>
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (i.Draft == true)
+                                    {
+                                        <input class="form-check-input form-check-success mx-auto d-flex" checked type="checkbox" readonly />
+                                    }
+                                }
+
+                            </td>
+                            <td>
+                                <a href="@Url.Action("ChiTietBaiViet", "BaiViet", new { bvid = i.Mabv, pkey = sess.GetString("pkey"), returnURL = Url.PageLink() })" class="btn btn-sm btn-primary">Xem</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<!-- Basic Tables end -->
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+        });
+    </script>
+}
+
+
+

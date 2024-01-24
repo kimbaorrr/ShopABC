@@ -1,0 +1,224 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Bảng điều khiển";
+    ViewBag.Hide = "Y";
+}
+
+<div class="page-heading">
+    <div class="row">
+        <div class="col-6">
+            <h3>@ViewBag.Title</h3>
+        </div>
+        <div class="col-6">
+            <a href="/" class="fw-bold float-end clearfix pt-1">Đến trang công khai <i class="bi bi-arrow-right-short"></i></a>
+        </div>
+    </div>
+   
+</div>
+<div class="page-content">
+    <section class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon purple mb-2">
+                                        <i class="iconly-boldShow"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Lượt mua</h6>
+                                    <h6 class="font-extrabold mb-0">@ShopABC_SanPham.get_LuotMuaSP()</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon blue mb-2">
+                                        <i class="iconly-boldProfile"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Tổng bài viết</h6>
+                                    <h6 class="font-extrabold mb-0">@ShopABC_BaiViet.get_TongBaiViet()</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon green mb-2">
+                                        <i class="iconly-boldAdd-User"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Tổng sản phẩm</h6>
+                                    <h6 class="font-extrabold mb-0">@ShopABC_SanPham.get_TongSP()</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon red mb-2">
+                                        <i class="iconly-boldBookmark"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Bài viết của tôi</h6>
+                                    <h6 class="font-extrabold mb-0">@ShopABC_BaiViet.get_TongBaiViet_Theo_ID((int)this.Context.Session.GetInt32("manv"))</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Thống kê doanh thu sản phẩm</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-profile-visit"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-xl-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Khu vực mua nhiều</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <svg class="bi text-primary" width="32" height="32" fill="blue"
+                                             style="width:10px">
+                                            <use xlink:href="/assets/Dashboard/images/bootstrap-icons.svg#circle-fill" />
+                                        </svg>
+                                        <h5 class="mb-0 ms-3">Europe</h5>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="mb-0">862</h5>
+                                </div>
+                                <div class="col-12">
+                                    <div id="chart-europe"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <svg class="bi text-success" width="32" height="32" fill="blue"
+                                             style="width:10px">
+                                            <use xlink:href="/assets/Dashboard/images/bootstrap-icons.svg#circle-fill" />
+                                        </svg>
+                                        <h5 class="mb-0 ms-3">America</h5>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="mb-0">375</h5>
+                                </div>
+                                <div class="col-12">
+                                    <div id="chart-america"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <svg class="bi text-danger" width="32" height="32" fill="blue"
+                                             style="width:10px">
+                                            <use xlink:href="/assets/Dashboard/images/bootstrap-icons.svg#circle-fill" />
+                                        </svg>
+                                        <h5 class="mb-0 ms-3">Indonesia</h5>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="mb-0">1025</h5>
+                                </div>
+                                <div class="col-12">
+                                    <div id="chart-indonesia"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Đánh giá từ khách hàng</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-lg">
+                                    <thead>
+                                        <tr>
+                                            <th>Sản phẩm</th>
+                                            <th>Khách hàng</th>
+                                            <th>Đánh giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (KhNhanxet i in ShopABC_KhachHang.get_kh_NhanXet_SP())
+                                        {
+                                            <tr>
+                                                <td class="col-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <a class="font-bold mb-0" href='@Url.Action("ChiTietSanPham", "SanPham", new {p = i.MaspNavigation.Tensp, spid = i.Masp, pkey = this.Context.Session.GetString("pkey")})'>@i.Masp</a>
+                                                    </div>
+                                                </td>
+                                                <td class="col-auto">
+                                                    <p class=" mb-0">@ShopABC_KhachHang.get_TenKhachHang_Theo_MaKH(i.Makh)</p>
+                                                </td>
+                                                <td class="col-1">
+                                                    <div id="DanhGia" data-rate-value=@i.Dgsao></div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section More_Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.36.3/apexcharts.min.js"></script>
+    <script src="/assets/Dashboard/js/pages/dashboard.js"></script>
+    <script src="/assets/Dashboard/extensions/rater-js/rater.min.js"></script>
+    <script>
+        var options = {
+            max_value: 5,
+            step_size: 0.5,
+            readonly: true,
+        }
+        $("#DanhGia").rate(options);
+    </script>
+}
+
+
+

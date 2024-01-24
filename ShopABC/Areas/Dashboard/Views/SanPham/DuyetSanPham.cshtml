@@ -1,0 +1,89 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ISession sess = Context.Session;
+    ViewBag.Title = "Duyệt sản phẩm";
+    ViewBag.Description = "Trang duyệt sản phẩm";
+}
+
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Dữ liệu sản phẩm
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Ngày nhập</th>
+                        <th>Người nhập</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Sanpham i in ShopABC_SanPham.get_SanPham_ChuaDuyet())
+                    {
+                        <tr>
+                            <td><a href='@Url.Action("ChiTietSanPham", "SanPham", new {p = i.Tensp, spid = i.Masp, pkey = sess.GetString("pkey")})'>@i.Masp</a></td>
+                            <td>@i.Tensp</td>
+                            <td>@i.Ngaynhap</td>
+                            <td>@ShopABC_NhanVien.get_HoTen((int)i.Manv)</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick='thao_tac_duyet("huybo", @i.Masp);'>Hủy bỏ</button>
+                                <button class="btn btn-sm btn-success" onclick='thao_tac_duyet("duyet", @i.Masp);'>Duyệt</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<!-- Basic Tables end -->
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+            // Thao tác duyệt
+            function thao_tac_duyet(thao_tac, masp) {
+                $.ajax({
+                    url: '@Url.Action("DuyetSanPham", "SanPham", new {Area = "Dashboard"})',
+                    type: "post",
+                    beforeSend: function () {
+                        loadingMarkFull();
+                    },
+                    data: {
+                        spid: masp,
+                        hd: thao_tac,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        removeLoadingMarkFull();
+                        alert(result);
+                        location.reload();
+                    },
+                    error: function (xhr, statusText, error) {
+                        removeLoadingMarkFull();
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            }
+        });
+    </script>
+}
+

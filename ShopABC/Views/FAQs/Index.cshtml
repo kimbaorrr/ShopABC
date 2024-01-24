@@ -1,0 +1,83 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "FAQs";
+}
+@section More_CSS {
+    <link rel="stylesheet" href="/assets/Public/css/faq.css" />
+}
+@section Breadcum {
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>@ViewBag.Title</h4>
+                        <div class="breadcrumb__links">
+                            <a href='@Url.Action("Index", "Home")'>Trang chủ</a>
+                            <span>@ViewBag.Title</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+}
+<!-- FAQ Section Begin -->
+<section class="FAQ">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-4 col-sm-6">
+                <div class="about__item">
+                    <div class="faq_area section_padding_130" id="faq">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-sm-8 col-lg-6">
+                                    <!-- Section Heading-->
+                                    <div class="section_heading text-center wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                                        <h3>Câu hỏi thường gặp</h3>
+                                        <br />
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <!-- FAQ Area-->
+                                <div class="col-12 col-sm-10 col-lg-8">
+                                    <div class="accordion faq-accordian" id="faqAccordion">
+                                        @{
+                                            byte count = 0;
+                                            foreach (Faq i in ShopABC_ThongTinCty.get_FAQs())
+                                            {
+                                                <div class="card border-0 wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                                                    <div class="card-header" id="heading-@count">
+                                                        <h6 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapse-@count" aria-expanded="true" aria-controls="collapseOne">@i.Cauhoi<span class="lni-chevron-up"></span></h6>
+                                                    </div>
+                                                    <div class="collapse" id="collapse-@count" aria-labelledby="heading-@count" data-parent="#faqAccordion">
+                                                        <div class="card-body">
+                                                            <p>@i.Traloi</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                count++;
+                                            }
+                                        }
+                                        
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="mb-0 px-2">Không tìm thấy câu trả lời?</span>
+                                        <a class="text-danger" href="@Url.Action("Index", "LienHe")"> Liên hệ với chúng tôi</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- FAQ Section End -->

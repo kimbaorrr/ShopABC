@@ -1,0 +1,62 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+@using X.PagedList;
+@{
+    ViewBag.Title = "Xu hướng thời trang";
+    IPagedList<Baiviet> ds = ViewData["list_blogs"] as IPagedList<Baiviet>;
+}
+@section Breadcum {
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-blog set-bg" data-setbg="/assets/Public/img/breadcrumb-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>@ViewBag.Title</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+}
+<!-- Blog Section Begin -->
+<section class="blog spad">
+    <div class="container">
+        <div class="row">
+            @foreach (Baiviet i in ds)
+            {
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="@ShopABC_Tools.get_Images_over_CDN(i.Hinhbv, 1)"></div>
+                        <div class="blog__item__text">
+                            <span><img src="/assets/Public/img/icon/calendar.png" alt=""> @i.Ngaydang.Value.ToString("dd/MMM/yyyy")</span>
+                            <h5>@i.Tieude</h5>
+                            <a href='@Url.Action("Xem_Blog", "Blog", new {bid = i.Mabv})'>Đọc thêm</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="product__pagination">
+                    @{
+                        byte first = 1;
+                        while (first <= ds.PageCount)
+                        {
+                            if (first == ViewBag.Here)
+                            {
+                                <a class="active" href='@this.Url.Action((string)ViewBag.Redirect, "Blog", new {page = first})'>@first</a>
+                            }
+                            else
+                            {
+                                <a href='@Url.Action((string)ViewBag.Redirect, "Blog", new {page = first})'>@first</a>
+                            }
+                            first++;
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Section End -->

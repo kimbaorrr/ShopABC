@@ -1,0 +1,404 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ISession sess = Context.Session;
+    Phanquyen x = ShopABC_NhanVien.get_PhanQuyen_NhanVien((int)sess.GetInt32("manv"));
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+	<link rel="preconnect" href="https://fonts.bunny.net/">
+	<link rel="preconnect" href="https://cdnjs.cloudflare.com/">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=nunito:200,300,400,500,600,700,800&display=swap">
+    <link rel="stylesheet" href="/assets/Dashboard/css/main/app.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/main/app-dark.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/shared/iconly.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.1/sweetalert2.min.css"/>
+    @RenderSection("More_CSS", required: false)
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header position-relative">
+                    <div class="avatar avatar-xl d-block mx-auto">
+                        <a href='@Url.Action("Index", "Home")'>
+                            <img src="/nv_zone/images/@ShopABC_NhanVien.get_HinhAnh((int)sess.GetInt32("manv"))" loading="lazy"/>
+                        </a>
+                        <span class="avatar-status bg-success"></span>
+                    </div>
+                    <h5 class="font-bold pt-3 text-center">Chào, @ShopABC_NhanVien.get_Ten((int)sess.GetInt32("manv"))</h5>
+                    <h6 class="text-muted mb-0 text-center">ID: @ShopABC_NhanVien.get_MaNV(this.Context.Session.GetString("tendn"))</h6>
+                    <div class="theme-toggle d-flex gap-2 justify-content-center mt-4">
+                        <?xml version="1.0" encoding="UTF-8" ?>
+                        <svg class="iconify iconify--system-uicons" width="20" height="20" role="img" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2" opacity=".3" />
+                                <g transform="translate(-210 -1)">
+                                    <path d="M220.5 2.5v2m6.5.5l-1.5 1.5" />
+                                    <circle cx="220.5" cy="11.5" r="4" />
+                                    <path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2" />
+                                </g>
+                            </g>
+                        </svg>
+                        <div class="form-check form-switch fs-6">
+                            <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" />
+                            <label class="form-check-label"></label>
+                        </div>
+                        <?xml version="1.0" encoding="UTF-8" ?>
+                        <svg class="iconify iconify--mdi" width="20" height="20" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div class="sidebar-toggler  x">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        @if (x.XemBangdieukhien == true)
+                        {
+                        <li class="sidebar-item active">
+                            <a href='@Url.Action("Index", "Home")' class="sidebar-link">
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Bảng điều khiển</span>
+                            </a>
+                        </li>
+                        }
+                        @if (x.XemBaiviet == true)
+                        {
+                            <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-stack"></i>
+                                <span>Bài viết</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Bài viết của tôi", "BaiVietCuaToi", "BaiViet")
+                                </li> 
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Đăng bài viết", "DangBaiViet", "BaiViet")
+                                </li>
+                                @if (x.DuyetBaiviet == true) {
+                                    <li class="submenu-item">
+                                    @Html.ActionLink("Duyệt bài viết", "DuyetBaiViet", "BaiViet")
+                                </li>
+                                }
+                                @if (x.XemBaivietTatcabaiviet == true) {
+                                    <li class="submenu-item">
+                                    @Html.ActionLink("Tất cả bài viết", "TatCaBaiViet", "BaiViet")
+                                </li>
+                                }
+                            </ul>
+                        </li>
+                        }
+                        @if (x.XemSanpham == true)
+                        {
+                            <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-box-fill"></i>
+                                <span>Sản phẩm</span>
+                            </a>
+                            <ul class="submenu">
+                                @if (x.XemSanphamDssp == true)
+                                {
+                                    <li class="submenu-item">
+                                    @Html.ActionLink("Danh sách sản phẩm", "DanhSachSanPham", "SanPham")
+                                </li>
+                                }   
+                                @if (x.DuyetSanpham == true) {
+                                    <li class="submenu-item">
+                                    @Html.ActionLink("Duyệt sản phẩm", "DuyetSanPham", "SanPham")
+                                </li>
+                                }
+                                @if (x.ThemSanpham == true)
+                                {
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Thêm sản phẩm", "ThemSanPham", "SanPham")
+                                </li>
+                                }
+                            </ul>
+                        </li>
+                        }
+                        @if (x.XemDonhang == true)
+                        {
+                             <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-bag-fill"></i>
+                                <span>Đơn hàng</span>
+                            </a>
+                            <ul class="submenu">
+                                @if (x.XacnhanDonhang == true)
+                                {
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Chờ giao hàng", "ChoGiaoHang", "DonHang")
+                                </li>
+                                }
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Đang giao", "DangGiao", "DonHang")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Đã hủy", "DaHuy", "DonHang")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Giao thành công", "GiaoThanhCong", "DonHang")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Danh sách đơn hàng", "DanhSachDonHang", "DonHang")
+                                </li>
+                            </ul>
+                        </li>
+                        }
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-hexagon-fill"></i>
+                                <span>Kho hàng</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Nhập kho", "NhapKho", "KhoHang")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Tồn kho", "TonKho", "KhoHang")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Thống kê", "ThongKe", "KhoHang")
+                                </li>
+                            </ul>
+                        </li>
+                        @if (x.XemKhachhang == true)
+                        {
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-file-earmark-medical-fill"></i>
+                                <span>Khách hàng</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Danh sách khách hàng", "DanhSachKhachHang", "KhachHang")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Khách hàng thân thiết", "KhachHangThanThiet", "KhachHang")
+                                </li>
+                            </ul>
+                        </li>
+                        }
+                         <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi bi-pen-fill"></i>
+                                <span>Tùy chỉnh</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Thông tin chính sách", "ChinhSach", "ThongTin")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Thông tin tuyển dụng", "TuyenDung", "ThongTin")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Liên hệ", "LienHe", "ThongTin")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Về chúng tôi", "VeChungToi", "ThongTin")
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Câu hỏi thường gặp", "FAQs", "ThongTin")
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-title">Nâng cao</li>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-person-circle"></i>
+                                <span>Tài khoản</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Hồ sơ cá nhân", "HoSoCaNhan", "TaiKhoan")
+                                </li>
+                                @if (x.Phanquyentruycap == true)
+                                {
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Phân quyền", "PhanQuyenTruyCap", "TaiKhoan")
+                                </li>
+                                }
+                                <li class="submenu-item">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#Modal_DoiMatKhau">Đổi mật khẩu</a>
+                                </li>
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Đăng xuất", "Logout", "TaiKhoan")
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-hdd-fill"></i>
+                                <span>Hệ thống</span>
+                            </a>
+                            <ul class="submenu">
+                                @if (x.Nhatkytruycap == true)
+                                {
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Nhật ký truy cập", "NhatKyTruyCap", "HeThong")
+                                </li>
+                                }
+                                <li class="submenu-item">
+                                    @Html.ActionLink("Trạng thái", "TrangThai", "HeThong")
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="main">
+            
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+            <div class="page_heading">
+                @if (ViewBag.Hide == null)
+                {
+                    <div class="page-title">
+                        <div class="row">
+                            <div class="col-12 col-md-6 order-md-1 order-last">
+                                <h3>@ViewBag.Title</h3>
+                                @if (ViewBag.Description != null)
+                                {
+                                    <p class="text-subtitle text-muted">@ViewBag.Description</p>
+                                }           
+                            </div>
+                            <div class="col-12 col-md-6 order-md-2 order-first">
+                                <nav class="breadcrumb-header float-start float-lg-end">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href='@Url.Action("Index", "Home")'>Bảng điều khiển</a></li>
+                                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @RenderBody()
+            </div>
+            
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <p class="text-center">&copy; @DateTime.Now.ToString("yyyy") BaoIT. All rights reserved</p>
+                </div>
+            </footer>
+            <!--Modal Change Password-->
+            <div class="modal fade text-left " id="Modal_DoiMatKhau" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light-primary">
+                            <h5 class="modal-title">&nbsp;Đổi mật khẩu</h5>
+                            <button type="button" class="close rounded-pill" data-bs-dismiss="modal">
+                                <i data-feather="x"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                                @Html.AntiForgeryToken()
+                                @Html.Label("mkcu", "Mật khẩu cũ", new { @class = "form-label mt-3" })<span class="text-danger"> *</span>
+                                @Html.Password("mkcu", "", new { @class = "form-control", @autofocus = "" })
+                                @Html.Label("mkmoi", "Mật khẩu mới", new { @class = "form-label mt-3" })<span class="text-danger"> *</span>
+                                @Html.Password("mkmoi", "", new { @class = "form-control" })
+                                @Html.Label("nhaplaimk", "Nhập lại mật khẩu", new { @class = "form-label mt-3" })<span class="text-danger"> *</span>
+                                @Html.Password("nhaplaimk", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <span class="d-none d-sm-block">Hủy bỏ</span>
+                            </button>
+                            <button class="btn btn-primary ml-1" data-bs-dismiss="modal" id="btn_DoiMK">
+                                <span class="d-none d-sm-block">Thay đổi</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Change Password-->
+        </div>
+    </div>
+    
+    <plugins>
+        <script>window.history.replaceState && window.history.replaceState(null, null, window.location.href)</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/Dashboard/js/app.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.1/sweetalert2.min.js"></script>
+        @RenderSection("More_Scripts", required: false)
+        <script>
+            // Thông báo
+            function thong_bao(icon, noi_dung) {
+                Swal.fire({
+                    icon: icon,
+                    title: noi_dung,
+                })
+            }
+            // Xóa mặt nạ loading
+            function removeLoadingMarkFull() {
+                $('.loading-mask').remove();
+            }
+            // Hiện mặt nạ loading
+            function loadingMarkFull() {
+                var html = '<div class="loading-mask" style="width: 100%;height: 100%;top: 0px;left: 0px;z-index: 99999999999999;display: block;background-color: #607d8b2b;position: fixed;bottom: 0px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="position:absolute;top:10px;left:50%;color:#397FAE;margin-top:20%;margin-left:-45px;font-size:90px;"></i></div>';
+                $(html).appendTo(document.body);
+            }
+            // Băm mật khẩu
+            function hash_MK(mat_khau) {
+                return CryptoJS.SHA3(mat_khau, { outputLength: 512 }).toString(CryptoJS.enc.Hex);
+            }
+            $(document).ready(function () {
+                // Đổi mật khẩu
+                $('#Modal_DoiMatKhau #btn_DoiMK').click(function () {
+                    if ($("#mkmoi").val() != $("#nhaplaimk").val()) {
+                        alert("Mật khẩu mới và nhập lại không khớp !");
+                    }
+                    $.ajax({
+                        url: '@Url.Action("DoiMatKhau", "TaiKhoan", new {Area = "Dashboard"})',
+                        type: "post",
+                        beforeSend: function () {
+                            loadingMarkFull();
+                        },
+                        data: {
+                            mkcu: hash_MK($("#mkcu").val()),
+                            mkmoi: hash_MK($("#mkmoi").val()),
+                            __RequestVerificationToken: $("#Modal_DoiMatKhau input[name='__RequestVerificationToken']").val()
+                        },
+                        success: function (result) {
+                            removeLoadingMarkFull();
+                            alert(result);
+                            location.reload();
+                        },
+                        error: function (xhr, statusText, error) {
+                            removeLoadingMarkFull();
+                            var errorMessage = xhr.responseText;
+                            alert(errorMessage);
+                            $("#Modal_DoiMatKhau").css("display", "block");
+                        }
+                    });
+                });
+            });
+        </script>
+        @if (!string.IsNullOrEmpty(ViewBag.ThongBao))
+        {
+            <script>
+                thong_bao("@Html.Raw(ViewBag.TrangThai)", "@Html.Raw(ViewBag.ThongBao)");
+            </script>
+        } 
+    </plugins>
+</body>
+</html>

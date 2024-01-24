@@ -1,0 +1,217 @@
+﻿@using ShopABC.Models;
+@using X.PagedList;
+@using ShopABC_DB;
+@{
+    ViewBag.Title = "Sản phẩm";
+    IPagedList<Sanpham> dssp = ViewData["list_SanPham"] as IPagedList<Sanpham>;
+}
+@section Breadcum {
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>@ViewBag.Title</h4>
+                        <div class="breadcrumb__links">
+                            <a href='@Url.Action("Index", "Home")'>Trang chủ</a>
+                            <span>@ViewBag.Title</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+}
+<!-- Shop Section Begin -->
+<section class="shop spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="shop__sidebar">
+                    <div class="shop__sidebar__search">
+                        @using (Html.BeginForm("TimKiem", "SanPham", FormMethod.Get))
+                        {
+                            <input name="search" type="text" placeholder="Tìm kiếm...">
+                            <button type="submit"><span class="icon_search"></span></button>
+                        }
+                    </div>
+                    <div class="shop__sidebar__accordion">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-heading">
+                                    <a data-toggle="collapse" data-target="#collapseOne">Loại</a>
+                                </div>
+                                <div id="collapseOne" class="collapse" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="shop__sidebar__categories">
+                                            <ul class="nice-scroll">
+                                                @foreach (Loaisp l in ShopABC_SanPham.get_LoaiSP())
+                                                {
+                                                    <li><a href='@Url.Action("LocSanPham_TheoLoai", "SanPham", new { loai = l.Tenloai, page = 1 })'>@l.Tenloai</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-heading">
+                                    <a data-toggle="collapse" data-target="#collapseTwo">Hãng</a>
+                                </div>
+                                <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="shop__sidebar__brand">
+                                            <ul>
+                                                @foreach (Hangsx hsx in ShopABC_SanPham.get_HangSX())
+                                                {
+                                                    <li><a href='@Url.Action("LocSanPham_TheoHSX", "SanPham", new { hsx = hsx.Tenhsx, page = 1 })'>@hsx.Tenhsx</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-heading">
+                                    <a data-toggle="collapse" data-target="#collapseThree">Giá bán</a>
+                                </div>
+                                <div id="collapseThree" class="collapse" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="shop__sidebar__price">
+                                            <ul>
+                                                <li><a href='@Url.Action("LocSanPham_TheoGiaBan", "SanPham", new { giaban = "100000-500000", page = 1 })'>100.000 đ - 500.000 đ</a></li>
+                                                <li><a href='@Url.Action("LocSanPham_TheoGiaBan", "SanPham", new { giaban = "500000-1000000", page = 1 })'>500.000 đ - 1.000.000 đ</a></li>
+                                                <li><a href='@Url.Action("LocSanPham_TheoGiaBan", "SanPham", new { giaban = "gt1000000", page = 1 })'>&gt; 1.000.000 đ</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-heading">
+                                    <a data-toggle="collapse" data-target="#collapseFive">Màu sắc</a>
+                                </div>
+                                <div id="collapseFive" class="collapse" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="shop__sidebar__color">
+                                             @foreach (Mausac i in ShopABC_SanPham.get_MauSac())
+                                             {
+                                                <a href='@Url.Action("LocSanPham_TheoMau", "SanPham", new { color = i.Tenmau, page = 1 })'>
+                                                     <label for="sp-@i.Mamau" style="background-color: @i.Mamau !important;"></label>
+                                                 </a>
+                                             }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-heading">
+                                    <a data-toggle="collapse" data-target="#collapseSix">Từ khóa</a>
+                                </div>
+                                <div id="collapseSix" class="collapse" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="shop__sidebar__tags">
+                                            @foreach (Loaisp i in ShopABC_SanPham.get_LoaiSP())
+                                            {
+                                                <a href='@Url.Action("LocSanPham_TheoLoai", "SanPham", new { loai = i.Tenloai, page = 1 })'>@i.Tenloai</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="shop__product__option">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="shop__product__option__left">
+                                <p>Hiển thị @dssp.Count tổng số @dssp.TotalItemCount sản phẩm</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="shop__product__option__right">
+                                <p>Sắp xếp giá </p>
+                                <select>
+                                    <option value="tangdan">Tăng dần</option>
+                                    <option value="giamdan">Giảm dần</option>
+                                    <option value="macdinh" selected>Mặc định</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (Sanpham sp in dssp)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="@ShopABC_Tools.get_Images_over_CDN(sp.Hinhsp, 2)">
+                                    <ul class="product__hover">
+                                        <li><a href="#"><img src="/assets/Public/img/icon/heart.png" loading="lazy"> <span>Yêu thích</span></a></li>
+                                        <li>
+                                            <a href="#"><img src="/assets/Public/img/icon/compare.png" loading="lazy"> <span>So sánh</span></a>
+                                        </li>
+                                        <li><a href='@Url.Action("ChiTiet", "SanPham", new { p = sp.Tensp, spid = sp.Masp })'><img src="/assets/Public/img/icon/search.png" loading="lazy"> <span>Xem ngay</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>@sp.Tensp</h6>
+                                    <a href="#" class="add-cart" onclick="them_vao_gio(@sp.Masp);">+ Thêm vào giỏ</a>
+                                    <div class="rating">
+                                        @{
+                                            byte rate = 1;
+                                            while (rate <= ShopABC_KhachHang.get_Sao_DanhGiaSP(sp.Masp))
+                                            {
+                                                <i class="fa fa-star"></i>
+                                                rate++;
+                                            }
+                                        }
+                                    </div>
+                                    <h5 class="text-danger">@String.Format("{0:0,0}", ShopABC_GioHang.calc_GiaBan_Sau_GiamGia(sp.Masp)) <u>đ</u></h5>
+                                    <div class="product__color__select">
+                                        <label for="pc-4">
+                                            <input type="radio" id="pc-4">
+                                        </label>
+                                        <label class="active black" for="pc-5">
+                                            <input type="radio" id="pc-5">
+                                        </label>
+                                        <label class="grey" for="pc-6">
+                                            <input type="radio" id="pc-6">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     }
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product__pagination">
+                            @{
+                                byte first = 1;
+                                while (first <= dssp.PageCount)
+                                {
+                                    if (first == ViewBag.Here)
+                                    {
+                                        <a class="active" href='@Url.Action((string)ViewBag.Redirect, "SanPham", new {page = first})'>@first</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action((string)ViewBag.Redirect, "SanPham", new {page = first})'>@first</a>
+                                    }
+                                    first++;
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Section End -->

@@ -1,0 +1,276 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+@using System.Linq;
+@using ShopABC.Controllers;
+@{
+    ISession sess = Context.Session;
+    ViewBag.Title = "Trang chủ";
+}
+<!-- Hero Section Begin -->
+<section class="hero">
+    <div class="hero__slider owl-carousel">
+        @foreach (BannerTrangchu i in ShopABC_Banner.get_Banner())
+        {
+            <div class="hero__items set-bg" data-setbg="@ShopABC_Tools.get_Images_over_CDN(@i.Hinhgt, 3)">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="hero__text">
+                                <h6>Thời trang nam</h6>
+                                <h2>@i.Tenbanner</h2>
+                                <p>@i.Gtngan</p>
+                                <a href='@Url.Action("Index", "SanPham")' class="primary-btn">Khám phá <span class="arrow_right"></span></a>
+                                <div class="hero__social">
+                                    <a href="https://facebook.com"><i class="fa fa-facebook"></i></a>
+                                    <a href="https://twitter.com"><i class="fa fa-twitter"></i></a>
+                                    <a href="https://pinterest.com"><i class="fa fa-pinterest"></i></a>
+                                    <a href="https://instagram.com"><i class="fa fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Banner Section Begin -->
+<section class="banner spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 offset-lg-4" style="z-index: 100;">
+                <div class="banner__item">
+                    <div class="banner__item__pic">
+                        <img src="@ShopABC_Tools.get_Images_over_CDN("home_banner_1_image_1.webp", 3)">
+                    </div>
+                    <div class="banner__item__text">
+                        <h2>Bộ sưu tập vest nam @DateTime.Now.Year</h2>
+                        <a href='@Url.Action("TimKiem", "SanPham", new {search = "vest"})'>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5" style="z-index: 99;">
+                <div class="banner__item banner__item--middle">
+                    <div class="banner__item__pic">
+                        <img src="@ShopABC_Tools.get_Images_over_CDN("vi-da-nam-2022.webp", 3)">
+                    </div>
+                    <div class="banner__item__text">
+                        <h2>Phụ kiện</h2>
+                        <a href='@Url.Action("LocSanPham_TheoLoai", "SanPham", new {loai = "Phụ kiện"})'>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7" style="z-index: 98;">
+                <div class="banner__item banner__item--last">
+                    <div class="banner__item__pic">
+                        <img src="/assets/Public/img/banner/banner-3.jpg">
+                    </div>
+                    <div class="banner__item__text">
+                        <h2>Giày nam</h2>
+                        <a href='@Url.Action("LocSanPham_TheoLoai", "SanPham", new {loai = "Giày dép"})'>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Banner Section End -->
+<!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="filter__controls">
+                    <li class="active" data-filter="*">Đề xuất</li>
+                    <li data-filter=".new-arrivals">Hàng mới</li>
+                    <li data-filter=".hot-sales">Giảm giá sốc</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row product__filter">
+            @foreach (Sanpham a in ShopABC_SanPham.get_SanPham_MoiNhap())
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="@ShopABC_Tools.get_Images_over_CDN(a.Hinhsp.Split("#")[0], 2)">
+                            <span class="label">Mới</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="/assets/Public/img/icon/heart.png"></a><span>Yêu thích</span></li>
+                                <li><a href="#"><img src="/assets/Public/img/icon/compare.png"> <span>So sánh</span></a></li>
+                                <li><a href='@Url.Action("ChiTiet", "SanPham", new {p = a.Tensp, spid = a.Masp})'><img src="/assets/Public/img/icon/search.png"></a><span>Xem ngay</span></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>@a.Tensp</h6>
+                            <a href="#" class="add-cart" onclick="them_vao_gio(@a.Masp);">+ Thêm vào giỏ</a>
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h5 class="text-danger">@String.Format("{0:0,0}", ShopABC_GioHang.calc_GiaBan_Sau_GiamGia(a.Masp)) <u>đ</u></h5>
+                            @if (a.Giamgia != 0)
+                            {
+                                <span style="text-decoration: line-through;">@String.Format("{0:0,0}", a.Giaban) <u>đ</u></span>
+                            }
+                            <div class="product__color__select">
+                                <label for="pc-@a.Mamau" style="background-color: @a.Mamau !important;">
+                                    <input type="radio" id="pc-@a.Mamau">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @foreach (Sanpham i in ShopABC_SanPham.get_SanPham_GiamGiaSoc())
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="@ShopABC_Tools.get_Images_over_CDN(i.Hinhsp.Split("#")[0], 2)">
+                            <span class="label">Ưu đãi</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="/assets/Public/img/icon/heart.png"></a> <span>Yêu thích</span></li>
+                                <li><a href="#"><img src="/assets/Public/img/icon/compare.png"> <span>So sánh</span></a></li>
+                                <li><a href='@Url.Action("ChiTiet", "SanPham", new {p = i.Tensp, spid = i.Masp})'><img src="/assets/Public/img/icon/search.png"></a> <span>Xem ngay</span></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>@i.Tensp</h6>
+                            <a href="#" class="add-cart" onclick="them_vao_gio(@i.Masp);">+ Thêm vào giỏ</a>
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h5 class="text-danger">@String.Format("{0:0,0}", ShopABC_GioHang.calc_GiaBan_Sau_GiamGia(i.Masp)) <u>đ</u></h5>
+                            <span style="text-decoration: line-through;">@String.Format("{0:0,0}", i.Giaban) <u>đ</u></span>
+                            <div class="product__color__select">
+                                <label for="pc-@i.Mamau" style="background-color: @i.Mamau !important;">
+                                    <input type="radio" id="pc-@i.Mamau">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Product Section End -->
+<!-- Categories Section Begin -->
+<section class="categories spad">
+    <div class="container">
+        @{
+            Sanpham b = ShopABC_SanPham.get_SanPham_GiamGiaSoc().FirstOrDefault();
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="categories__text">
+                        <h2>Giảm giá sốc <br /> <span>@b.MadmNavigation.Tendm</span> <br /> </h2>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="categories__hot__deal">
+                        <img src="@ShopABC_Tools.get_Images_over_CDN(b.Hinhsp.Split("#")[0], 2)">
+                        <div class="hot__deal__sticker">
+                            <span>Giá ưu đãi</span>
+                            <h6>@String.Format("{0:0,0}", ShopABC_GioHang.calc_GiaBan_Sau_GiamGia(b.Masp)) <u>đ</u></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 offset-lg-1">
+                    <div class="categories__deal__countdown">
+                        <span>Ưu đãi trong tuần</span>
+                        <h2>@b.Tensp</h2>
+                        <div class="categories__deal__countdown__timer" id="countdown">
+                            <div class="cd-item">
+                                <span>3</span>
+                                <p>Days</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>1</span>
+                                <p>Hours</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>50</span>
+                                <p>Minutes</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>18</span>
+                                <p>Seconds</p>
+                            </div>
+                        </div>
+                        <a href='@Url.Action("ChiTiet", "SanPham", new {p = b.Tensp, spid = b.Masp})' class="primary-btn">Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+<!-- Categories Section End -->
+<!-- Instagram Section Begin -->
+<section class="instagram spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="instagram__pic">
+                    <div class="instagram__pic__item set-bg" data-setbg="/assets/Public/img/instagram/instagram-1.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="/assets/Public/img/instagram/instagram-2.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="/assets/Public/img/instagram/instagram-3.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="/assets/Public/img/instagram/instagram-4.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="/assets/Public/img/instagram/instagram-5.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="/assets/Public/img/instagram/instagram-6.jpg"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="instagram__text">
+                    <h2>Instagram</h2>
+                    <p>
+                        Một trong những đề tài nóng hổi nhất mà hàng ngày chúng ta
+                        không thể bỏ qua đó là nhu cầu may mặc mua sắm. Nếu bạn
+                        nào còn băn khoăn hay đang muốn tìm cho mình một bộ quần áo nam đẹp,
+                        hấp dẫn, chất lượng, hãy theo dõi chúng tôi trên Instagram nhé !
+                    </p>
+                    <h3>#Male_Fashion</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Instagram Section End -->
+<!-- Latest Blog Section Begin -->
+<section class="latest spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <span>Tin tức</span>
+                    <h2>Xu hướng thời trang</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (Baiviet r in ShopABC_BaiViet.get_BaiViet_DaDuyet().Take(3))
+            {
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="@ShopABC_Tools.get_Images_over_CDN(r.Hinhbv, 1)"></div>
+                        <div class="blog__item__text">
+                            <span><img src="/assets/Public/img/icon/calendar.png"> @r.Ngaydang.Value.ToString("dd/MMM/yyyy")</span>
+                            <h5>@r.Tieude</h5>
+                            <a href='@Url.Action("Xem_Blog", "Blog", new {bid = r.Mabv})'>Đọc thêm</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Latest Blog Section End -->
+@section More_Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-countdown@2.2.0/dist/jquery.countdown.min.js"></script>
+}

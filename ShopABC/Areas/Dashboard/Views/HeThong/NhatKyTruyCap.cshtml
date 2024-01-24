@@ -1,0 +1,72 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Nhật ký truy cập";
+    ViewBag.Description = "Trang hiển thị nhật ký truy cập hệ thống";
+}
+
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Nhật ký truy cập
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Địa chỉ IP</th>
+                        <th>Thời gian</th>
+                        <th>Hành động</th>
+                        <th>Nhân viên</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (History i in ShopABC_NhanVien.get_NhatKyTruyCap())
+                    {
+                        <tr>
+                            <td>@i.Id</td>
+                            <td>
+                                @{
+                                    if (i.Diachiip.Equals("::1") || i.Diachiip.Equals("127.0.0.1"))
+                                    {
+                                        <a href="#">@i.Diachiip</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="https://api.ipgeolocation.io/ipgeo?apiKey=e5be8a00c1654b84a9064341f0615d3c&ip=@i.Diachiip&output=xml" target="_blank">@i.Diachiip</a>
+                                    }
+                                }
+                            </td>
+                            <td>@i.Thoigian.Value</td>
+                            <td>@i.Hanhdong</td>
+                            <td>@ShopABC_NhanVien.get_HoTen((int)i.Manv)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<!-- Basic Tables end -->
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+        });
+    </script>
+}
+
+
+

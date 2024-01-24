@@ -1,0 +1,106 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ISession sess = Context.Session;
+    ViewBag.Title = "Đơn hàng chờ giao";
+    ViewBag.Description = "Trang hiển thị các đơn hàng chờ giao";
+}
+
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Dữ liệu đơn hàng
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>Số hóa đơn</th>
+                        <th>Ngày mua</th>
+                        <th>Người mua</th>
+                        <th>Tình trạng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Donhang i in ShopABC_DonHang.get_DonHang_Theo_MaTT(5))
+                    {
+                        <tr>
+                            <td><a href='@Url.Action("ChiTietDonHang", "DonHang", new {hdid = i.Sohd, pkey = sess.GetString("pkey")})'>@i.Sohd</a></td>
+                            <td>@i.Ngaymua.Value</td>
+                            <td>@ShopABC_KhachHang.get_TenKhachHang_Theo_MaKH(i.Makh)</td>
+                            <td><span class="badge bg-secondary">@i.MattNavigation.Tentt</span></td>
+                            <td>
+                                <span class="btn btn-danger btn-sm btn_HuyDon">Hủy đơn</span>
+                                <span class="btn btn-success btn-sm btn_XacNhan">Bắt đầu giao</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<!-- Basic Tables end -->
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+            function gettoken() {
+                var token = '@Html.AntiForgeryToken()';
+                token = $(token).val();
+                return token;
+            }
+            $('.btn_XacNhan').click(function () {
+                $.ajax({
+                    url: "/admin/bat-dau-giao-hang",
+                    type: "post",
+                    data: {
+                        hdid: $(this).parents("tr").find("td:first a").text(),
+                        hd: "xacnhan",
+                        __RequestVerificationToken: gettoken()
+                    },
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            });
+            $('.btn_HuyDon').click(function () {
+                $.ajax({
+                    url: "/admin/bat-dau-giao-hang",
+                    type: "post",
+                    data: {
+                        hdid: $(this).parents("tr").find("td:first a").text(),
+                        hd: "huydon",
+                        __RequestVerificationToken: gettoken()
+                    },
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra. Thử lại !");
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+}

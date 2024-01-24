@@ -1,0 +1,67 @@
+﻿@using ShopABC.Models;
+@using ShopABC_DB;
+
+@{
+    ViewBag.Title = "Đơn hàng giao thành công";
+    ViewBag.Description = "Trang hiển thị các đơn hàng giao thành công";
+    ISession sess = Context.Session;
+}
+
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Dữ liệu đơn hàng
+        </div>
+        <div class="card-body overflow-auto">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>Số hóa đơn</th>
+                        <th>Ngày mua</th>
+                        <th>Ngày nhận</th>
+                        <th>Người mua</th>
+                        <th>Tình trạng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Donhang i in ShopABC_DonHang.get_DonHang_Theo_MaTT(6))
+                    {
+                        <tr>
+                            <td>@i.Sohd</td>
+                            <td>@i.Ngaymua.Value</td>
+                            <td>@i.Ngaynhan.Value</td>
+                            <td>@i.Makh</td>
+                            <td><span class="badge bg-success">@i.MattNavigation.Tentt</span></td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href='@Url.Action("ChiTietDonHang", "DonHang", new {hdid = i.Sohd, pkey = sess.GetString("pkey")})'>Xem</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+@section More_CSS {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/Dashboard/css/pages/datatables.css">
+}
+
+@section More_Scripts {
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#table1").DataTable();
+            $("#table1_filter").wrap("<form>");
+            $("#table1_filter").closest("form").attr("autocomplete", "off");
+        });
+    </script>
+}
+
+
+
