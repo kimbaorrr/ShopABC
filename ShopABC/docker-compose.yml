@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  shopabc:
+    image: kimbaorrr/shopabc:latest
+    container_name: shopabc
+    ports:
+    - '127.0.0.1:9000:80'
+    network_mode: bridge
+    restart: always
