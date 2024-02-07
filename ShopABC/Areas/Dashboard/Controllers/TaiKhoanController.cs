@@ -31,7 +31,6 @@ namespace ShopABC.Areas.Dashboard.Controllers
         /// </summary>
         /// <param name="mkcu">Truyền tham số Mật khẩu cũ</param>
         /// <param name="mkmoi">Truyền tham số Mật khẩu mới</param>
-        /// <param name="nhaplaimk">Truyền tham số Nhập lại mật khẩu</param>
         /// <returns>Thông báo trạng thái thay đổi</returns>
         [HttpPost, ValidateAntiForgeryToken]
         [Route("admin/doi-mat-khau")]
