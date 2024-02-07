@@ -21,7 +21,7 @@ namespace ShopABC.Areas.Dashboard.Controllers
         {
             try
             {
-                bool dn = ShopABC_NhanVien.get_NV_DangNhap().Any(x => x.Tendn.Equals(a.TenDN.Trim().Normalize().ToLower()) && x.Matkhau.Equals(a.MatKhau + ShopABC_TaiKhoan.salt()));
+                bool dn = ShopABC_NhanVien.get_NV_DangNhap().Any(x => x.Tendn.Equals(a.TenDN.Trim().Normalize().ToLower()) && x.Matkhau.Equals(a.MatKhau));
                 if (ModelState.IsValid && dn)
                 {
                     ISession sess = get_Session();

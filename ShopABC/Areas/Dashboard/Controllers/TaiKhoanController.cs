@@ -44,9 +44,9 @@ namespace ShopABC.Areas.Dashboard.Controllers
                         x => x.Manv == get_MaNV_Session() &&
                         x.Tendn.Equals(get_tendn_Session())
                         );
-                    if (!mkcu.Equals(a.Matkhau + ShopABC_TaiKhoan.salt()))
+                    if (!mkcu.Equals(a.Matkhau))
                         return Unauthorized("Mật khẩu cũ không chính xác !");
-                    a.Matkhau = mkmoi + ShopABC_TaiKhoan.salt();
+                    a.Matkhau = mkmoi;
                     e.SaveChanges();
                     ShopABC_TaiKhoan._History(
                         get_IP_Addr(),

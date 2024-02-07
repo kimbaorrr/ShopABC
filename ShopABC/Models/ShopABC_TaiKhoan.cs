@@ -40,8 +40,8 @@ namespace ShopABC.Models
         /// <returns>Khớp/Không khớp</returns>
         public static string privateKey()
          => Guid.NewGuid().ToString().Replace("-", "");
-        public static string salt()
-            => File.ReadAllText("salt.txt");
+        //public static string salt()
+        //    => File.ReadAllText("salt.txt");
         /// <summary>
         /// Ghi nhật ký truy cập trang Quản trị
         /// </summary>
