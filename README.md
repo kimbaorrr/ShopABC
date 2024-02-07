@@ -1,6 +1,6 @@
-Demo website quản lý shop thời trang nam
+<h2>Demo website quản lý shop thời trang nam</h2>
 
-***Thông tin truy cập trang quản trị***
+<h4>Thông tin truy cập trang quản trị</h4>
 Vai trò: Quản trị viên
 + Username: kimbao
 + Password: 123456@
