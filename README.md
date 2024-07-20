@@ -1,13 +1,17 @@
-<h2>Demo website quản lý shop thời trang nam</h2>
+<h2>Male Fashion Shop</h2>
+<h4>Access Information for Admin Page</h4>
+Role: Administrator
 
-<h4>Thông tin truy cập trang quản trị</h4>
+Username: kimbao
+Password: 123456@
 
-Vai trò: Quản trị viên
+Role: Shipper
 
-+ Username: kimbao
-+ Password: 123456@
+Username: ngocanh
+Password: 123456@
 
-Vai trò: Shipper
-
-+ Username: ngocanh
-+ Password: 123456@
+<h4>How can restore database ?</h4>
+Step 1: Access your database using pgAdmin.
+Step 2: Create a new database named "shopabc".
+Step 3: Right-click on the shopabc database, then choose "Restore" and select the DB backup file.
+Final Step: Click "Restore" and wait for the process to complete...
