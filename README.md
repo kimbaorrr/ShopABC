@@ -1,4 +1,4 @@
-<h2>Male Fashion Shop</h2>
+<h2>Male Fashion Shop Management System</h2>
 <h4>Access Information for Admin Page</h4>
 Role: Administrator
 
