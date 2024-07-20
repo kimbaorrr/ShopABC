@@ -3,16 +3,16 @@
 Role: Administrator
 
 
-Username: kimbao
+- Username: kimbao
 
-Password: 123456@
+- Password: 123456@
 
 Role: Shipper
 
 
-Username: ngocanh
+- Username: ngocanh
 
-Password: 123456@
+- Password: 123456@
 
 <h4>How can restore database ?</h4>
 
