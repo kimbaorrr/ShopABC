@@ -11,6 +11,7 @@ Username: ngocanh
 Password: 123456@
 
 <h4>How can restore database ?</h4>
+
 Step 1: Access your database using pgAdmin.
 
 Step 2: Create a new database named "shopabc".
